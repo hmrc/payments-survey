@@ -1,2 +1,10 @@
 # microservice specific routes
 
+GET         /assets/*file                                 controllers.Assets.at(path="/public", file)
+
+GET         /survey                                       controllers.SurveyController.route(paymentStatus: String ?= "Successful")
+GET         /payment-survey                               controllers.SurveyController.survey
+GET         /cancelled-payment-survey                     controllers.SurveyController.surveyForCancelled
+GET         /rejected-payment-survey                      controllers.SurveyController.surveyForRejected
+POST        /survey                                       controllers.SurveyController.submitSurvey(journey: String)
+GET         /survey-thanks                                controllers.SurveyController.surveyThanks
