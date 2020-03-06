@@ -14,7 +14,9 @@
  * limitations under the License.
  *@
 
-@(form: Form[model.SurveyForm], journey: String)(implicit request: Request[_], m: Messages)
+@import config.AppConfig
+
+@(form: Form[model.SurveyForm], journey: String)(implicit request: Request[_], m: Messages, appConfig: AppConfig)
 
 @import uk.gov.hmrc.play.views.html.helpers
 
@@ -23,7 +25,7 @@
 }
 
 @radioInput(id: String, name: String, value: String) = {
-    <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map{_ => checked="checked"} />
+    <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map{_ => checked="checked"} >
 }
 
 @main_payment(title = Messages("survey.html.title"), header = Some(header), fullWidth = true) {
@@ -47,7 +49,7 @@
 
             <!-- 1. Were you able to do what you needed to do today? -->
             <div class="form-group">
-                <fieldset class="form-field-group @if(form.error("wereYouAble").isDefined) { form-group-error }"" id="wereYouAble">
+                <fieldset class="form-field-group @if(form.error("wereYouAble").isDefined) { form-group-error }" id="wereYouAble">
                     <legend>
                         <p class="bold-medium">1. @Messages("survey.wereYouAble.question")</p>
                         <span style ="color: #af1324">

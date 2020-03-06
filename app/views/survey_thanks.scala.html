@@ -14,7 +14,9 @@
  * limitations under the License.
  *@
 
-@()(implicit request: Request[_], m: Messages)
+@import config.AppConfig
+
+@()(implicit request: Request[_], m: Messages, appConfig: AppConfig)
 
 @header = {
 <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>

@@ -16,18 +16,26 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import config.AppConfig
+import javax.inject.{ Inject, Singleton }
 import model.SurveyForm
 import model.SurveyForm.surveyForm
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.{ AuditConnector, AuditResult }
 import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-final class SurveyController @Inject() (cc: MessagesControllerComponents) extends FrontendController(cc) {
+final class SurveyController @Inject() (
+  auditConnector: AuditConnector,
+  cc: MessagesControllerComponents)(implicit
+  ec: ExecutionContext,
+  appConfig: AppConfig) extends FrontendController(cc) {
+
+  import requests.RequestSupport._
 
   def route(paymentStatus: String): Action[AnyContent] = Action { implicit request =>
     paymentStatus match {
@@ -51,8 +59,6 @@ final class SurveyController @Inject() (cc: MessagesControllerComponents) extend
 
   def submitSurvey(journey: String): Action[AnyContent] = Action.async { implicit request =>
     Future.successful {
-      implicit val hc = request.headerCarrier
-
       surveyForm.bindFromRequest().fold(
         formWithErrors => { BadRequest(views.html.survey(formWithErrors, journey)) },
         data => {
@@ -64,22 +70,22 @@ final class SurveyController @Inject() (cc: MessagesControllerComponents) extend
             "comments" -> comments,
             "journey" -> journey)
 
-          val orderId = for {
-            pd <- request.paymentDetails
-            wpRef <- pd.wpRef
-          } yield wpRef
+          //          val orderId = for {
+          //            pd <- request.paymentDetails
+          //            wpRef <- pd.wpRef
+          //          } yield wpRef
 
-          val userType = if (request.isLoggedIn) "LoggedIn" else "LoggedOut"
+          val userType = if (isLoggedIn) "LoggedIn" else "LoggedOut"
 
-          val details = hc.toAuditDetails("orderId" -> orderId.getOrElse("?"), "userType" -> userType) ++
+          val details = Map("orderId" -> "?" /*orderId.getOrElse("?")*/ , "userType" -> userType) ++
             surveyMap ++
-            hc.toAuditDetails("liability" -> request.tax.shortName)
+            Map("liability" -> /*request.tax.shortName*/ "TEST")
 
-          val event: Future[AuditResult] = auditConnector.sendEvent(
+          auditConnector.sendEvent(
             DataEvent(
-              auditSource = "payments-frontend",
+              auditSource = "payments-survey",
               auditType = "Questionnaire",
-              tags = hc.toAuditTags("submitSurvey", request.uri),
+              tags = Map("submitSurvey" -> request.uri),
               detail = details))
 
           Redirect(controllers.routes.SurveyController.surveyThanks())
