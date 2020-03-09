@@ -21,8 +21,7 @@ import javax.inject.{ Inject, Singleton }
 import model.SurveyForm
 import model.SurveyForm.surveyForm
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.{ AuditConnector, AuditResult }
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
