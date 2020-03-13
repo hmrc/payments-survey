@@ -77,6 +77,73 @@ package object model {
       case Ni => true
       case PtaSa => true
     }
+
+    def auditName: String = o match {
+      case PfSa | BtaSa | PtaSa | ItSa => "self-assessment"
+      case PfVat | BtaVat | DdVat | VcVatReturn | VcVatOther => "vat"
+      case PfCt | BtaCt => "corporation-tax"
+      case PfEpayeNi | BtaEpayeGeneral | BtaEpayeBill => "epaye"
+      case PfEpayeLpp => "epaye-late-payment-penalty"
+      case PfEpayeSeta => "epaye-settlement-agreement"
+      case PfEpayeLateCis => "cis-late-filing-penalty"
+      case BtaEpayePenalty => "epaye-penalty"
+      case BtaEpayeInterest => "epaye-interest"
+      case PfEpayeP11d | BtaClass1aNi => "class-1a-national-insurance"
+      case PfP800 => "p800"
+      case PfSdlt => "stamp-duty"
+      case PfSdil | BtaSdil => "soft-drinks-industry-levy"
+      case PfCds => "cds"
+      case PfTpes => "taxes-penalties-and-enquiry-settlements"
+      case PfClass2Ni => "class-2-national-insurance"
+      case PfClass3Ni => "class-3-national-insurance"
+      case PfInsurancePremium => "insurance-premium-tax"
+      case PfMgd => "machine-games-duty"
+      case PfSimpleAssessment => "simple-assessment"
+      case PfPsAdmin => "pension-scheme-administrators"
+      case PfBioFuels => "bio-fuels-or-road-gas"
+      case PfAirPass => "air-passenger-duty"
+      case PfBeerDuty => "beer-duty"
+      case PfGamingOrBingoDuty => "gaming-or-bingo-duty"
+      case PfGbPbRgDuty => "general-betting-pool-betting-remote-gaming-duty"
+      case PfLandfillTax => "landfill-tax"
+      case PfAggregatesLevy => "aggregates-levy"
+      case PfClimateChangeLevy => "climate-change-levy"
+      case PfOther => "other-taxes"
+      case Amls => "anti-money-laundering"
+      case BcPngr => "passengers"
+      case CapitalGainsTax => "capital-gains-tax"
+      case Mib => "merchandise-in-baggage"
+      case Ni => "northern-ireland"
+      case Parcels => "parcels"
+    }
+  }
+
+  implicit class TaxTypeExt(val t: TaxType) extends AnyVal {
+    def auditName: String = t match {
+      case TaxTypes.selfAssessment => "self-assessment"
+      case TaxTypes.vat => "vat"
+      case TaxTypes.epaye => "epaye"
+      case TaxTypes.corporationTax => "corporation-tax"
+      case TaxTypes.other => "other-taxes"
+      case TaxTypes.class2NationalInsurance => "class-2-national-insurance"
+      case TaxTypes.ni => "northern-ireland"
+      case TaxTypes.parcels => "parcels"
+      case TaxTypes.mib => "unimplemented"
+      case TaxTypes.stampDuty => "unimplemented"
+      case TaxTypes.cds => "unimplemented"
+      case TaxTypes.pngr => "unimplemented"
+      case TaxTypes.p800 => "unimplemented"
+      case TaxTypes.insurancePremium => "unimplemented"
+      case TaxTypes.class3NationalInsurance => "unimplemented"
+      case TaxTypes.bioFuelsAndRoadGas => "unimplemented"
+      case TaxTypes.airPassengerDuty => "unimplemented"
+      case TaxTypes.beerDuty => "unimplemented"
+      case TaxTypes.landfillTax => "unimplemented"
+      case TaxTypes.aggregatesLevy => "unimplemented"
+      case TaxTypes.climateChangeLevy => "unimplemented"
+      case TaxTypes.epayeTpes => "unimplemented"
+      case TaxTypes.capitalGainsTax => "unimplemented"
+    }
   }
 
   implicit class JsdExt(val jsd: JourneySpecificData) extends AnyVal {

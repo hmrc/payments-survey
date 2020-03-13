@@ -30,6 +30,8 @@ class AppConfig @Inject() (config: ServicesConfig) {
 
   lazy val optimizelyProjectId: Option[String] = Try(config.getString(s"optimizely.projectId")).toOption
 
+  lazy val payFrontendBaseUrl: String = s"${config.getString("payFrontendBaseUrl")}/pay"
+
   lazy val assetsBaseUrl: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String = loadConfig(s"google-analytics.host")

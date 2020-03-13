@@ -15,8 +15,9 @@
  *@
 
 @import config.AppConfig
+@import requests.JourneyRequest
 
-@(form: Form[model.SurveyForm], journey: String)(implicit request: Request[_], m: Messages, appConfig: AppConfig)
+@(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
 
 @import uk.gov.hmrc.play.views.html.helpers
 
@@ -43,9 +44,9 @@
     }
 
     <div class="sign-out-survey">
-        @helpers.form(action = controllers.routes.SurveyController.submitSurvey(journey), 'class -> "form") {
+        @helpers.form(action = controllers.routes.SurveyController.submitSurvey(request.journey._id), 'class -> "form") {
 
-            <input type="hidden" name="journey" value = "@journey"/>
+            <input type="hidden" name="journey" value = "@request.journey.status"/>
 
             <!-- 1. Were you able to do what you needed to do today? -->
             <div class="form-group">
