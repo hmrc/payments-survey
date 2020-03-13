@@ -15,14 +15,17 @@
  *@
 
 @import config.AppConfig
+@import requests.JourneyRequest
 
-@()(implicit request: Request[_], m: Messages, appConfig: AppConfig)
+@this(main: views.html.main)
+
+@()(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
 
 @header = {
 <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
 }
 
-@main_payment(title = Messages("thanks.heading"), header = Some(header)) {
+@main(title = Messages("thanks.heading"), header = Some(header), isWelshSupported = request.welsh) {
 
     <p>@Messages("thanks.message")</p>
 

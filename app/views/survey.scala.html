@@ -17,6 +17,9 @@
 @import config.AppConfig
 @import requests.JourneyRequest
 
+@this(main: views.html.main)
+
+
 @(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
 
 @import uk.gov.hmrc.play.views.html.helpers
@@ -29,7 +32,7 @@
     <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map{_ => checked="checked"} >
 }
 
-@main_payment(title = Messages("survey.html.title"), header = Some(header), fullWidth = true) {
+@main(title = Messages("survey.html.title"), header = Some(header), fullWidth = true, isWelshSupported = request.welsh) {
 
     <p>@Messages("survey.instruction.text.1")</p>
     <p>@Messages("survey.instruction.text.2.1")

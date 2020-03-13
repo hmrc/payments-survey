@@ -16,131 +16,124 @@
 
 package model.content
 
-import java.time.format.DateTimeFormatter
-
 import payapi.cardpaymentjourney.model.journey._
-import payapi.cardpaymentjourney.model.taxes.epaye.{ AccountsOfficeReference, SubYearlyEpayeTaxPeriod, YearlyEpayeTaxPeriod }
-import payapi.cardpaymentjourney.model.taxes.sdlt.Utrn
-import payapi.cardpaymentjourney.model.taxes.vat.VatPeriod
-import payapi.corcommon.model.Reference
-import payapi.corcommon.model.p800.P800ChargeRef
 
 object JsdToContentOptions {
 
   def toContentOptions(jsd: JourneySpecificData): ContentOptions = jsd match {
-    case j: JsdItSa => ContentOptions(
+    case _: JsdItSa => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Option("Talu eich Hunanasesiad")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdDdVat => ContentOptions(
+    case _: JsdDdVat => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Business tax account", welshValue = Option("Cyfrif treth busnes")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdVcVatReturn => ContentOptions(
+    case _: JsdVcVatReturn => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Business tax account", welshValue = Option("Cyfrif treth busnes")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdVcVatOther => ContentOptions(
+    case _: JsdVcVatOther => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Business tax account", welshValue = Option("Cyfrif treth busnes")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfVat => ContentOptions(
+    case _: JsdPfVat => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your VAT",
         welshValue = Some("Talu eich TAW")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaVat => ContentOptions(
+    case _: JsdBtaVat => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your VAT", welshValue = Option("Talu eich TAW")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaEpayeBill => ContentOptions(
+    case _: JsdBtaEpayeBill => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your employers’ PAYE and National Insurance",
         welshValue = Some("Talwch eich TWE a'ch Yswiriant Gwladol y cyflogwr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaEpayePenalty => ContentOptions(
+    case _: JsdBtaEpayePenalty => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your PAYE late payment or filing penalty",
         welshValue = Some("Talu’ch cosb am dalu neu gyflwyno TWE yn hwyr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaEpayeInterest => ContentOptions(
+    case _: JsdBtaEpayeInterest => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay employers’ PAYE interest",
         welshValue = Some("Talu llog TWE cyflogwr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaEpayeGeneral => ContentOptions(
+    case _: JsdBtaEpayeGeneral => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your employers’ PAYE and National Insurance",
         welshValue = Some("Talwch eich TWE a'ch Yswiriant Gwladol y cyflogwr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaClass1aNi => ContentOptions(
+    case _: JsdBtaClass1aNi => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your employers’ Class 1A National Insurance (P11D bill)",
         welshValue = Some("Talu’ch Yswiriant Gwladol Dosbarth 1A y cyflogwr (bil P11D)")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfEpayeNi => ContentOptions(
+    case _: JsdPfEpayeNi => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your employers’ PAYE and National Insurance",
         welshValue = Some("Talwch eich TWE a'ch Yswiriant Gwladol y cyflogwr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfEpayeLpp => ContentOptions(
+    case _: JsdPfEpayeLpp => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your PAYE late payment or filing penalty",
         welshValue = Some("Talwch eich cosb am dalu TWE y cyflogwr yn hwyr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfEpayeSeta => ContentOptions(
+    case _: JsdPfEpayeSeta => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your PAYE Settlement Agreement",
         welshValue = Some("Talwch eich Cytundeb Setliad TWE y cyflogwr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfEpayeLateCis => ContentOptions(
+    case _: JsdPfEpayeLateCis => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your Construction Industry Scheme penalty",
         welshValue = Some("Talwch eich cosb - Cynllun y Diwydiant Adeiladu")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfEpayeP11d => ContentOptions(
+    case _: JsdPfEpayeP11d => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Pay your employers’ Class 1A National Insurance (P11D bill)",
         welshValue = Some("Talu’ch Yswiriant Gwladol Dosbarth 1A y cyflogwr (bil P11D)")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfPsAdmin => ContentOptions(
+    case _: JsdPfPsAdmin => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Pension scheme administrators", welshValue = Some("Talu eich gweinyddwyr cynllun pensiwn")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfOther => ContentOptions(
+    case _: JsdPfOther => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your tax", welshValue = Some("Talwch-eich-treth")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfP800 => ContentOptions(
+    case _: JsdPfP800 => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Check how much Income Tax you paid", welshValue = Some("Gwirio faint o dreth incwm a daloch")),
       showBetaBanner = ShowBetaBanner.no)
@@ -150,57 +143,62 @@ object JsdToContentOptions {
       title = BannerTitle(englishValue = "Pay Class 2 National Insurance", Some("Talu Yswiriant Gwladol Dosbarth 2")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfSdlt => ContentOptions(
+    case _: JsdPfSdlt => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Stamp Duty Land Tax", Some("Talwch eich Treth Dir y Tollau Stamp")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfCds => ContentOptions(
+    case _: JsdPfCds => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle("Customs Declaration Service"),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdParcels => ContentOptions(
+    case _: JsdParcels => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle("Manage your import VAT on parcels you sell to UK buyers"),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBcPngr => ContentOptions(
+    case _: JsdBcPngr => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle(englishValue = "Check tax on goods you bring into the UK", welshValue = None),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdMib => ContentOptions(
+    case _: JsdMib => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle(englishValue = "Merchandise in Baggage"),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfCt => ContentOptions(
+    case _: JsdPfCt => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Corporation Tax", welshValue = Some("Talu eich Treth Gorfforaeth")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaCt => ContentOptions(
+    case _: JsdBtaCt => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Corporation Tax", welshValue = Some("Talu eich Treth Gorfforaeth")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdAmls => ContentOptions(
+    case _: JsdAmls => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle(englishValue = "AMLS Payment"),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaSa => ContentOptions(
+    case _: JsdBtaSa => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Option("Talu eich Hunanasesiad")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPtaSa => ContentOptions(
+    case _: JsdPtaSa => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Some("Talu eich Hunanasesiad")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdNi => ContentOptions(
+    case _: JsdPfSa => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Some("Talu eich Hunanasesiad")),
+      showBetaBanner = ShowBetaBanner.no)
+
+    case _: JsdNi => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title = BannerTitle(englishValue = "Manage your Northern Ireland import VAT", welshValue = None),
       showBetaBanner = ShowBetaBanner.no)
@@ -225,7 +223,7 @@ object JsdToContentOptions {
       title = BannerTitle(englishValue = "Pay Air Passenger Duty", Some("Talu Toll Teithwyr Awyr")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfMgd => ContentOptions(
+    case _: JsdPfMgd => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay Machine Games Duty", welshValue = Some("Talu’r Doll Peiriannau Hapchwarae")),
       showBetaBanner = ShowBetaBanner.no)
@@ -272,22 +270,22 @@ object JsdToContentOptions {
       title = BannerTitle(englishValue = "Pay the Soft Drinks Industry Levy", welshValue = Some("Talu Ardoll y Diwydiant Diodydd Ysgafn")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdBtaSdil => ContentOptions(
+    case _: JsdBtaSdil => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay the Soft Drinks Industry Levy", welshValue = Some("Talu Ardoll y Diwydiant Diodydd Ysgafn")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfSimpleAssessment => ContentOptions(
+    case _: JsdPfSimpleAssessment => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Simple Assessment", welshValue = Some("Talu eich Asesiad Syml")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdPfTpes => ContentOptions(
+    case _: JsdPfTpes => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay taxes, penalties or enquiry settlements", welshValue = Some("Talu trethi, cosbau neu setliadau ymholiadau")),
       showBetaBanner = ShowBetaBanner.no)
 
-    case j: JsdCapitalGainsTax => ContentOptions(
+    case _: JsdCapitalGainsTax => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(
         englishValue = "Report and pay Capital Gains Tax on UK property",

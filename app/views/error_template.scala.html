@@ -15,7 +15,11 @@
  *@
 
 @import config.AppConfig
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import model.content.IsWelshSupported
+
+@this(govuk_wrapper: views.html.govuk_wrapper)(implicit appConfig: AppConfig)
+
+@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
   <h1>@heading</h1>
@@ -25,4 +29,8 @@
   <p>@message</p>
 }
 
-@govuk_wrapper(appConfig = appConfig, title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
+@govuk_wrapper(
+ title = pageTitle,
+ contentHeader = Some(contentHeader),
+ mainContent = mainContent,
+ isWelshSupported = IsWelshSupported.yes)

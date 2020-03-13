@@ -15,6 +15,12 @@
  *@
 
 @import config.AppConfig
+@import model.content.IsWelshSupported
+
+@this(
+        govuk_wrapper: views.html.govuk_wrapper,
+        viewsHelpers: views.ViewsHelpers
+)(implicit appConfig: AppConfig)
 
 @(      title: String,
         header: Option[Html] = None,
@@ -26,8 +32,8 @@
         fullWidth: Boolean = false,
         helpFormEnabled: Boolean = true,
         additionalContentClasses: Option[String] = None,
-        enableWelshToggle:Boolean = true
-        )(content: Html)(implicit request: Request[_], m: Messages, appConfig: AppConfig)
+        isWelshSupported: IsWelshSupported
+        )(content: Html)(implicit request: Request[_], m: Messages)
 
 @errorsJson = @{Html(errorsOpt.fold("{}")(errors => errors.toString()))}
 
@@ -134,6 +140,9 @@
     @* @Html(GoogleAnalytics.renderTrackerCode(pageViewName, FlashStoreUtils.getGAEvent(request.flash)))*@
 }
 
-@govuk_wrapper(appConfig, title + " " +  Messages("title.context"))
+@govuk_wrapper(
+    title = title + " " +  Messages("title.context"),
+    mainContent = viewsHelpers.article(mainContent),
+    isWelshSupported = isWelshSupported)
     @*(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footer_links), nav = true)(mainContent)*@
 

@@ -35,7 +35,9 @@ final class SurveyController @Inject() (
   actions: Actions,
   auditConnector: AuditConnector,
   cc: MessagesControllerComponents,
-  requestSupport: RequestSupport)(implicit
+  requestSupport: RequestSupport,
+  survey: views.html.survey,
+  surveyThanks: views.html.survey_thanks)(implicit
   ec: ExecutionContext,
   appConfig: AppConfig) extends FrontendController(cc) {
 
@@ -49,12 +51,12 @@ final class SurveyController @Inject() (
   }
 
   def survey(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
-    Ok(views.html.survey(surveyForm))
+    Ok(survey(surveyForm))
   }
 
   def submitSurvey(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
     surveyForm.bindFromRequest().fold(
-      formWithErrors => { BadRequest(views.html.survey(formWithErrors)) },
+      formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
         val SurveyForm(wereYouAble, overallRate, howEasyAnswer, journey, comments) = data
         val surveyMap: Map[String, String] = Map(
@@ -82,6 +84,6 @@ final class SurveyController @Inject() (
   }
 
   def surveyThanks(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
-    Ok(views.html.survey_thanks())
+    Ok(surveyThanks())
   }
 }
