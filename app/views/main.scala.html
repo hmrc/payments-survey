@@ -17,29 +17,18 @@
 @import config.AppConfig
 @import model.content.IsWelshSupported
 
-@this(
-        govuk_wrapper: views.html.govuk_wrapper,
-        viewsHelpers: views.ViewsHelpers
-)(implicit appConfig: AppConfig)
+@this(govuk_wrapper: views.html.govuk_wrapper)(implicit appConfig: AppConfig)
 
 @(
         title: String,
         navTitle: Option[String] = None,
         header: Option[Html] = None,
-        errorsOpt: Option[play.api.libs.json.JsValue] = None,
         pageViewName: Option[String] = None,
-        reportSubmitAction: Option[Call]=None,
         jsFiles: List[String] = Nil,
         linkElement: Option[Html] = None,
         fullWidth: Boolean = false,
-        helpFormEnabled: Boolean = true,
-        additionalContentClasses: Option[String] = None,
         isWelshSupported: IsWelshSupported
         )(content: Html)(implicit request: Request[_], m: Messages)
-
-@errorsJson = @{Html(errorsOpt.fold("{}")(errors => errors.toString()))}
-
-
 
 @head = {
     <!--[if lt IE 8 ]>
@@ -55,7 +44,6 @@
 
     <script src='@{appConfig.assetsBaseUrl}/javascripts/vendor/modernizr.js' type='text/javascript'></script>
 
-    @* OPS-522 *@
     @appConfig.optimizelyProjectId.map { projectId =>
         <script src="https://cdn.optimizely.com/js/@{projectId}.js"></script>
     }
@@ -65,51 +53,22 @@
 
     @linkElement
 }
-
-@* @insideHeader = {*@
-@*    @payments.views.html.partial.header_nav(navTitle = Some(Messages(ViewUtils.figureHeaderTitleMessageKey(request.path,request.tax))), navTitleLink = None, navLinks = Some(payments.views.html.partial.payments_header_nav_links()))*@
-@*}*@
-
-@afterHeader = {}
-
 @mainContent = {
-        <div id="content" class="payments @additionalContentClasses">
+    <div class="content__body @{if(fullWidth) "full-width"}">
 
-            <div class="content__body @{if(fullWidth) "full-width"}">
+        <header>
+            @header
+        </header>
 
-                <header>
-                    @header
-                </header>
+        @content
 
-                @content
-
-            </div>
-
-            @* @if(helpFormEnabled) { *@
-            @*     @FormPartialProvider.getPartialContent(ContactConfig.reportAProblemPartialUrl) *@
-            @* } *@
-
-        </div>
+    </div>
 }
-
-@footerTop = {}
-
-@footer_links = {
-
-    <ul class="platform-help-links">
-        <li><a href='@Messages("footer.links.cookies.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Cookies">@Messages("footer.links.cookies.text")</a></li>
-        <li><a href='@Messages("footer.links.privacy_policy.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Privacy policy">@Messages("footer.links.privacy_policy.text")</a></li>
-        <li><a href='@Messages("footer.links.terms_and_conditions.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Terms and conditions">@Messages("footer.links.terms_and_conditions.text")</a></li>
-        <li><a href='@Messages("footer.links.help_page.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Help">@Messages("footer.links.help_page.text")</a></li>
-    </ul>
-}
-
 
 @bodyEnd = {
     <script src="@{appConfig.assetsBaseUrl}/javascripts/application.min.js" type="text/javascript"></script>
 
     @*<script type="text/javascript">var ssoUrl = '@{ExternalUrls.portalUrl}/ssoin'</script>?*@
-    <script type="text/javascript">var errorsJson = @errorsJson</script>
 
     @for(jsFile <- "javascripts/analytics.js" +: jsFiles) {
         <script type='text/javascript' src='@routes.Assets.at(jsFile)'></script>
@@ -122,5 +81,4 @@
     title = title + " " +  Messages("title.context"),
     mainContent = mainContent,
     isWelshSupported = isWelshSupported)
-    @*(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footer_links), nav = true)(mainContent)*@
 

@@ -2,6 +2,7 @@
 header.default = Talwch eich treth
 
 global.back = Yn ôl
+global.sign-out = Allgofnodi
 
 error.InternalServerError.heading = Mae’n flin gennym, rydym yn profi anawsterau technegol
 error.InternalServerError.message = Rhowch gynnig arni eto mewn ychydig funudau.

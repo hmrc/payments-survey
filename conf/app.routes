@@ -3,6 +3,6 @@
 GET         /assets/*file                                 controllers.Assets.at(path="/public", file)
 
 GET         /survey                                       controllers.SurveyController.route
-GET         /:journeyId/payment-survey                    controllers.SurveyController.survey(journeyId: JourneyId)
+GET         /:journeyId/survey                    controllers.SurveyController.survey(journeyId: JourneyId)
 POST        /:journeyId/survey                            controllers.SurveyController.submitSurvey(journeyId: JourneyId)
 GET         /:journeyId/survey-thanks                     controllers.SurveyController.surveyThanks(journeyId: JourneyId)

@@ -2,6 +2,7 @@
 header.default = Pay your tax
 
 global.back = Back
+global.sign-out = Sign out
 
 error.InternalServerError.heading = Sorry, we’re experiencing technical difficulties
 error.InternalServerError.message = Please try again in a few minutes.

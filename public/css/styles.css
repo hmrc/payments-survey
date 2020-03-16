@@ -3,6 +3,13 @@
 }
 
 /*
+ * TODO: remove this and find a better way to space survey subheadings.
+ */
+.payments p {
+    margin: .42105em 0 1.05263em 0
+}
+
+/*
  * Things to fix common failings of assets-frontend
  */
 select.wide{

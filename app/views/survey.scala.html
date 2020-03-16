@@ -57,7 +57,7 @@
             <input type="hidden" name="journey" value = "@request.journey.status"/>
 
             <!-- 1. Were you able to do what you needed to do today? -->
-            <div class="form-group">
+            <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("wereYouAble").isDefined) { form-group-error }" id="wereYouAble">
                     <legend>
                         <p class="bold-medium">1. @Messages("survey.wereYouAble.question")</p>
@@ -77,7 +77,7 @@
             </div>
 
             <!-- 2. How easy was it for you to do what you needed to do today? -->
-            <div class="form-group">
+            <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("howEasy").isDefined) { form-group-error }" id="howEasy">
                     <legend>
                         <p class="bold-medium">2. @Messages("survey.howEasy.question")</p>
@@ -109,7 +109,7 @@
             </div>
 
             <!-- 2b. Why did you give this score? -->
-            <div class="form-group">
+            <div class="form-group payments">
                 <fieldset class="form-field-group">
                     <label for="comments">
                         <p class="bold-medium">2b. @Messages("survey.comment.question")</p>
@@ -120,7 +120,7 @@
             </div>
 
             <!-- 3. Overall, how did you feel about the service you received today? -->
-            <div class="form-group">
+            <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("overallRate").isDefined) { form-group-error }" id="overallRate">
                     <legend>
                         <p class="bold-medium">3. @Messages("survey.overallRate.question")</p>
