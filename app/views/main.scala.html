@@ -22,7 +22,9 @@
         viewsHelpers: views.ViewsHelpers
 )(implicit appConfig: AppConfig)
 
-@(      title: String,
+@(
+        title: String,
+        navTitle: Option[String] = None,
         header: Option[Html] = None,
         errorsOpt: Option[play.api.libs.json.JsValue] = None,
         pageViewName: Option[String] = None,
@@ -71,29 +73,8 @@
 @afterHeader = {}
 
 @mainContent = {
-
-    <main id="wrapper" role="main">
-
         <div id="content" class="payments @additionalContentClasses">
 
-            <div class="service-info">
-
-                <div class="grid-layout header-options print-hidden">
-
-                    <div class="grid-layout__column--1-2 ops-header">
-                        <a id="back" class="link-back" href="javascript:history.back();">@Messages("global.return-link.back")</a>
-                    </div>
-
-@*                    @if(request.userContext.isLoggedIn) {*@
-@*                        <div class="grid-layout__column--1-2 ops-header">*@
-@*                            <a class="signoutLnk" href="/business-account/sso-sign-out">@Messages("global.nav.sign-out")</a>*@
-@*                        </div>*@
-@*                    }*@
-
-
-                </div>
-
-            </div>
             <div class="content__body @{if(fullWidth) "full-width"}">
 
                 <header>
@@ -109,9 +90,6 @@
             @* } *@
 
         </div>
-    </main>
-
-
 }
 
 @footerTop = {}
@@ -142,7 +120,7 @@
 
 @govuk_wrapper(
     title = title + " " +  Messages("title.context"),
-    mainContent = viewsHelpers.article(mainContent),
+    mainContent = mainContent,
     isWelshSupported = isWelshSupported)
     @*(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footer_links), nav = true)(mainContent)*@
 

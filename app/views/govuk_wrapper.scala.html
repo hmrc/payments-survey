@@ -109,12 +109,28 @@
 }
 
 @serviceInfo = {
-@uiServiceInfo(
-    betaBanner = HtmlFormat.empty,
-    includeGridWrapper = false,
-    serviceInfoContent = Some(serviceInfoContent),
-    includeHMRCBranding = false
-)
+    @uiServiceInfo(
+        betaBanner = HtmlFormat.empty,
+        includeGridWrapper = false,
+        serviceInfoContent = Some(serviceInfoContent),
+        includeHMRCBranding = false
+    )
+
+    <div class="grid-layout header-options print-hidden">
+
+        <div class="grid-layout__column--1-2 ops-header">
+            <a id="back" class="link-back" href="javascript:history.back();">@Messages("global.back")</a>
+        </div>
+
+        @*                    @if(request.userContext.isLoggedIn) {*@
+        @*                        <div class="grid-layout__column--1-2 ops-header">*@
+        @*                            <a class="signoutLnk" href="/business-account/sso-sign-out">@Messages("global.nav.sign-out")</a>*@
+        @*                        </div>*@
+        @*                    }*@
+
+
+    </div>
+
 }
 @mainContentHeader = {
 
@@ -142,15 +158,15 @@
 }
 
 @content = {
-@uiMainContent(
-    article = mainContent,
-    mainClass = mainClass,
-    mainDataAttributes = mainDataAttributes,
-    mainContentHeader = mainContentHeader,
-    serviceInfo = serviceInfo,
-    getHelpForm = getHelpForm,
-    sidebar = sidebar
-)
+    @uiMainContent(
+        article = mainContent,
+        mainClass = mainClass,
+        mainDataAttributes = mainDataAttributes,
+        mainContentHeader = mainContentHeader,
+        serviceInfo = serviceInfo,
+        getHelpForm = getHelpForm,
+        sidebar = sidebar
+    )
 }
 
 @govUkTemplate(

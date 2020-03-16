@@ -6,8 +6,8 @@ object AppDependencies {
   private lazy val catsVersion = "1.1.0"
 
   val compile = Seq(
-    "uk.gov.hmrc"             %% "govuk-template"                   % "5.36.0-play-26",
-    "uk.gov.hmrc"             %% "play-ui"                          % "7.40.0-play-26",
+    "uk.gov.hmrc"             %% "govuk-template"                   % "5.52.0-play-26",
+    "uk.gov.hmrc"             %% "play-ui"                          % "8.8.0-play-26",
     "uk.gov.hmrc"             %% "bootstrap-play-26"                % "0.42.0",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % "[0.350.0,)",
     "com.beachape"            %% "enumeratum" % "1.5.13",

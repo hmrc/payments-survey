@@ -1,0 +1,241 @@
+.tableheading-multiline {
+    vertical-align: top;
+}
+
+/*
+ * Things to fix common failings of assets-frontend
+ */
+select.wide{
+    width: 100%
+}
+
+.important-notice {
+    min-height: 2em;
+}
+
+.important-notice p {
+    font-weight: 700;
+}
+
+.img--inline {
+    height: 1.25em;
+    max-width: inherit;
+}
+
+.figure.bold-total {
+    font-weight: 700;
+}
+
+.header-options {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form-hint {
+    display: block;
+    color: #6f777b;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.top-padded {
+    margin-top: 25px !important;
+}
+
+.bottom-padded {
+    margin-bottom: 25px !important;
+}
+
+.resizedTextbox {
+    width: 250px !important;
+}
+
+.th-bold th {
+    width: 200px;
+    font-weight: 700;
+}
+
+#DDlogo img {
+    max-width: 50%;
+    display: block;
+    margin: 0 auto 1em;
+}
+
+@media only screen and (min-width: 450px) {
+    #DDlogo {
+        text-align: right;
+        margin-bottom: 1em;
+    }
+    #DDlogo img {
+        display: inline;
+        margin: 0;
+        width: 25%;
+    }
+}
+.form-group .panel{
+    margin-left: .9em;
+    padding-top: 0;
+}
+.form-group .panel ul{
+    margin-left: 2em;
+}
+.form-group .panel ul li{
+    margin-bottom: 5px;
+}
+.margin-bottom-20{
+    margin-bottom: 20px;
+}
+
+/*fix error summary */
+
+
+.content__body .grid-row{
+    margin: initial;
+}
+
+.flash.error-summary{
+    border-color: #b10e1e;
+}
+
+.flash.error-summary h2{
+    font-size: 18px;
+}
+
+@media (min-width: 641px){
+    .flash.error-summary h2{
+        font-size: 24px;
+    }
+}
+
+.flash.error-summary li {
+    color: #b10e1e;
+}
+.flash.error-summary li a {
+    font-weight: 700;
+}
+
+.form-field--error{
+    border-left: 5px solid #b10e1e;
+}
+
+
+.form-field--error .error-notification {
+    color: #af1324;
+    display: block;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+#global-header .header-proposition #proposition-menu{
+    max-width:95% !important;
+}
+@media (min-width: 800px){
+#global-header.with-proposition .header-wrapper .header-global {
+width: 33%!important;
+margin-bottom: 5px;
+    display: block;
+
+}
+}
+
+span.header__menu__proposition-name{
+    max-width:68%;
+    display: inline-table;
+    margin-top: 5px;
+}
+#proposition-links li p {
+    color: white;
+    font-weight: bold;
+    color: #6f777b;
+    margin-top:0;
+    margin-bottom:0em;
+}
+
+.column-two-thirds {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+.ops-header.grid-layout__column--1-2{
+
+}
+
+a.js-header-toggle.menu {
+    display: none !important;
+}
+
+.signoutLnk{
+    display: inline-block;
+    position: relative;
+    font-family: "nta",Arial,sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    font-size: 16px;
+    line-height: 1.25;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: #005ea5;
+    text-decoration: none;
+    border-bottom: 1px solid #005ea5;
+    float: right;
+
+}
+
+@media (max-width: 641px){
+    .grid-layout.header-options.print-hidden {
+        background-color: white;
+        float: left;
+    }
+
+    .js-enabled #global-header .header-proposition #proposition-links {
+        display: block;
+        margin-top: 20px;
+    }
+
+    span.header__menu__proposition-name{
+        max-width :60%;
+    }
+
+  .ops-header.grid-layout__column--1-2{
+          width: 50%;
+          display: block;
+          float: left;
+     }
+
+     .ops-header.grid-layout__column--1-3{
+            width: 50%;
+            display: block;
+            float: right;
+       }
+
+
+    .signoutLnk{
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 642px) and (max-width: 799px){
+    span.header__menu__proposition-name{
+        max-width :65%;
+    }
+
+
+}
+
+@media (max-width: 800px){
+
+    .header__menu__proposition-links{
+        width: auto;
+    }
+
+    .js-enabled #global-header .header-proposition #proposition-links {
+        display: block;
+        margin-top:0px;
+    }
+
+    #global-header .header-proposition #proposition-links li {
+        width:auto;
+    }
+}
