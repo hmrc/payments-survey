@@ -30,7 +30,7 @@
         uiFooterLinks: uk.gov.hmrc.play.views.html.layouts.FooterLinks,
         helperReportAProblemLink: uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink,
         head: uk.gov.hmrc.play.views.html.layouts.Head,
-        viewsHelpers: views.ViewsHelpers
+        footer: uk.gov.hmrc.play.views.html.layouts.Footer
 )(implicit appConfig: AppConfig)
 
 @(
@@ -85,7 +85,7 @@
 @afterHeader = {}
 
 @bodyEnd = {
-@viewsHelpers.footer(
+@footer(
     analyticsToken = None,
     analyticsHost = "auto",
     ssoUrl = None,

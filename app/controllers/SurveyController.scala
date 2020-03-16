@@ -59,6 +59,7 @@ final class SurveyController @Inject() (
       formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
         val SurveyForm(wereYouAble, overallRate, howEasyAnswer, journey, comments) = data
+
         val surveyMap: Map[String, String] = Map(
           "wereYouAble" -> wereYouAble.toString,
           "overallRate" -> overallRate.toString,

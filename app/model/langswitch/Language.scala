@@ -61,4 +61,3 @@ object Languages extends Enum[Language] {
   val availableLanguages: NonEmptyList[Language] = NonEmptyList.of(English, Welsh)
   override def values: immutable.IndexedSeq[Language] = findValues
 }
-

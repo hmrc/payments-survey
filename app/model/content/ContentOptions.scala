@@ -62,4 +62,3 @@ object ShowBetaBanner {
 
   implicit val format: Format[ShowBetaBanner] = implicitly[Format[Boolean]].inmap(ShowBetaBanner(_), _.value)
 }
-

@@ -150,4 +150,3 @@ package object model {
     def contentOptions: ContentOptions = JsdToContentOptions.toContentOptions(jsd)
   }
 }
-
