@@ -1,3 +1,8 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.paymentssurvey.controllers.HelloWorld.helloWorld
+GET         /assets/*file                                 controllers.Assets.at(path="/public", file)
+
+GET         /survey                                       controllers.SurveyController.route
+GET         /:journeyId/survey                    controllers.SurveyController.survey(journeyId: JourneyId)
+POST        /:journeyId/survey                            controllers.SurveyController.submitSurvey(journeyId: JourneyId)
+GET         /:journeyId/survey-thanks                     controllers.SurveyController.surveyThanks(journeyId: JourneyId)
