@@ -23,8 +23,7 @@ import play.api.libs.json.{ Format, Json, OFormat }
 
 final case class ContentOptions(
   isWelshSupported: IsWelshSupported,
-  title: BannerTitle,
-  showBetaBanner: ShowBetaBanner)
+  title: BannerTitle)
 
 object ContentOptions {
   implicit val format: OFormat[ContentOptions] = Json.format[ContentOptions]
@@ -51,14 +50,4 @@ final case class BannerTitle(englishValue: String, welshValue: Option[String] = 
 object BannerTitle {
   implicit val format: OFormat[BannerTitle] = Json.format[BannerTitle]
   val default: BannerTitle = BannerTitle(englishValue = "Pay tax", welshValue = Option("Talu treth"))
-}
-
-final case class ShowBetaBanner(value: Boolean)
-
-object ShowBetaBanner {
-  val yes: ShowBetaBanner = ShowBetaBanner(true)
-  val no: ShowBetaBanner = ShowBetaBanner(false)
-  val default: ShowBetaBanner = ShowBetaBanner.no
-
-  implicit val format: Format[ShowBetaBanner] = implicitly[Format[Boolean]].inmap(ShowBetaBanner(_), _.value)
 }

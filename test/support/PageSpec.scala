@@ -19,14 +19,21 @@ package support
 import java.time.{ Clock, LocalDateTime, ZoneId, ZoneOffset }
 
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import org.scalatest.TestData
+import org.scalatest.selenium.WebBrowser
+import org.scalatestplus.play.guice.GuiceOneServerPerTest
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import testdata.TestData
+import uk.gov.hmrc.http.SessionKeys
 
-trait AppSpec extends UnitSpec with GuiceOneAppPerSuite with WireMockSupport {
+trait PageSpec extends UnitSpec with GuiceOneServerPerTest with WireMockSupport with WebBrowser {
+  //  protected implicit def executionContext: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  //  protected implicit def hc: HeaderCarrier = HeaderCarrier()
+
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
-  override lazy val app: Application = new GuiceApplicationBuilder()
+  override def newAppForTest(testData: TestData): Application = new GuiceApplicationBuilder()
     .configure(Map[String, Any](
       "microservice.services.pay-api.port" -> WireMockSupport.port))
     .build()
@@ -35,5 +42,9 @@ trait AppSpec extends UnitSpec with GuiceOneAppPerSuite with WireMockSupport {
   implicit val testClock: Clock = {
     val fixedInstant = LocalDateTime.parse(frozenTimeString).toInstant(ZoneOffset.UTC)
     Clock.fixed(fixedInstant, ZoneId.systemDefault)
+  }
+
+  protected trait TestWithSession {
+    webDriver.get(s"http://localhost:${port}/pay/test-only/add-to-session/${SessionKeys.sessionId}/${TestData.testSessionId.value}")
   }
 }
