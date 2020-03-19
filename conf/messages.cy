@@ -12,7 +12,6 @@ error.pageNotFound.title = Heb ddod o hyd i’r tudalen
 error.pageNotFound.heading = Ni ellir dod o hyd i’r tudalen hwn
 error.pageNotFound.message = Gwiriwch eich bod wedi nodi’r cyfeiriad we cywir.
 
-survey.html.title = Rhoi adborth
 survey.heading = Sut oedd eich gwasanaeth talu?
 survey.instruction.text.1 = Rydym yn defnyddio’ch adborth i wella ein gwasanaethau. I ddeall eich adborth yn well, efallai y byddwn yn ei gysylltu â gwybodaeth arall sydd gennym amdanoch, megis rhywedd ac oedran.
 survey.instruction.text.2.1 = Gweler
