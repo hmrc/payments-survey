@@ -3,6 +3,7 @@ header.default = Pay your tax
 
 global.back = Back
 global.sign-out = Sign out
+global.title-suffix = GOV.UK
 
 error.InternalServerError.heading = Sorry, we’re experiencing technical difficulties
 error.InternalServerError.message = Please try again in a few minutes.
@@ -11,7 +12,7 @@ error.pageNotFound.title = Page not found
 error.pageNotFound.heading = This page can’t be found
 error.pageNotFound.message = Please check that you have entered the correct web address.
 
-survey.html.title = Give feedback
+#survey.html.title = Give feedback
 survey.heading = How was our payment service?
 survey.instruction.text.1 = We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. 
 survey.instruction.text.2.1 = See the

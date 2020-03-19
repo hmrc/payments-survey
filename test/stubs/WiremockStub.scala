@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package mock
+package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 

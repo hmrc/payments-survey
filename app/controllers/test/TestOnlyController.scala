@@ -27,7 +27,6 @@ class TestOnlyController @Inject() (cc: MessagesControllerComponents)(
   implicit
   ec: ExecutionContext) extends FrontendController(cc) {
   def addToSession(key: String, value: String): Action[AnyContent] = Action { implicit request =>
-    println("hnbhvbdsiygj cbcdfb csnjobvhf csncd************************")
     Ok("").addingToSession(key -> value)
   }
 

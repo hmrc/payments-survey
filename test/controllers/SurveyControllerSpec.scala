@@ -16,17 +16,14 @@
 
 package controllers
 
-import mock.PayApiStubGetJourney
-import payapi.corcommon.model.JourneyId
+import model._
 import play.api.http.Status
-import play.api.mvc.{ AnyContentAsEmpty, Result }
 import play.api.test.FakeRequest
-import support.AppSpec
 import play.api.test.Helpers._
-import testdata.TestData
+import stubs.PayApiStubGetJourney
+import support.AppSpec
+import testdata.TestData._
 import uk.gov.hmrc.http.SessionKeys
-
-import scala.concurrent.Future
 
 final class SurveyControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SurveyController]
@@ -52,38 +49,49 @@ final class SurveyControllerSpec extends AppSpec {
   "survey should return 404 to the user if pay-api is not responsive" in {
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.survey(TestData.testJourneyId)(fakeRequest)
+    val result = controller.survey(testJourneyId)(fakeRequest)
 
     status(result) shouldBe Status.NOT_FOUND
+
+    PayApiStubGetJourney.getJourneyVerify(testJourney)
   }
 
   "survey should render the survey page if pay-api is responsive" in {
-    PayApiStubGetJourney.getJourney2xx(TestData.testJourney)
+    PayApiStubGetJourney.getJourney2xx(testJourney)
 
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.survey(TestData.testJourneyId)(fakeRequest.withSession((SessionKeys.sessionId, TestData.testSessionId.value)))
+    val result = controller.survey(testJourneyId)(fakeRequest.withSession((SessionKeys.sessionId, testSessionId.value)))
 
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
+    contentAsString(result).contains(testJourney.contentOptions.title.englishValue) shouldBe true
+
+    PayApiStubGetJourney.getJourneyVerify(testJourney)
   }
 
   "surveyThanks should return 404 to the user if pay-api is not responsive" in {
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.surveyThanks(TestData.testJourneyId)(fakeRequest)
+    val result = controller.surveyThanks(testJourneyId)(fakeRequest)
 
     status(result) shouldBe Status.NOT_FOUND
+
+    PayApiStubGetJourney.getJourneyVerify(testJourney)
+
   }
 
   "surveyThanks should render the survey page if pay-api is responsive" in {
-    PayApiStubGetJourney.getJourney2xx(TestData.testJourney)
+    PayApiStubGetJourney.getJourney2xx(testJourney)
 
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.surveyThanks(TestData.testJourneyId)(fakeRequest.withSession((SessionKeys.sessionId, TestData.testSessionId.value)))
+    val result = controller.surveyThanks(testJourneyId)(fakeRequest.withSession((SessionKeys.sessionId, testSessionId.value)))
 
     status(result) shouldBe Status.OK
     contentAsString(result).contains("Thank you") shouldBe true
+    contentAsString(result).contains(testJourney.contentOptions.title.englishValue) shouldBe true
+
+    PayApiStubGetJourney.getJourneyVerify(testJourney)
   }
 }

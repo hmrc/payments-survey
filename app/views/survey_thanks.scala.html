@@ -15,7 +15,9 @@
  *@
 
 @import config.AppConfig
+@import model._
 @import requests.JourneyRequest
+@import views.TitleMaker.journeyTitleMaker
 
 @this(main: views.html.main)
 
@@ -25,7 +27,10 @@
 <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
 }
 
-@main(title = Messages("thanks.heading"), header = Some(header), isWelshSupported = request.welsh) {
+@main(title = journeyTitleMaker("thanks.heading"),
+    navTitle = request.journey.contentOptions.title.forCurrentLanguage,
+    header = Some(header),
+    isWelshSupported = request.welsh) {
 
     <p>@Messages("thanks.message")</p>
 

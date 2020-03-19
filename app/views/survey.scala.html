@@ -15,14 +15,14 @@
  *@
 
 @import config.AppConfig
-@import requests.JourneyRequest
 @import model._
+@import requests.JourneyRequest
+@import views.TitleMaker.journeyTitleMaker
 
 @this(main: views.html.main, formHelper: uk.gov.hmrc.play.views.html.helpers.FormWithCSRF, errorSummary: uk.gov.hmrc.play.views.html.helpers.ErrorSummary)
 
 @(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
 
-@import uk.gov.hmrc.play.views.html.helpers
 
 @header = {
   <h1 class="heading-xlarge">@Messages("survey.heading")</h1>
@@ -33,7 +33,7 @@
 }
 
 @main(
-    title = Messages("survey.html.title"),
+    title = journeyTitleMaker("survey.heading", Some(form)),
     navTitle = request.journey.contentOptions.title.forCurrentLanguage,
     header = Some(header),
     fullWidth = true,
@@ -60,18 +60,18 @@
             <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("wereYouAble").isDefined) { form-group-error }" id="wereYouAble">
                     <legend>
-                        <p class="bold-medium">1. @Messages("survey.wereYouAble.question")</p>
-                        <span style ="color: #af1324">
+                        <p id="were-you-able-label" class="bold-medium">1. @Messages("survey.wereYouAble.question")</p>
+                        <span id="were-you-able-error" style="color: #af1324">
                         @form.error("wereYouAble").map(x => Messages(x.message)).getOrElse("")
                         </span>
                     </legend>
                     <div class="multiple-choice">
                         @radioInput("able-yes", "wereYouAble", "1")
-                        <label class="block-label--stacked" for="able-yes">@Messages("survey.wereYouAble.response.yes")</label>
+                        <label id="were-you-able-yes-label" class="block-label--stacked" for="able-yes">@Messages("survey.wereYouAble.response.yes")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("able-no", "wereYouAble", "0")
-                        <label class="block-label--stacked" for="able-no">@Messages("survey.wereYouAble.response.no")</label>
+                        <label id="were-you-able-no-label" class="block-label--stacked" for="able-no">@Messages("survey.wereYouAble.response.no")</label>
                     </div>
                 </fieldset>
             </div>
@@ -80,30 +80,30 @@
             <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("howEasy").isDefined) { form-group-error }" id="howEasy">
                     <legend>
-                        <p class="bold-medium">2. @Messages("survey.howEasy.question")</p>
-                        <span style ="color: #af1324">
+                        <p id="how-easy-label" class="bold-medium">2. @Messages("survey.howEasy.question")</p>
+                        <span id="how-easy-error" style ="color: #af1324">
                         @form.error("howEasy").map(x => Messages(x.message)).getOrElse("")
                         </span>
                     </legend>
                     <div class="multiple-choice">
                         @radioInput("difficulty-radio-very-easy", "howEasy", "5")
-                        <label class="block-label--stacked" for="difficulty-radio-very-easy">@Messages("survey.howEasy.response.5")</label>
+                        <label id="how-easy-very-easy-label" class="block-label--stacked" for="difficulty-radio-very-easy">@Messages("survey.howEasy.response.5")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("difficulty-radio-easy", "howEasy", "4")
-                        <label class="block-label--stacked" for="difficulty-radio-easy">@Messages("survey.howEasy.response.4")</label>
+                        <label id="how-easy-easy-label" class="block-label--stacked" for="difficulty-radio-easy">@Messages("survey.howEasy.response.4")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("difficulty-radio-neutral","howEasy","3")
-                        <label class="block-label--stacked" for="difficulty-radio-neutral">@Messages("survey.howEasy.response.3")</label>
+                        <label id="how-easy-neutral-label" class="block-label--stacked" for="difficulty-radio-neutral">@Messages("survey.howEasy.response.3")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("difficulty-radio-difficult", "howEasy", "2")
-                        <label class="block-label--stacked" for="difficulty-radio-difficult">@Messages("survey.howEasy.response.2")</label>
+                        <label id="how-easy-difficult-label" class="block-label--stacked" for="difficulty-radio-difficult">@Messages("survey.howEasy.response.2")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("difficulty-radio-very-difficult", "howEasy", "1")
-                        <label class="block-label--stacked" for="difficulty-radio-very-difficult">@Messages("survey.howEasy.response.1")</label>
+                        <label id="how-easy-very-difficult-label" class="block-label--stacked" for="difficulty-radio-very-difficult">@Messages("survey.howEasy.response.1")</label>
                     </div>
                 </fieldset>
             </div>
@@ -112,9 +112,9 @@
             <div class="form-group payments">
                 <fieldset class="form-field-group">
                     <label for="comments">
-                        <p class="bold-medium">2b. @Messages("survey.comment.question")</p>
+                        <p id="why-score-label" class="bold-medium">2b. @Messages("survey.comment.question")</p>
                     </label>
-                    <textarea maxlength="1200" name="comments" style="width:80%" rows="4" id="comments" class="form-control">@form("comments").value</textarea>
+                    <textarea id="why-score-field" maxlength="1200" name="comments" style="width:80%" rows="4" id="comments" class="form-control">@form("comments").value</textarea>
                     <small>@Messages("survey.comment.limit")</small>
                 </fieldset>
             </div>
@@ -123,36 +123,36 @@
             <div class="form-group payments">
                 <fieldset class="form-field-group @if(form.error("overallRate").isDefined) { form-group-error }" id="overallRate">
                     <legend>
-                        <p class="bold-medium">3. @Messages("survey.overallRate.question")</p>
-                        <span style ="color: #af1324">
+                        <p id="overall-label" class="bold-medium">3. @Messages("survey.overallRate.question")</p>
+                        <span id="overall-error" style ="color: #af1324">
                         @form.error("overallRate").map(x => Messages(x.message)).getOrElse("")
                         </span>
                     </legend>
                     <div class="multiple-choice">
                         @radioInput("rate-very-good", "overallRate", "5")
-                        <label class="block-label--stacked" for="rate-very-good">@Messages("survey.overallRate.response.5")</label>
+                        <label id="overall-very-good-label" class="block-label--stacked" for="rate-very-good">@Messages("survey.overallRate.response.5")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("rate-good", "overallRate", "4")
-                        <label class="block-label--stacked" for="rate-good">@Messages("survey.overallRate.response.4")</label>
+                        <label id="overall-good-label" class="block-label--stacked" for="rate-good">@Messages("survey.overallRate.response.4")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("rate-neutral", "overallRate", "3")
-                        <label class="block-label--stacked" for="rate-neutral">@Messages("survey.overallRate.response.3")</label>
+                        <label id="overall-neutral-label" class="block-label--stacked" for="rate-neutral">@Messages("survey.overallRate.response.3")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("rate-poor", "overallRate", "2")
-                        <label class="block-label--stacked" for="rate-poor">@Messages("survey.overallRate.response.2")</label>
+                        <label id="overall-poor-label" class="block-label--stacked" for="rate-poor">@Messages("survey.overallRate.response.2")</label>
                     </div>
                     <div class="multiple-choice">
                         @radioInput("rate-very-poor", "overallRate", "1")
-                        <label class="block-label--stacked" for="rate-very-poor">@Messages("survey.overallRate.response.1")</label>
+                        <label id="overall-very-poor-label" class="block-label--stacked" for="rate-very-poor">@Messages("survey.overallRate.response.1")</label>
                     </div>
                 </fieldset>
             </div>
 
-            <p class="bold-medium">@Messages("survey.footnote.header")</p>
-            <p>@Messages("survey.footnote.text")</p>
+            <p id="thank-you-header" class="bold-medium">@Messages("survey.footnote.header")</p>
+            <p id="thank-you-message">@Messages("survey.footnote.text")</p>
 
             <p>
                 <input id="submit-survey-button" type="submit" class="button" value="@Messages("survey.submit")"/>
