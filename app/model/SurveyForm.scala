@@ -20,12 +20,7 @@ import play.api.data.Form
 import play.api.data.Forms.{ mapping, number, text }
 import play.api.libs.json.{ Json, OFormat }
 
-final case class SurveyForm(
-  wereYouAble: Int,
-  overallRate: Int,
-  howEasy: Int,
-  journey: String,
-  comments: String)
+final case class SurveyForm(wereYouAble: Int, overallRate: Int, howEasy: Int, journey: String, comments: String)
 
 object SurveyForm {
   implicit val format: OFormat[SurveyForm] = Json.format[SurveyForm]

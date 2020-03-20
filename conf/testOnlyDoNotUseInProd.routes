@@ -10,4 +10,7 @@
 # Failing to follow this rule may result in test routes deployed in production.
 
 # Add all the application routes to the prod.routes file
-->         /                          prod.Routes
+->         /                                                      prod.Routes
+
+GET        /payments-survey/test-only/add-to-session/:key/:value  @controllers.test.TestOnlyController.addToSession(key: String, value: String)
+

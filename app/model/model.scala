@@ -22,7 +22,7 @@ import payapi.corcommon.model._
 package object model {
 
   implicit class JourneyExt[Jsd <: JourneySpecificData](val j: Journey[Jsd]) {
-    def contentOptions: ContentOptions = j.journeySpecificData.contentOptions
+    def contentOptions: ContentOptions = JsdToContentOptions.toContentOptions(j.journeySpecificData)
   }
 
   implicit class OriginExt(val o: Origin) extends AnyVal {
@@ -116,37 +116,5 @@ package object model {
       case Ni => "northern-ireland"
       case Parcels => "parcels"
     }
-  }
-
-  implicit class TaxTypeExt(val t: TaxType) extends AnyVal {
-    def auditName: String = t match {
-      case TaxTypes.selfAssessment => "self-assessment"
-      case TaxTypes.vat => "vat"
-      case TaxTypes.epaye => "epaye"
-      case TaxTypes.corporationTax => "corporation-tax"
-      case TaxTypes.other => "other-taxes"
-      case TaxTypes.class2NationalInsurance => "class-2-national-insurance"
-      case TaxTypes.ni => "northern-ireland"
-      case TaxTypes.parcels => "parcels"
-      case TaxTypes.mib => "unimplemented"
-      case TaxTypes.stampDuty => "unimplemented"
-      case TaxTypes.cds => "unimplemented"
-      case TaxTypes.pngr => "unimplemented"
-      case TaxTypes.p800 => "unimplemented"
-      case TaxTypes.insurancePremium => "unimplemented"
-      case TaxTypes.class3NationalInsurance => "unimplemented"
-      case TaxTypes.bioFuelsAndRoadGas => "unimplemented"
-      case TaxTypes.airPassengerDuty => "unimplemented"
-      case TaxTypes.beerDuty => "unimplemented"
-      case TaxTypes.landfillTax => "unimplemented"
-      case TaxTypes.aggregatesLevy => "unimplemented"
-      case TaxTypes.climateChangeLevy => "unimplemented"
-      case TaxTypes.epayeTpes => "unimplemented"
-      case TaxTypes.capitalGainsTax => "unimplemented"
-    }
-  }
-
-  implicit class JsdExt(val jsd: JourneySpecificData) extends AnyVal {
-    def contentOptions: ContentOptions = JsdToContentOptions.toContentOptions(jsd)
   }
 }

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package config
+package controllers.test
 
 import javax.inject.{ Inject, Singleton }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import play.api.i18n.MessagesApi
-import play.api.mvc.Request
-import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class ErrorHandler @Inject() (errorTemplate: views.html.error_template, val messagesApi: MessagesApi)(implicit val appConfig: AppConfig) extends FrontendErrorHandler {
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
-    errorTemplate(pageTitle, heading, message)
+class TestOnlyController @Inject() (cc: MessagesControllerComponents)(
+  implicit
+  ec: ExecutionContext) extends FrontendController(cc) {
+  def addToSession(key: String, value: String): Action[AnyContent] = Action { implicit request =>
+    Ok("").addingToSession(key -> value)
+  }
+
 }
