@@ -14,13 +14,16 @@
  * limitations under the License.
  *@
 
-@(presentationMode: String)(implicit paymentRequest: Request[_], m: Messages)
+@import requests.JourneyRequest
+@import model._
 
-    @presentationMode match {
-        case "BTA" => {
+@()(implicit request: JourneyRequest[_], m: Messages)
+
+    @request.journey.origin.presentationMode match {
+        case "BTA" | "MTD-BTA"=> {
             <a id="back-to-bta" href="/business-account">@Messages("survey.nothanks.return-to-bta")</a>
         }
-        case "PTA" => {
+        case "PTA" | "MTD-PTA" => {
             <a href="/personal-account" class="back-link">@Messages("survey.nothanks.return-to-pta")</a>
         }
         case _ => {
