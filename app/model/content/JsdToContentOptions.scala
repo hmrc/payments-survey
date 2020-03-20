@@ -243,5 +243,9 @@ object JsdToContentOptions {
       title = BannerTitle(
         englishValue = "Report and pay Capital Gains Tax on UK property",
         welshValue = Some("Rhoi gwybod am a thalu Treth Enillion Cyfalaf ar eiddo yn y DU")))
+
+    case _: JsdPtaSimpleAssessment => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title = BannerTitle(englishValue = "Pay your Simple Assessment", welshValue = Some("Talu eich Asesiad Syml")))
   }
 }

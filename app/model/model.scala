@@ -76,6 +76,7 @@ package object model {
       case Parcels => true
       case Ni => true
       case PtaSa => true
+      case PtaSimpleAssessment => true
     }
 
     def auditName: String = o match {
@@ -89,7 +90,7 @@ package object model {
       case BtaEpayePenalty => "epaye-penalty"
       case BtaEpayeInterest => "epaye-interest"
       case PfEpayeP11d | BtaClass1aNi => "class-1a-national-insurance"
-      case PfP800 => "p800"
+      case PfP800 | PtaSimpleAssessment => "p800-or-pa302"
       case PfSdlt => "stamp-duty"
       case PfSdil | BtaSdil => "soft-drinks-industry-levy"
       case PfCds => "cds"
@@ -115,6 +116,19 @@ package object model {
       case Mib => "merchandise-in-baggage"
       case Ni => "northern-ireland"
       case Parcels => "parcels"
+    }
+
+    def presentationMode: String = o match {
+      case BtaSa | BtaVat | BtaCt | BtaEpayeGeneral | BtaEpayeBill | BtaEpayePenalty | BtaEpayeInterest | BtaClass1aNi
+        | BtaSdil => "BTA"
+      case PtaSa | PtaSimpleAssessment => "PTA"
+      case PfSa | PfVat | PfCt | PfEpayeNi | PfEpayeP11d | PfEpayeLpp | PfEpayeSeta | PfEpayeLateCis | PfSdil | PfSdlt
+        | PfP800 | PfCds | PfTpes | PfClass2Ni | PfClass3Ni | PfInsurancePremium | PfMgd | PfSimpleAssessment
+        | PfPsAdmin | PfBioFuels | PfAirPass | PfBeerDuty | PfGamingOrBingoDuty | PfGbPbRgDuty | PfLandfillTax
+        | PfAggregatesLevy | PfClimateChangeLevy | PfOther => "PF-GOVUK"
+      case VcVatReturn | VcVatOther | DdVat => "MTD-BTA"
+      case ItSa => "MTD-PTA"
+      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels => "Other"
     }
   }
 }

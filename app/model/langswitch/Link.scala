@@ -31,7 +31,7 @@
  */
 package model.langswitch
 
-//shamelessly copied from play-ui
+//shamelessly copied from pay-frontend, which in turn copied it from play-ui
 //TODO: remove what it not used
 
 import play.api.i18n.Messages

@@ -16,8 +16,6 @@
 
 @(presentationMode: String)(implicit paymentRequest: Request[_], m: Messages)
 
-
-
     @presentationMode match {
         case "BTA" => {
             <a id="back-to-bta" href="/business-account">@Messages("survey.nothanks.return-to-bta")</a>
