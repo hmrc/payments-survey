@@ -47,7 +47,6 @@ final class SurveyController @Inject() (
     request.session
       .get("journeyId")
       .fold(Redirect(appConfig.payFrontendBaseUrl))(id => Redirect(routes.SurveyController.survey(JourneyId(id))))
-
   }
 
   def survey(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
@@ -58,14 +57,12 @@ final class SurveyController @Inject() (
     surveyForm.bindFromRequest().fold(
       formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
-        val SurveyForm(wereYouAble, overallRate, howEasyAnswer, journey, comments) = data
-
         val surveyMap: Map[String, String] = Map(
-          "wereYouAble" -> wereYouAble.toString,
-          "overallRate" -> overallRate.toString,
-          "howEasy" -> howEasyAnswer.toString,
-          "comments" -> comments,
-          "journey" -> journey)
+          "wereYouAble" -> data.wereYouAble.toString,
+          "overallRate" -> data.overallRate.toString,
+          "howEasy" -> data.howEasy.toString,
+          "comments" -> data.comments,
+          "journey" -> data.journey)
 
         val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
 

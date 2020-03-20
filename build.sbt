@@ -4,11 +4,25 @@ import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "payments-survey"
 
+val scalaCompilerOptions = Seq(
+  "-Xfatal-warnings",
+  "-Xlint:-missing-interpolator,_",
+  "-Yno-adapted-args",
+  "-Ywarn-value-discard",
+  "-Ywarn-dead-code",
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-language:implicitConversions",
+  "-Ypartial-unification"
+)
+
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(
     scalaVersion := "2.11.11",
     majorVersion                     := 0,
+    scalacOptions ++= scalaCompilerOptions,
     resolvers ++= Seq(
       "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/",
       Resolver.bintrayRepo("hmrc", "releases")
@@ -16,6 +30,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
   )
   .settings(
+    PlayKeys.playDefaultPort := 9966,
     routesImport ++= Seq(
       "payapi.corcommon.model._"
     ))

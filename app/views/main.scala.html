@@ -23,9 +23,6 @@
         title: String,
         navTitle: Option[String] = None,
         header: Option[Html] = None,
-        pageViewName: Option[String] = None,
-        jsFiles: List[String] = Nil,
-        linkElement: Option[Html] = None,
         fullWidth: Boolean = false,
         isWelshSupported: IsWelshSupported
         )(content: Html)(implicit request: Request[_], m: Messages)
@@ -50,8 +47,6 @@
 
     <script src="@routes.Assets.at("javascripts/formatter.js")"></script>
     <script src="@routes.Assets.at("javascripts/details.polyfill.js")"></script>
-
-    @linkElement
 }
 @mainContent = {
     <div class="content__body @{if(fullWidth) "full-width"}">
@@ -67,14 +62,6 @@
 
 @bodyEnd = {
     <script src="@{appConfig.assetsBaseUrl}/javascripts/application.min.js" type="text/javascript"></script>
-
-    @*<script type="text/javascript">var ssoUrl = '@{ExternalUrls.portalUrl}/ssoin'</script>?*@
-
-    @for(jsFile <- "javascripts/analytics.js" +: jsFiles) {
-        <script type='text/javascript' src='@routes.Assets.at(jsFile)'></script>
-    }
-
-    @* @Html(GoogleAnalytics.renderTrackerCode(pageViewName, FlashStoreUtils.getGAEvent(request.flash)))*@
 }
 
 @govuk_wrapper(
