@@ -30,6 +30,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
   )
   .settings(
+    PlayKeys.playDefaultPort := 9966,
     routesImport ++= Seq(
       "payapi.corcommon.model._"
     ))
