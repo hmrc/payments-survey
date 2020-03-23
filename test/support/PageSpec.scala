@@ -33,6 +33,7 @@ trait PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with 
 
   override def newAppForTest(testData: TestData): Application = new GuiceApplicationBuilder()
     .configure(Map[String, Any](
+      "application.router" -> "testOnlyDoNotUseInProd.Routes",
       "microservice.services.pay-api.port" -> WireMockSupport.port))
     .build()
 
