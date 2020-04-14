@@ -230,6 +230,10 @@ object JsdToContentOptions {
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay the Soft Drinks Industry Levy", welshValue = Some("Talu Ardoll y Diwydiant Diodydd Ysgafn")))
 
+    case _: JsdDdSdil => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title = BannerTitle(englishValue = "Pay the Soft Drinks Industry Levy", welshValue = Some("Talu Ardoll y Diwydiant Diodydd Ysgafn")))
+
     case _: JsdPfSimpleAssessment => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Simple Assessment", welshValue = Some("Talu eich Asesiad Syml")))

@@ -69,6 +69,7 @@ package object model {
       case BtaCt => true
       case BtaSdil => true
       case DdVat => true
+      case DdSdil => true
       case VcVatReturn => true
       case VcVatOther => true
       case ItSa => true
@@ -92,7 +93,7 @@ package object model {
       case PfEpayeP11d | BtaClass1aNi => "class-1a-national-insurance"
       case PfP800 | PtaSimpleAssessment => "p800-or-pa302"
       case PfSdlt => "stamp-duty"
-      case PfSdil | BtaSdil => "soft-drinks-industry-levy"
+      case PfSdil | BtaSdil | DdSdil => "soft-drinks-industry-levy"
       case PfCds => "cds"
       case PfTpes => "taxes-penalties-and-enquiry-settlements"
       case PfClass2Ni => "class-2-national-insurance"
@@ -125,8 +126,8 @@ package object model {
       case PfSa | PfVat | PfCt | PfEpayeNi | PfEpayeP11d | PfEpayeLpp | PfEpayeSeta | PfEpayeLateCis | PfSdil | PfSdlt
         | PfP800 | PfCds | PfTpes | PfClass2Ni | PfClass3Ni | PfInsurancePremium | PfMgd | PfSimpleAssessment
         | PfPsAdmin | PfBioFuels | PfAirPass | PfBeerDuty | PfGamingOrBingoDuty | PfGbPbRgDuty | PfLandfillTax
-        | PfAggregatesLevy | PfClimateChangeLevy | PfOther => "PF-GOVUK"
-      case VcVatReturn | VcVatOther | DdVat => "MTD-BTA"
+        | PfAggregatesLevy | PfClimateChangeLevy | PfOther  => "PF-GOVUK"
+      case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa => "MTD-PTA"
       case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels => "Other"
     }
