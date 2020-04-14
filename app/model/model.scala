@@ -126,8 +126,8 @@ package object model {
       case PfSa | PfVat | PfCt | PfEpayeNi | PfEpayeP11d | PfEpayeLpp | PfEpayeSeta | PfEpayeLateCis | PfSdil | PfSdlt
         | PfP800 | PfCds | PfTpes | PfClass2Ni | PfClass3Ni | PfInsurancePremium | PfMgd | PfSimpleAssessment
         | PfPsAdmin | PfBioFuels | PfAirPass | PfBeerDuty | PfGamingOrBingoDuty | PfGbPbRgDuty | PfLandfillTax
-        | PfAggregatesLevy | PfClimateChangeLevy | PfOther | DdSdil => "PF-GOVUK"
-      case VcVatReturn | VcVatOther | DdVat => "MTD-BTA"
+        | PfAggregatesLevy | PfClimateChangeLevy | PfOther  => "PF-GOVUK"
+      case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa => "MTD-PTA"
       case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels => "Other"
     }
