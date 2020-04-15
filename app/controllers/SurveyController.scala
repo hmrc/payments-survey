@@ -20,7 +20,7 @@ import action.Actions
 import config.AppConfig
 import javax.inject.{ Inject, Singleton }
 import model.SurveyForm.surveyForm
-import model.{ SurveyForm, _ }
+import model._
 import payapi.corcommon.model.JourneyId
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import requests.RequestSupport
@@ -45,7 +45,7 @@ final class SurveyController @Inject() (
 
   def route(): Action[AnyContent] = Action { implicit request =>
     request.session
-      .get("journeyId")
+      .get("opsJourneyId") //TODO: This would better be communicated as a path parameter but that will require parameterisation of returnUrls. See: OPS-4611
       .fold(Redirect(appConfig.payFrontendBaseUrl))(id => Redirect(routes.SurveyController.survey(JourneyId(id))))
   }
 
