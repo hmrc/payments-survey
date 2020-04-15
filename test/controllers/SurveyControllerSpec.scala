@@ -40,7 +40,7 @@ final class SurveyControllerSpec extends AppSpec {
   "route should send the user to the main survey page if there is a Journey ID in the session" in {
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.route()(fakeRequest.withSession(("journeyId", "123456")))
+    val result = controller.route()(fakeRequest.withSession(("opsJourneyId", "123456")))
 
     status(result) shouldBe Status.SEE_OTHER
     redirectLocation(result) shouldBe Some("/payments-survey/123456/survey")
