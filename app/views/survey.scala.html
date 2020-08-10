@@ -52,7 +52,7 @@
     }
 
     <div class="sign-out-survey">
-        @formHelper(action = controllers.routes.SurveyController.submitSurvey(request.journey._id), 'class -> "form") {
+        @formHelper(action = controllers.routes.SurveyController.submitSurvey(), 'class -> "form") {
 
             <input type="hidden" name="journey" value = "@request.journey.status"/>
 

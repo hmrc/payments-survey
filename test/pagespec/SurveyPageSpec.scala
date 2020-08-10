@@ -17,23 +17,24 @@
 package pagespec
 
 import model._
+import payapi.cardpaymentjourney.model.journey.Journey
 import payapi.corcommon.model.JourneyId
-import stubs.PayApiStubGetJourney
+import stubs.{ PayApiStubFindJourneyBySessionId, PayApiStubGetJourney }
 import support.PageSpec
 import testdata.TestData._
 
 class SurveyPageSpec extends PageSpec {
-  def pagePath(journeyId: JourneyId) = s"/payments-survey/${journeyId.value}/survey"
-  def surveyThanksPath(journeyId: JourneyId) = s"/payments-survey/${journeyId.value}/survey-thanks"
+  val pagePath = s"/payments-survey/survey"
+  val surveyThanksPath = s"/payments-survey/survey-thanks"
 
   "should render correctly" in new TestWithSession {
 
-    PayApiStubGetJourney.getJourney2xx(testJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
-    goTo(baseUrl + pagePath(testJourneyId))
+    goTo(baseUrl + pagePath)
 
     cssSelector(".header__menu__proposition-name")
-      .element.text shouldEqual testJourney.contentOptions.title.englishValue
+      .element.text shouldEqual journey.contentOptions.title.englishValue
 
     webDriver.getTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
 
@@ -82,13 +83,13 @@ class SurveyPageSpec extends PageSpec {
     find("submit-survey-button")
       .fold(fail)(elem => elem.underlying.getAttribute("value") shouldBe "Send feedback")
 
-    PayApiStubGetJourney.getJourneyVerify(testJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
   }
 
   "should show no errors if the user hasn't clicked submit" in new TestWithSession {
-    PayApiStubGetJourney.getJourney2xx(testJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
-    goTo(baseUrl + pagePath(testJourneyId))
+    goTo(baseUrl + pagePath)
 
     find("were-you-able-error")
       .fold(fail)(elem => elem.underlying.getText shouldBe "")
@@ -101,13 +102,13 @@ class SurveyPageSpec extends PageSpec {
   }
 
   "should show an error if the user tries to submit without filling in any fields" in new TestWithSession {
-    PayApiStubGetJourney.getJourney2xx(testJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
-    goTo(baseUrl + pagePath(testJourneyId))
+    goTo(baseUrl + pagePath)
 
     click.on("submit-survey-button")
 
-    currentUrl shouldBe (baseUrl + pagePath(testJourneyId))
+    currentUrl shouldBe (baseUrl + pagePath)
 
     find("were-you-able-error")
       .fold(fail)(elem => elem.underlying.getText shouldBe "This field is required")
@@ -120,15 +121,15 @@ class SurveyPageSpec extends PageSpec {
   }
 
   "should proceed to the survey thanks page if the user submits after filling in all necessary fields" in new TestWithSession {
-    PayApiStubGetJourney.getJourney2xx(testJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
-    goTo(baseUrl + pagePath(testJourneyId))
+    goTo(baseUrl + pagePath)
 
     click.on("able-yes")
     click.on("difficulty-radio-very-easy")
     click.on("rate-very-poor")
     click.on("submit-survey-button")
 
-    currentUrl shouldBe (baseUrl + surveyThanksPath(testJourneyId))
+    currentUrl shouldBe (baseUrl + surveyThanksPath)
   }
 }
