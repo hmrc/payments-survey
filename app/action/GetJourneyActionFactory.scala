@@ -50,7 +50,7 @@ final class GetJourneyActionFactory @Inject() (
         } yield maybeJourney match {
           case Some(journey) => Right(new JourneyRequest(journey, request))
           case None =>
-            JourneyLogger.warn(s"Journey not found for that session id.")
+            JourneyLogger.error(s"Journey not found for that session id. Investigate what happened.")
             Left(Results.NotFound(defaultViews.notFound))
         }
       }
