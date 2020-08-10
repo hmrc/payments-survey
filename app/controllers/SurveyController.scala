@@ -19,6 +19,7 @@ package controllers
 import action.Actions
 import config.AppConfig
 import javax.inject.{ Inject, Singleton }
+import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
 import payapi.corcommon.model.JourneyId
@@ -43,17 +44,11 @@ final class SurveyController @Inject() (
 
   import requestSupport._
 
-  def route(): Action[AnyContent] = Action { implicit request =>
-    request.session
-      .get("opsJourneyId") //TODO: This would better be communicated as a path parameter but that will require parameterisation of returnUrls. See: OPS-4611
-      .fold(Redirect(appConfig.payFrontendBaseUrl))(id => Redirect(routes.SurveyController.survey(JourneyId(id))))
-  }
-
-  def survey(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
+  def survey: Action[AnyContent] = actions.journeyAction { implicit request =>
     Ok(survey(surveyForm))
   }
 
-  def submitSurvey(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
+  def submitSurvey: Action[AnyContent] = actions.journeyAction { implicit request =>
     surveyForm.bindFromRequest().fold(
       formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
@@ -66,7 +61,9 @@ final class SurveyController @Inject() (
 
         val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
 
-        val details: Map[String, String] = Map("orderId" -> request.journey.reference.map(_.value).getOrElse("?"), "userType" -> userType) ++
+        if (request.journey.reference.isEmpty) JourneyLogger.error("Expected reference to be defined in the journey. Investigate what happened.")
+        val referenceString = request.journey.reference.map(_.value).getOrElse("?")
+        val details: Map[String, String] = Map("orderId" -> referenceString, "userType" -> userType) ++
           surveyMap ++
           Map("liability" -> request.journey.origin.auditName)
 
@@ -77,11 +74,11 @@ final class SurveyController @Inject() (
             tags = Map("submitSurvey" -> request.uri),
             detail = details))
 
-        Redirect(controllers.routes.SurveyController.surveyThanks(journeyId))
+        Redirect(controllers.routes.SurveyController.showSurveyThanks)
       })
   }
 
-  def surveyThanks(journeyId: JourneyId): Action[AnyContent] = actions.journeyAction(journeyId) { implicit request =>
+  def showSurveyThanks: Action[AnyContent] = actions.journeyAction { implicit request =>
     Ok(surveyThanks())
   }
 }

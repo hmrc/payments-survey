@@ -19,11 +19,16 @@ package support
 import java.time.{ Clock, LocalDateTime, ZoneId, ZoneOffset }
 
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.scalatest.OptionValues
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 
-trait AppSpec extends UnitSpec with GuiceOneAppPerSuite with WireMockSupport {
+trait AppSpec
+  extends UnitSpec
+  with GuiceOneAppPerSuite
+  with WireMockSupport
+  with OptionValues {
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
   override lazy val app: Application = new GuiceApplicationBuilder()

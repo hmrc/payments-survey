@@ -27,9 +27,7 @@ final class Actions @Inject() (
 
   import getJourneyActionFactory._
 
-  def journeyAction(journeyId: JourneyId): ActionBuilder[JourneyRequest, AnyContent] =
+  def journeyAction: ActionBuilder[JourneyRequest, AnyContent] =
     actionBuilder andThen
-      journeyActionRefiner(journeyId) andThen
-      logInFilter andThen
-      validSessionActionRefiner
+      journeyActionRefiner
 }

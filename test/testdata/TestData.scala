@@ -22,17 +22,17 @@ import payapi.cardpaymentjourney.model.journey.{ Journey, JsdPfSa, NavigationOpt
 import payapi.corcommon.model.{ JourneyId, PaymentStatuses }
 
 object TestData {
-  val testJourneyId: JourneyId = JourneyId("123456")
-  val testSessionId: SessionId = SessionId("TestSession-4b87460d-6f43-4c4c-b810-d6f87c774854")
+  //  val testJourneyId: JourneyId = JourneyId("123456")
+  //  val testSessionId: SessionId = SessionId("TestSession-4b87460d-6f43-4c4c-b810-d6f87c774854")
 
-  def testJourney(implicit clock: Clock): Journey[JsdPfSa] = Journey(
-    _id = testJourneyId,
-    sessionId = Some(testSessionId),
-    amountInPence = None,
-    emailTemplateOptions = None,
-    navigation = NavigationOptions(Url("http://localhost:9056/pay"), Url("http://localhost:9056/pay"), Url("http://localhost:9056/pay"), None),
-    order = None,
-    status = PaymentStatuses.Created,
-    createdOn = LocalDateTime.now(clock),
-    journeySpecificData = JsdPfSa(utr = None))
+  //  def testJourney(implicit clock: Clock): Journey[JsdPfSa] = Journey(
+  //    _id = testJourneyId,
+  //    sessionId = Some(testSessionId),
+  //    amountInPence = None,
+  //    emailTemplateOptions = None,
+  //    navigation = NavigationOptions(Url("http://localhost:9056/pay"), Url("http://localhost:9056/pay"), Url("http://localhost:9056/pay"), None),
+  //    order = None,
+  //    status = PaymentStatuses.Created,
+  //    createdOn = LocalDateTime.now(clock),
+  //    journeySpecificData = JsdPfSa(utr = None))
 }
