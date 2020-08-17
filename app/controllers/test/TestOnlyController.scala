@@ -23,11 +23,22 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TestOnlyController @Inject() (cc: MessagesControllerComponents)(
+class TestOnlyController @Inject() (
+  cc: MessagesControllerComponents,
+  show_error_pages: views.html.error.show_error_pages,
+  error_5xx: views.html.error.error_5xx)(
   implicit
   ec: ExecutionContext) extends FrontendController(cc) {
+
   def addToSession(key: String, value: String): Action[AnyContent] = Action { implicit request =>
     Ok("").addingToSession(key -> value)
   }
 
+  def showErrorPages(): Action[AnyContent] = Action { implicit request =>
+    Ok(show_error_pages())
+  }
+
+  def showError5xx(): Action[AnyContent] = Action { implicit request =>
+    Ok(error_5xx())
+  }
 }
