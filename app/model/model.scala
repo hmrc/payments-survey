@@ -26,59 +26,6 @@ package object model {
   }
 
   implicit class OriginExt(val o: Origin) extends AnyVal {
-    def authExpected: Boolean = o match {
-      case PfSa => false
-      case PfVat => false
-      case PfCt => false
-      case PfEpayeNi => false
-      case PfEpayeLpp => false
-      case PfEpayeSeta => false
-      case PfEpayeLateCis => false
-      case PfEpayeP11d => false
-      case PfTpes => false
-      case PfClass2Ni => false
-      case PfClass3Ni => false
-      case PfInsurancePremium => false
-      case PfSdlt => false
-      case PfCds => false
-      case PfMgd => false
-      case PfSimpleAssessment => false
-      case PfPsAdmin => false
-      case PfSdil => false
-      case PfOther => false
-      case BcPngr => false
-      case Mib => false
-      case PfBioFuels => false
-      case PfAirPass => false
-      case PfBeerDuty => false
-      case PfGamingOrBingoDuty => false
-      case PfGbPbRgDuty => false
-      case PfLandfillTax => false
-      case PfAggregatesLevy => false
-      case PfClimateChangeLevy => false
-      case CapitalGainsTax => false
-
-      case PfP800 => true
-      case BtaSa => true
-      case BtaVat => true
-      case BtaEpayeBill => true
-      case BtaEpayePenalty => true
-      case BtaEpayeInterest => true
-      case BtaEpayeGeneral => true
-      case BtaClass1aNi => true
-      case BtaCt => true
-      case BtaSdil => true
-      case DdVat => true
-      case DdSdil => true
-      case VcVatReturn => true
-      case VcVatOther => true
-      case ItSa => true
-      case Amls => true
-      case Parcels => true
-      case Ni => true
-      case PtaSa => true
-      case PtaSimpleAssessment => true
-    }
 
     def auditName: String = o match {
       case PfSa | BtaSa | PtaSa | ItSa => "self-assessment"
@@ -117,8 +64,10 @@ package object model {
       case Mib => "merchandise-in-baggage"
       case Ni => "northern-ireland"
       case Parcels => "parcels"
+      case JobRetentionScheme => "job-retention-scheme"
     }
 
+    //TODO: is it used anywhere?
     def presentationMode: String = o match {
       case BtaSa | BtaVat | BtaCt | BtaEpayeGeneral | BtaEpayeBill | BtaEpayePenalty | BtaEpayeInterest | BtaClass1aNi
         | BtaSdil => "BTA"
@@ -129,7 +78,7 @@ package object model {
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa => "MTD-PTA"
-      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels => "Other"
+      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels | JobRetentionScheme => "Other"
     }
   }
 }

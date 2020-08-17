@@ -251,5 +251,10 @@ object JsdToContentOptions {
     case _: JsdPtaSimpleAssessment => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title = BannerTitle(englishValue = "Pay your Simple Assessment", welshValue = Some("Talu eich Asesiad Syml")))
+
+    //TODO
+    case _: JsdJobRetentionScheme => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title = BannerTitle(englishValue = "Pay your JSR", welshValue = Some("Pay your JSR")))
   }
 }

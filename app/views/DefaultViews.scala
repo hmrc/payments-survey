@@ -22,9 +22,8 @@ import play.api.i18n.Messages
 import play.api.mvc.Request
 import play.twirl.api.HtmlFormat
 import requests.RequestSupport
-import views.html.error_template
 
-class DefaultViews @Inject() (error_template: views.html.error_template, requestSupport: RequestSupport)(implicit appConfig: AppConfig) {
+class DefaultViews @Inject() (error_template: views.html.error.error_template, requestSupport: RequestSupport)(implicit appConfig: AppConfig) {
 
   import requestSupport._
 
