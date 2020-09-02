@@ -94,8 +94,8 @@ object JourneyLogger {
     lazy val richMessage = makeRichMessage(message)
     level match {
       case Debug => log.debug(richMessage)
-      case Info => log.info(richMessage)
-      case Warn => log.warn(richMessage)
+      case Info  => log.info(richMessage)
+      case Warn  => log.warn(richMessage)
       case Error => log.error(richMessage)
     }
   }
@@ -104,8 +104,8 @@ object JourneyLogger {
     lazy val richMessage = makeRichMessage(message)
     level match {
       case Debug => log.debug(richMessage, ex)
-      case Info => log.info(richMessage, ex)
-      case Warn => log.warn(richMessage, ex)
+      case Info  => log.info(richMessage, ex)
+      case Warn  => log.warn(richMessage, ex)
       case Error => log.error(richMessage, ex)
     }
   }

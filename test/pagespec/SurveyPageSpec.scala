@@ -19,7 +19,7 @@ package pagespec
 import model._
 import payapi.cardpaymentjourney.model.journey.Journey
 import payapi.corcommon.model.JourneyId
-import stubs.{ PayApiStubFindJourneyBySessionId, PayApiStubGetJourney }
+import stubs.{PayApiStubFindJourneyBySessionId, PayApiStubGetJourney}
 import support.PageSpec
 import testdata.TestData._
 

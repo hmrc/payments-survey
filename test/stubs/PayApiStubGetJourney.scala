@@ -18,7 +18,7 @@ package stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import payapi.cardpaymentjourney.model.journey.{ Journey, JourneySpecificData }
+import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 import payapi.corcommon.model.JourneyId
 import play.api.http.Status
 import WiremockStub._
@@ -37,15 +37,19 @@ object PayApiStubGetJourney {
       .willReturn(
         aResponse()
           .withStatus(Status.OK)
-          .withBody(Json.prettyPrint(Journey.formats.writes(journey))))
-      .willSetStateTo(nextState(sequence)))
+          .withBody(Json.prettyPrint(Journey.formats.writes(journey)))
+      )
+      .willSetStateTo(nextState(sequence))
+  )
 
   def getJourney2xx(journey: Journey[JourneySpecificData]): StubMapping = stubFor(
     get(urlPathEqualTo(path(journey._id)))
       .willReturn(
         aResponse()
           .withStatus(Status.OK)
-          .withBody(Json.prettyPrint(Journey.formats.writes(journey)))))
+          .withBody(Json.prettyPrint(Journey.formats.writes(journey)))
+      )
+  )
 
   def getJourney404(journey: Journey[JourneySpecificData], wireMockState: Int = 0): StubMapping = stubFor(
     get(urlPathEqualTo(path(journey._id)))
@@ -54,8 +58,10 @@ object PayApiStubGetJourney {
       .willReturn(
         aResponse()
           .withStatus(Status.NOT_FOUND)
-          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found [${journey._id}]"}"""))
-      .willSetStateTo(nextState(wireMockState)))
+          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found [${journey._id}]"}""")
+      )
+      .willSetStateTo(nextState(wireMockState))
+  )
 
   def getJourney5xx(journey: Journey[JourneySpecificData], wireMockState: Int): StubMapping = stubFor(
     get(urlPathEqualTo(path(journey._id)))
@@ -64,18 +70,23 @@ object PayApiStubGetJourney {
       .willReturn(
         aResponse()
           .withStatus(Status.SERVICE_UNAVAILABLE)
-          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}"""))
-      .willSetStateTo(nextState(wireMockState)))
+          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")
+      )
+      .willSetStateTo(nextState(wireMockState))
+  )
 
   def getJourney5xx(journey: Journey[JourneySpecificData]): StubMapping = stubFor(
     get(urlPathEqualTo(path(journey._id)))
       .willReturn(
         aResponse()
           .withStatus(Status.SERVICE_UNAVAILABLE)
-          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")))
+          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")
+      )
+  )
 
   def getJourneyVerify(journey: Journey[JourneySpecificData], times: Int = 1): Unit = verify(
     times,
-    getRequestedFor(urlEqualTo(path(journey._id))))
+    getRequestedFor(urlEqualTo(path(journey._id)))
+  )
 
 }

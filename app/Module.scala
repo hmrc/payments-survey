@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import java.time.{ Clock, ZoneOffset }
+import java.time.{Clock, ZoneOffset}
 
-import com.google.inject.{ AbstractModule, Provides, Singleton }
-import uk.gov.hmrc.auth.core.{ AuthConnector, AuthorisedFunctions }
+import com.google.inject.{AbstractModule, Provides, Singleton}
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
 class Module() extends AbstractModule {
   override def configure(): Unit = ()

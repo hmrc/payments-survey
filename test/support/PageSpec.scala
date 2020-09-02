@@ -16,17 +16,17 @@
 
 package support
 
-import java.time.{ Clock, LocalDateTime, ZoneId, ZoneOffset }
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.scalatest.{ OptionValues, TestData }
+import org.scalatest.{OptionValues, TestData}
 import org.scalatestplus.selenium.WebBrowser
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
-import payapi.cardpaymentjourney.model.journey.{ Journey, JsdPfSa }
+import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
 import payapi.corcommon.model.JourneyId
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import testdata.{ TdAll, TdJourney, TestData }
+import testdata.{TdAll, TdJourney, TestData}
 import uk.gov.hmrc.http.SessionKeys
 
 trait PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with WireMockSupport with OptionValues {
@@ -36,7 +36,8 @@ trait PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with 
   override def newAppForTest(testData: TestData): Application = new GuiceApplicationBuilder()
     .configure(Map[String, Any](
       "application.router" -> "testOnlyDoNotUseInProd.Routes",
-      "microservice.services.pay-api.port" -> WireMockSupport.port))
+      "microservice.services.pay-api.port" -> WireMockSupport.port
+    ))
     .build()
 
   val baseUrl = s"http://localhost:$port"

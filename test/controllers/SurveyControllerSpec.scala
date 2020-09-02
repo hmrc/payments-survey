@@ -21,9 +21,9 @@ import payapi.cardpaymentjourney.model.journey.JsdPfSa
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import stubs.{ PayApiStubFindJourneyBySessionId, PayApiStubGetJourney }
+import stubs.{PayApiStubFindJourneyBySessionId, PayApiStubGetJourney}
 import support.AppSpec
-import testdata.{ TdAll, TdJourney }
+import testdata.{TdAll, TdJourney}
 import testdata.TestData._
 import uk.gov.hmrc.http.SessionKeys
 

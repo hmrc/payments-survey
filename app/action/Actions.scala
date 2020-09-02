@@ -18,12 +18,13 @@ package action
 
 import com.google.inject.Inject
 import payapi.corcommon.model.JourneyId
-import play.api.mvc.{ ActionBuilder, AnyContent, DefaultActionBuilder }
+import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
 import requests.JourneyRequest
 
 final class Actions @Inject() (
-  getJourneyActionFactory: GetJourneyActionFactory,
-  actionBuilder: DefaultActionBuilder) {
+    getJourneyActionFactory: GetJourneyActionFactory,
+    actionBuilder:           DefaultActionBuilder
+) {
 
   import getJourneyActionFactory._
 

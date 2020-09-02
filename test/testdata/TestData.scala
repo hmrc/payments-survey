@@ -16,10 +16,10 @@
 
 package testdata
 
-import java.time.{ Clock, LocalDateTime }
+import java.time.{Clock, LocalDateTime}
 
-import payapi.cardpaymentjourney.model.journey.{ Journey, JsdPfSa, NavigationOptions, SessionId, Url }
-import payapi.corcommon.model.{ JourneyId, PaymentStatuses }
+import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa, NavigationOptions, SessionId, Url}
+import payapi.corcommon.model.{JourneyId, PaymentStatuses}
 
 object TestData {
   //  val testJourneyId: JourneyId = JourneyId("123456")

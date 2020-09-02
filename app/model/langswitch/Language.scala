@@ -17,10 +17,10 @@
 package model.langswitch
 
 import cats.data.NonEmptyList
-import enumeratum.{ Enum, EnumEntry }
+import enumeratum.{Enum, EnumEntry}
 import util.enumformat.EnumFormat
-import model.langswitch.Languages.{ English, Welsh }
-import play.api.i18n.{ Lang, Messages }
+import model.langswitch.Languages.{English, Welsh}
+import play.api.i18n.{Lang, Messages}
 import play.api.libs.json.Format
 import play.api.mvc.PathBindable
 import util.ValueClassBinder.valueClassBinder
@@ -43,7 +43,7 @@ object Language {
   private def apply(lang: Lang): Language = lang.code match {
     case "en" => English
     case "cy" => Welsh
-    case _ => English //default language is English
+    case _    => English //default language is English
   }
 }
 
