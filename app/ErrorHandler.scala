@@ -14,30 +14,33 @@
  * limitations under the License.
  */
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
 import play.api.mvc._
-import play.twirl.api.{ Html, HtmlFormat }
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
 import scala.language.implicitConversions
 
 @Singleton
 class ErrorHandler @Inject() (
-  override val messagesApi: MessagesApi,
-  errorTemplate: views.html.error.error_template,
-  error404: views.html.error.error_404,
-  error5xx: views.html.error.error_5xx) extends FrontendErrorHandler {
+    override val messagesApi: MessagesApi,
+    errorTemplate:            views.html.error.error_template,
+    error404:                 views.html.error.error_404,
+    error5xx:                 views.html.error.error_5xx
+) extends FrontendErrorHandler {
 
   override def notFoundTemplate(implicit request: Request[_]): HtmlFormat.Appendable = error404()
 
   override def internalServerErrorTemplate(implicit request: Request[_]): Html = error5xx()
 
   override def standardErrorTemplate(
-    pageTitle: String,
-    heading: String,
-    message: String)(implicit request: Request[_]): Html = errorTemplate(
+      pageTitle: String,
+      heading:   String,
+      message:   String
+  )(implicit request: Request[_]): Html = errorTemplate(
     pageTitle,
     heading,
-    message)
+    message
+  )
 }

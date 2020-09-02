@@ -31,17 +31,20 @@ class DefaultViews @Inject() (error_template: views.html.error.error_template, r
     error_template(
       Messages("error.InternalServerError.heading"),
       Messages("error.InternalServerError.heading"),
-      Messages("error.InternalServerError.message"))
+      Messages("error.InternalServerError.message")
+    )
 
   def notFound(implicit request: Request[_]): HtmlFormat.Appendable =
     error_template(
       Messages("error.pageNotFound.title"),
       Messages("error.pageNotFound.heading"),
-      Messages("error.pageNotFound.message"))
+      Messages("error.pageNotFound.message")
+    )
 
   def unauthorised()(implicit request: Request[_]): HtmlFormat.Appendable =
     error_template(
       Messages("error.pageNotFound.title"),
       Messages("error.pageNotFound.heading"),
-      Messages("error.pageNotFound.message"))
+      Messages("error.pageNotFound.message")
+    )
 }

@@ -35,7 +35,7 @@ package model.langswitch
 //TODO: remove what it not used
 
 import play.api.i18n.Messages
-import play.twirl.api.{ Html, HtmlFormat }
+import play.twirl.api.{Html, HtmlFormat}
 
 trait Target {
   protected val targetName: String
@@ -65,14 +65,15 @@ case object ServerSso extends PossibleSso {
 }
 
 final case class Link(
-  url: String,
-  value: Option[String],
-  id: Option[String] = None,
-  target: Target = SameWindow,
-  sso: PossibleSso = NoSso,
-  cssClasses: Option[String] = None,
-  dataAttributes: Option[Map[String, String]] = None,
-  hiddenInfo: Option[String] = None)(implicit messages: Messages) {
+    url:            String,
+    value:          Option[String],
+    id:             Option[String]              = None,
+    target:         Target                      = SameWindow,
+    sso:            PossibleSso                 = NoSso,
+    cssClasses:     Option[String]              = None,
+    dataAttributes: Option[Map[String, String]] = None,
+    hiddenInfo:     Option[String]              = None
+)(implicit messages: Messages) {
 
   import Link._
 
@@ -108,12 +109,13 @@ object Link {
 
   final case class PreconfiguredLink(sso: PossibleSso, target: Target) {
     def apply(
-      url: String,
-      value: Option[String],
-      id: Option[String] = None,
-      cssClasses: Option[String] = None,
-      dataAttributes: Option[Map[String, String]] = None,
-      hiddenInfo: Option[String] = None)(implicit messages: Messages): Link =
+        url:            String,
+        value:          Option[String],
+        id:             Option[String]              = None,
+        cssClasses:     Option[String]              = None,
+        dataAttributes: Option[Map[String, String]] = None,
+        hiddenInfo:     Option[String]              = None
+    )(implicit messages: Messages): Link =
       Link(url, value, id, target, sso, cssClasses, dataAttributes, hiddenInfo)
   }
 

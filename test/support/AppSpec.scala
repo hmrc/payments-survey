@@ -16,7 +16,7 @@
 
 package support
 
-import java.time.{ Clock, LocalDateTime, ZoneId, ZoneOffset }
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.scalatest.OptionValues
@@ -33,7 +33,8 @@ trait AppSpec
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(Map[String, Any](
-      "microservice.services.pay-api.port" -> WireMockSupport.port))
+      "microservice.services.pay-api.port" -> WireMockSupport.port
+    ))
     .build()
 
   def frozenTimeString: String = "2027-11-02T16:33:51.880"

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import model.content.{ ContentOptions, JsdToContentOptions }
+import model.content.{ContentOptions, JsdToContentOptions}
 import payapi.cardpaymentjourney.model.journey._
 import payapi.corcommon.model.Origins._
 import payapi.corcommon.model._

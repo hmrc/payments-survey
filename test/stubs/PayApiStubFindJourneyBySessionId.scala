@@ -18,7 +18,7 @@ package stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import payapi.cardpaymentjourney.model.journey.{ Journey, JourneySpecificData }
+import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 import play.api.http.Status
 import stubs.WiremockStub._
 import testdata.TdJourney
@@ -32,7 +32,9 @@ object PayApiStubFindJourneyBySessionId {
       .willReturn(
         aResponse()
           .withStatus(Status.OK)
-          .withBody(tdJourney.jsonPrettyPrint)))
+          .withBody(tdJourney.jsonPrettyPrint)
+      )
+  )
 
   def findBySessionId404[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd], wireMockState: Int = 0): StubMapping = stubFor(
     get(urlPathEqualTo(path))
@@ -41,8 +43,10 @@ object PayApiStubFindJourneyBySessionId {
       .willReturn(
         aResponse()
           .withStatus(Status.NOT_FOUND)
-          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found [${tdJourney.journey._id}]"}"""))
-      .willSetStateTo(nextState(wireMockState)))
+          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found [${tdJourney.journey._id}]"}""")
+      )
+      .willSetStateTo(nextState(wireMockState))
+  )
 
   def findBySessionId5xx[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd], wireMockState: Int): StubMapping = stubFor(
     get(urlPathEqualTo(path))
@@ -51,18 +55,23 @@ object PayApiStubFindJourneyBySessionId {
       .willReturn(
         aResponse()
           .withStatus(Status.SERVICE_UNAVAILABLE)
-          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}"""))
-      .willSetStateTo(nextState(wireMockState)))
+          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")
+      )
+      .willSetStateTo(nextState(wireMockState))
+  )
 
   def findBySessionId5xx[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd]): StubMapping = stubFor(
     get(urlPathEqualTo(path))
       .willReturn(
         aResponse()
           .withStatus(Status.SERVICE_UNAVAILABLE)
-          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")))
+          .withBody(s"""{"statusCode":${Status.SERVICE_UNAVAILABLE},"message":"some error at pay-api"}""")
+      )
+  )
 
   def findBySessionIdVerify[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd], times: Int = 1): Unit = verify(
     times,
-    getRequestedFor(urlEqualTo(path)))
+    getRequestedFor(urlEqualTo(path))
+  )
 }
 

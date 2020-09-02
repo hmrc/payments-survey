@@ -16,7 +16,7 @@
 
 package model.content
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 final case class InternationalisedLine(english: Line, welsh: Option[Line] = None)
 

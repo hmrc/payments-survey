@@ -20,7 +20,7 @@ import javax.inject.Inject
 import model.langswitch.Language
 import play.api.i18n._
 import play.api.mvc.Request
-import uk.gov.hmrc.http.{ HeaderCarrier, SessionKeys }
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 
 /**

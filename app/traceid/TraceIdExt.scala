@@ -35,7 +35,7 @@ object TraceIdExt {
       .map(_.map(TraceId.apply))
       .map(_.toSet)
       .flatMap {
-        case s if s.isEmpty => None
+        case s if s.isEmpty   => None
         case s if s.size == 1 => Some(s.head)
         case s =>
           Logger.error(s"Multiple traceIds in the URL. [${s.mkString(", ")}] [$request]")

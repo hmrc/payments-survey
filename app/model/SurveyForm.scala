@@ -17,8 +17,8 @@
 package model
 
 import play.api.data.Form
-import play.api.data.Forms.{ mapping, number, text }
-import play.api.libs.json.{ Json, OFormat }
+import play.api.data.Forms.{mapping, number, text}
+import play.api.libs.json.{Json, OFormat}
 
 final case class SurveyForm(wereYouAble: Int, overallRate: Int, howEasy: Int, journey: String, comments: String)
 
@@ -31,5 +31,7 @@ object SurveyForm {
       "overallRate" -> number(min = 1, max = 5),
       "howEasy" -> number(min = 1, max = 5),
       "journey" -> text(maxLength = 30),
-      "comments" -> text(maxLength = 1200))(SurveyForm.apply)(SurveyForm.unapply))
+      "comments" -> text(maxLength = 1200)
+    )(SurveyForm.apply)(SurveyForm.unapply)
+  )
 }

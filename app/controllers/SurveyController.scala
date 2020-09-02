@@ -18,12 +18,12 @@ package controllers
 
 import action.Actions
 import config.AppConfig
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
 import payapi.corcommon.model.JourneyId
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
@@ -33,14 +33,16 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 final class SurveyController @Inject() (
-  actions: Actions,
-  auditConnector: AuditConnector,
-  cc: MessagesControllerComponents,
-  requestSupport: RequestSupport,
-  survey: views.html.survey,
-  surveyThanks: views.html.survey_thanks)(implicit
-  ec: ExecutionContext,
-  appConfig: AppConfig) extends FrontendController(cc) {
+    actions:        Actions,
+    auditConnector: AuditConnector,
+    cc:             MessagesControllerComponents,
+    requestSupport: RequestSupport,
+    survey:         views.html.survey,
+    surveyThanks:   views.html.survey_thanks
+)(implicit
+    ec: ExecutionContext,
+  appConfig: AppConfig
+) extends FrontendController(cc) {
 
   import requestSupport._
 
@@ -57,7 +59,8 @@ final class SurveyController @Inject() (
           "overallRate" -> data.overallRate.toString,
           "howEasy" -> data.howEasy.toString,
           "comments" -> data.comments,
-          "journey" -> data.journey)
+          "journey" -> data.journey
+        )
 
         val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
 
@@ -70,12 +73,15 @@ final class SurveyController @Inject() (
         auditConnector.sendEvent(
           DataEvent(
             auditSource = "payments-survey",
-            auditType = "Questionnaire",
-            tags = Map("submitSurvey" -> request.uri),
-            detail = details))
+            auditType   = "Questionnaire",
+            tags        = Map("submitSurvey" -> request.uri),
+            detail      = details
+          )
+        )
 
         Redirect(controllers.routes.SurveyController.showSurveyThanks)
-      })
+      }
+    )
   }
 
   def showSurveyThanks: Action[AnyContent] = actions.journeyAction { implicit request =>

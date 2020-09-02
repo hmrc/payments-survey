@@ -16,14 +16,15 @@
 
 package model.content
 
-import model.langswitch.{ Language, Languages }
+import model.langswitch.{Language, Languages}
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{ Format, Json, OFormat }
+import play.api.libs.json.{Format, Json, OFormat}
 
 final case class ContentOptions(
-  isWelshSupported: IsWelshSupported,
-  title: BannerTitle)
+    isWelshSupported: IsWelshSupported,
+    title:            BannerTitle
+)
 
 object ContentOptions {
   implicit val format: OFormat[ContentOptions] = Json.format[ContentOptions]
@@ -42,8 +43,8 @@ object IsWelshSupported {
 final case class BannerTitle(englishValue: String, welshValue: Option[String] = None) {
   def forCurrentLanguage(implicit messages: Messages): Option[String] = Language() match {
     case Languages.English => Some(englishValue)
-    case Languages.Welsh => welshValue
-    case _ => None
+    case Languages.Welsh   => welshValue
+    case _                 => None
   }
 }
 
