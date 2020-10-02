@@ -319,7 +319,7 @@ object JsdToContentOptions {
       isWelshSupported = IsWelshSupported.yes,
       title            = BannerTitle(
         englishValue = "Pay Coronavirus Job Retention Scheme grants back",
-        welshValue = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+        welshValue   = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
       )
     )
 
@@ -327,7 +327,7 @@ object JsdToContentOptions {
       isWelshSupported = IsWelshSupported.yes,
       title            = BannerTitle(
         englishValue = "Pay Coronavirus Job Retention Scheme grants back",
-        welshValue = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+        welshValue   = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
       )
     )
   }
