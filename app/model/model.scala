@@ -64,7 +64,8 @@ package object model {
       case Mib => "merchandise-in-baggage"
       case Ni => "northern-ireland"
       case Parcels => "parcels"
-      case JobRetentionScheme => "job-retention-scheme"
+      case PfJobRetentionScheme => "job-retention-scheme"
+      case JrsJobRetentionScheme => "job-retention-scheme"
     }
 
     //TODO: is it used anywhere?
@@ -77,8 +78,9 @@ package object model {
         | PfPsAdmin | PfBioFuels | PfAirPass | PfBeerDuty | PfGamingOrBingoDuty | PfGbPbRgDuty | PfLandfillTax
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
-      case ItSa => "MTD-PTA"
-      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels | JobRetentionScheme => "Other"
+      case ItSa                                      => "MTD-PTA"
+      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels
+        | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
     }
   }
 }

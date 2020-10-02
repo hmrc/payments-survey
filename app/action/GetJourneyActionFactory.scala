@@ -47,11 +47,16 @@ final class GetJourneyActionFactory @Inject() (
         implicit val r: Request[A] = request
 
         for {
-          maybeJourney <- paymentApi.findLatestJourneyBySessionId()
+          isDefinedSessionId <- Future(implicitly[HeaderCarrier].sessionId.isDefined)
+          maybeJourney <- if (isDefinedSessionId) paymentApi.findLatestJourneyBySessionId() else Future(None)
         } yield maybeJourney match {
           case Some(journey) => Right(new JourneyRequest(journey, request))
           case None =>
-            JourneyLogger.error(s"Journey not found for that session id. Investigate what happened.")
+            if (isDefinedSessionId) {
+              JourneyLogger.info(s"Session expired thus the Journey was not found")
+            } else {
+              JourneyLogger.error(s"Journey not found for that session id. Investigate what happened.")
+            }
             Left(Results.NotFound(defaultViews.notFound))
         }
       }
