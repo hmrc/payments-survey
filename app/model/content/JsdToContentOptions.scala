@@ -315,8 +315,11 @@ object JsdToContentOptions {
       title            = BannerTitle(englishValue = "Pay your Simple Assessment", welshValue = Some("Talu eich Asesiad Syml"))
     )
 
-    //TODO
-    case _: JsdJobRetentionScheme => ContentOptions(
+    case _: JsdPfJobRetentionScheme => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title            = BannerTitle(englishValue = "Pay your JSR", welshValue = Some("Pay your JSR"))
+    )
+    case _: JsdJrsJobRetentionScheme => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title            = BannerTitle(englishValue = "Pay your JSR", welshValue = Some("Pay your JSR"))
     )

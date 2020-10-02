@@ -19,6 +19,9 @@ import payapi.cardpaymentjourney.model.journey._
 import payapi.corcommon.model.Origins._
 import payapi.corcommon.model._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+
 package object model {
 
   implicit class JourneyExt[Jsd <: JourneySpecificData](val j: Journey[Jsd]) {
@@ -64,7 +67,8 @@ package object model {
       case Mib => "merchandise-in-baggage"
       case Ni => "northern-ireland"
       case Parcels => "parcels"
-      case JobRetentionScheme => "job-retention-scheme"
+      case PfJobRetentionScheme => "job-retention-scheme"
+      case JrsJobRetentionScheme => "job-retention-scheme"
     }
 
     //TODO: is it used anywhere?
@@ -77,8 +81,17 @@ package object model {
         | PfPsAdmin | PfBioFuels | PfAirPass | PfBeerDuty | PfGamingOrBingoDuty | PfGbPbRgDuty | PfLandfillTax
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
-      case ItSa => "MTD-PTA"
-      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels | JobRetentionScheme => "Other"
+      case ItSa                                      => "MTD-PTA"
+      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels
+        | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
     }
   }
+}
+
+object x {
+
+  for {
+    x <- Future(1)
+    z <- Future(1)
+  } yield z
 }
