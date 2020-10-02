@@ -19,9 +19,6 @@ import payapi.cardpaymentjourney.model.journey._
 import payapi.corcommon.model.Origins._
 import payapi.corcommon.model._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-
 package object model {
 
   implicit class JourneyExt[Jsd <: JourneySpecificData](val j: Journey[Jsd]) {
@@ -86,12 +83,4 @@ package object model {
         | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
     }
   }
-}
-
-object x {
-
-  for {
-    x <- Future(1)
-    z <- Future(1)
-  } yield z
 }

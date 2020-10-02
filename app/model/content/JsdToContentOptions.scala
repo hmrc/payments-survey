@@ -317,11 +317,18 @@ object JsdToContentOptions {
 
     case _: JsdPfJobRetentionScheme => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
-      title            = BannerTitle(englishValue = "Pay your JSR", welshValue = Some("Pay your JSR"))
+      title            = BannerTitle(
+        englishValue = "Pay Coronavirus Job Retention Scheme grants back",
+        welshValue = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+      )
     )
+
     case _: JsdJrsJobRetentionScheme => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
-      title            = BannerTitle(englishValue = "Pay your JSR", welshValue = Some("Pay your JSR"))
+      title            = BannerTitle(
+        englishValue = "Pay Coronavirus Job Retention Scheme grants back",
+        welshValue = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+      )
     )
   }
 }
