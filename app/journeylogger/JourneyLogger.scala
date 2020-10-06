@@ -22,6 +22,7 @@ import requests.JourneyRequest
 import traceid.TraceIdExt
 import uk.gov.hmrc.http.{CookieNames, HeaderCarrier}
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import requests.RequestSupport._
 
 object JourneyLogger {
 
@@ -43,8 +44,6 @@ object JourneyLogger {
 
   def error(message: => String, ex: Throwable)(implicit request: Request[_]): Unit = logMessage(message, ex, Error)
 
-  private def hc(implicit r: Request[_]): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(r.headers)
-
   private def journeyId(implicit request: JourneyRequest[_]) = s"[journeyId: ${request.journey._id}]"
 
   private def traceId(implicit request: JourneyRequest[_]) = s"[traceId: ${request.journey.traceId}]"
@@ -52,6 +51,7 @@ object JourneyLogger {
   private def origin(implicit request: JourneyRequest[_]) = s"[origin: ${request.journey.origin}]"
 
   private def sessionId(implicit r: Request[_]) = s"[sessionId: ${hc.sessionId.map(_.value).getOrElse("")}]"
+
   private def referer(implicit r: Request[_]) = s"[Referer: ${r.headers.headers.find(_._1 == "Referer").map(_._2).getOrElse("")}]"
 
   private def deviceId(implicit r: Request[_]) = s"[deviceId: ${r.cookies.find(_.name == CookieNames.deviceID).map(_.value).getOrElse("")}]"
