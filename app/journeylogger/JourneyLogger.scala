@@ -47,7 +47,9 @@ object JourneyLogger {
 
   private def origin(implicit request: JourneyRequest[_]) = s"[origin: ${request.journey.origin}]"
 
-  private def context(implicit request: Request[_]) = s"[context: ${request.method} ${request.path}]"
+  private val deviceIdCookieName = "mdtpdi"
+  private def deviceId(implicit r: Request[_]) = s"[deviceId: ${r.cookies.find(_.name == deviceIdCookieName).map(_.value).getOrElse("")}]"
+  private def context(implicit r: Request[_]) = s"[context: ${r.method} ${r.path}]]"
 
   private def transactionReference(implicit request: JourneyRequest[_]) =
     request
@@ -74,9 +76,9 @@ object JourneyLogger {
   def makeRichMessage(message: String)(implicit request: Request[_]): String = request match {
     case r: JourneyRequest[_] =>
       implicit val journeyRequest: JourneyRequest[_] = r
-      s"$message $origin $traceId $journeyId $traceIdsFromUrlIfDifferentThanInJourney $transactionReference $context"
+      s"$message $origin $traceId $journeyId $traceIdsFromUrlIfDifferentThanInJourney $transactionReference $context $deviceId"
     case r =>
-      s"$message $traceIdFromQueryParameter $context"
+      s"$message $traceIdFromQueryParameter $context $deviceId"
 
   }
 
