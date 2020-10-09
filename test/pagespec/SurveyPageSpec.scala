@@ -19,6 +19,7 @@ package pagespec
 import model._
 import payapi.cardpaymentjourney.model.journey.Journey
 import payapi.corcommon.model.JourneyId
+import play.api.Logger
 import stubs.{PayApiStubFindJourneyBySessionId, PayApiStubGetJourney}
 import support.PageSpec
 import testdata.TestData._
@@ -131,5 +132,11 @@ class SurveyPageSpec extends PageSpec {
     click.on("submit-survey-button")
 
     currentUrl shouldBe (baseUrl + surveyThanksPath)
+  }
+
+  "ensure goes to timeout page when session not found" in new TestWithSession {
+    PayApiStubFindJourneyBySessionId.findBySessionId404(tdJourney)
+    goTo(baseUrl + pagePath)
+    pageTitle shouldBe ("For your security, we timed you out")
   }
 }

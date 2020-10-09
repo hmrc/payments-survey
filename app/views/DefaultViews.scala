@@ -18,14 +18,22 @@ package views
 
 import config.AppConfig
 import javax.inject.Inject
+import payapi.corcommon.model.TraceId
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import play.twirl.api.HtmlFormat
 import requests.RequestSupport
 
-class DefaultViews @Inject() (error_template: views.html.error.error_template, requestSupport: RequestSupport)(implicit appConfig: AppConfig) {
+class DefaultViews @Inject() (
+    error_template: views.html.error.error_template,
+    timedOut:       views.html.error.timed_out,
+    requestSupport: RequestSupport
+)(implicit appConfig: AppConfig) {
 
   import requestSupport._
+
+  def timedOutSessionId(implicit request: Request[_]): HtmlFormat.Appendable =
+    timedOut()
 
   def internalServerError()(implicit request: Request[_]): HtmlFormat.Appendable =
     error_template(
