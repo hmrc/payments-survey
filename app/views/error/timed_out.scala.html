@@ -1,0 +1,46 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import model.content.IsWelshSupported
+
+
+@this(
+govUkWrapper: views.html.govuk_wrapper
+)
+
+@()(
+implicit
+request: play.api.mvc.Request[_],
+messages: Messages
+)
+
+@mainContent = {
+<h1 class="heading-large" id="not_found_heading">@Messages("error.auth.heading.logged-out")</h1>
+<div class="form-group">
+
+    <a class="button" id="back_button" href="/pay"/>
+    @Messages("error.auth.button.logged-out")
+    </a>
+</div>
+}
+
+@govUkWrapper(
+title =  Messages("error.auth.heading.logged-out"),
+navTitle = Some(Messages("error.auth.heading.logged-out")),
+mainContent = mainContent,
+backButtonUrl = None,
+isWelshSupported = IsWelshSupported.yes
+)

@@ -50,3 +50,5 @@ thanks.message = Bydd eich atebion yn ein helpu i wella''r gwasanaeth talu.
 thanks.return-to-govuk = Ewch i GOV.UK
 thanks.return-to-bta = Dychwelyd i cyfrif treth busnes
 thanks.return-to-pta = Dychwelyd i cyfrif treth personol
+error.auth.heading.logged-out = Er eich diogelwch, rydym wedi dod â’ch sesiwn i ben
+error.auth.button.logged-out = Dechrau eto

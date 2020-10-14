@@ -19,21 +19,15 @@ package action
 import com.google.inject.Inject
 import config.AppConfig
 import journeylogger.JourneyLogger
-import model._
 import payapi.cardpaymentjourney.PayApiConnector
-import payapi.corcommon.model.{JourneyId, Origins}
-import play.api.Logger
 import play.api.mvc._
 import requests.{JourneyRequest, RequestSupport}
-import uk.gov.hmrc.auth.core.{AuthorisationException, AuthorisedFunctions}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, SessionKeys}
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.http.HeaderCarrier
 import views.DefaultViews
 
 import scala.concurrent.{ExecutionContext, Future}
 
 final class GetJourneyActionFactory @Inject() (
-    af:           AuthorisedFunctions,
     paymentApi:   PayApiConnector,
     defaultViews: DefaultViews
 )(implicit ec: ExecutionContext, config: AppConfig) {
@@ -57,7 +51,9 @@ final class GetJourneyActionFactory @Inject() (
             } else {
               JourneyLogger.error(s"Journey not found for that session id. Investigate what happened.")
             }
-            Left(Results.NotFound(defaultViews.notFound))
+            //TODO revert this back to notfound when sessionIdFilter is removed
+            //Left(Results.NotFound(defaultViews.notFound))
+            Left(Results.Unauthorized(defaultViews.timedOutSessionId))
         }
       }
 

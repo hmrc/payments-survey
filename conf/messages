@@ -50,3 +50,5 @@ thanks.message = Your replies will help us improve the payment service.
 thanks.return-to-govuk = Go to GOV.UK
 thanks.return-to-bta = Return to business tax account
 thanks.return-to-pta = Return to personal tax account
+error.auth.heading.logged-out = For your security, we timed you out
+error.auth.button.logged-out = Start again
