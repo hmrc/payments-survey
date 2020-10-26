@@ -22,7 +22,9 @@ import javax.inject.{Inject, Singleton}
 import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
+import model.langswitch.Language
 import payapi.corcommon.model.JourneyId
+import play.api.i18n.Lang
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -47,7 +49,12 @@ final class SurveyController @Inject() (
   import requestSupport._
 
   def survey: Action[AnyContent] = actions.journeyAction { implicit request =>
-    Ok(survey(surveyForm))
+    Ok(survey(surveyForm)).withLang(Lang("en"))
+  }
+
+  def switchToLanguage(language: Language): Action[AnyContent] = actions.journeyAction { implicit request =>
+    //Ok(survey(surveyForm)).withLang(language.toPlayLang)
+    Ok(survey(surveyForm)).withLang(Lang("en"))
   }
 
   def submitSurvey: Action[AnyContent] = actions.journeyAction { implicit request =>

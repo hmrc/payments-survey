@@ -5,3 +5,5 @@ GET         /assets/*file         controllers.Assets.at(path="/public", file)
 GET         /survey               controllers.SurveyController.survey
 POST        /survey               controllers.SurveyController.submitSurvey
 GET         /survey-thanks        controllers.SurveyController.showSurveyThanks
+
+GET         /survey/language/:language    controllers.SurveyController.switchToLanguage(language: Language)
