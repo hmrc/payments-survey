@@ -1,7 +1,9 @@
 
 # payments-survey
 
-This is a placeholder README.md for a new repository
+run with this command if you want to avoid the memory leak:
+sbt -mem 2048 clean test compile
+
 
 ### License
 

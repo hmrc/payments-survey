@@ -30,7 +30,7 @@
     @if(messages.lang.code != language.code) {
       @Link.toInternalPage(
         id      = Some(s"${language.code}-switch"),
-        url     = s"${appConfig.payFrontendBaseUrl}/language/${language.toString}",
+        url     = s"${controllers.routes.LanguageSwitchController.switchToLanguage(language)}",
         value   = Some(language.label)
       ).toHtml
     } else {

@@ -6,4 +6,4 @@ GET         /survey               controllers.SurveyController.survey
 POST        /survey               controllers.SurveyController.submitSurvey
 GET         /survey-thanks        controllers.SurveyController.showSurveyThanks
 
-GET         /survey/language/:language    controllers.SurveyController.switchToLanguage(language: Language)
+GET         /survey/language/:language    controllers.LanguageSwitchController.switchToLanguage(language: Language)

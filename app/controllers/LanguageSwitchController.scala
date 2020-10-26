@@ -16,6 +16,12 @@
 
 package controllers
 
+import javax.inject.Inject
+import model.SurveyForm.surveyForm
+import model.langswitch.Language
+import play.api.i18n.{Lang, LangImplicits, Messages, MessagesApi}
+import play.api.mvc.{Action, AnyContent, Results}
+import play.mvc.Http.HeaderNames
 import action.Actions
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
@@ -32,7 +38,6 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import javax.inject.Inject
-import model.langswitch.Languages.Welsh
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
@@ -41,8 +46,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext
 
-@Singleton
-final class SurveyController @Inject() (
+class LanguageSwitchController @Inject() (
     actions:        Actions,
     auditConnector: AuditConnector,
     cc:             MessagesControllerComponents,
@@ -55,10 +59,6 @@ final class SurveyController @Inject() (
 ) extends FrontendController(cc) {
 
   import requestSupport._
-
-  def survey: Action[AnyContent] = actions.journeyAction { implicit request =>
-    Ok(survey(surveyForm)).withLang(Welsh.toPlayLang)
-  }
 
   def switchToLanguage(language: Language): Action[AnyContent] = actions.journeyAction { implicit request =>
 
@@ -74,47 +74,12 @@ final class SurveyController @Inject() (
       Redirect(referrer.toString).withCookies())
     //Ok(x).withLang(language.toPlayLang)
 
-    Ok(survey(surveyForm)).withLang(language.toPlayLang)
+    val result: Result = maybeReferrer.fold(Redirect("referrer.toString"))(Redirect(_))
+    result.withLang(language.toPlayLang)
+
+    //Ok(survey(surveyForm)).withLang(language.toPlayLang)
     //Ok(survey(surveyForm)).withLang(Lang("en"))
 
-    //Redirect(controllers.routes.SurveyController.showSurveyThanks)
-  }
-
-  def submitSurvey: Action[AnyContent] = actions.journeyAction { implicit request =>
-    surveyForm.bindFromRequest().fold(
-      formWithErrors => { BadRequest(survey(formWithErrors)) },
-      data => {
-        val surveyMap: Map[String, String] = Map(
-          "wereYouAble" -> data.wereYouAble.toString,
-          "overallRate" -> data.overallRate.toString,
-          "howEasy" -> data.howEasy.toString,
-          "comments" -> data.comments,
-          "journey" -> data.journey
-        )
-
-        val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
-
-        if (request.journey.reference.isEmpty) JourneyLogger.error("Expected reference to be defined in the journey. Investigate what happened.")
-        val referenceString = request.journey.reference.map(_.value).getOrElse("?")
-        val details: Map[String, String] = Map("orderId" -> referenceString, "userType" -> userType) ++
-          surveyMap ++
-          Map("liability" -> request.journey.origin.auditName)
-
-        auditConnector.sendEvent(
-          DataEvent(
-            auditSource = "payments-survey",
-            auditType   = "Questionnaire",
-            tags        = Map("submitSurvey" -> request.uri),
-            detail      = details
-          )
-        )
-
-        Redirect(controllers.routes.SurveyController.showSurveyThanks)
-      }
-    )
-  }
-
-  def showSurveyThanks: Action[AnyContent] = actions.journeyAction { implicit request =>
-    Ok(surveyThanks())
+    //Redirect(controllers.routes.SurveyController.survey())
   }
 }
