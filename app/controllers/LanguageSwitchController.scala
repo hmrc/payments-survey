@@ -35,7 +35,6 @@ class LanguageSwitchController @Inject() (
     auditConnector: AuditConnector,
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,
-    error404:       views.html.error.error_404,
     defaultViews:   DefaultViews
 )(implicit
     ec: ExecutionContext,
@@ -57,5 +56,4 @@ class LanguageSwitchController @Inject() (
   def notFound: Action[AnyContent] = actions.journeyAction { implicit request =>
     Ok(defaultViews.notFound)
   }
-
 }

@@ -18,7 +18,7 @@ package controllers
 
 import action.Actions
 import config.AppConfig
-import javax.inject.Singleton
+import javax.inject.{Singleton, Inject}
 import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
@@ -26,7 +26,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
-import javax.inject.Inject
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.ExecutionContext
