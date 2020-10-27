@@ -16,34 +16,18 @@
 
 package controllers
 
-import javax.inject.Inject
-import model.SurveyForm.surveyForm
-import model.langswitch.Language
-import play.api.i18n.{Lang, LangImplicits, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Results}
-import play.mvc.Http.HeaderNames
 import action.Actions
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
-import journeylogger.JourneyLogger
-import model.SurveyForm.surveyForm
 import model._
 import langswitch.Language
-import payapi.corcommon.model.JourneyId
-import play.api.i18n.Lang
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.mvc.Http.HeaderNames
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.audit.model._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
 import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.DefaultViews
 
-import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext
 
 class LanguageSwitchController @Inject() (
@@ -51,8 +35,8 @@ class LanguageSwitchController @Inject() (
     auditConnector: AuditConnector,
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,
-    survey:         views.html.survey,
-    surveyThanks:   views.html.survey_thanks
+    error404:       views.html.error.error_404,
+    defaultViews:   DefaultViews
 )(implicit
     ec: ExecutionContext,
   appConfig: AppConfig
@@ -66,20 +50,12 @@ class LanguageSwitchController @Inject() (
       request
         .headers
         .get(HeaderNames.REFERER)
-    //    val x = maybeReferrer.fold {
-    //      referrer => Redirect(referrer.toString).withCookies()
-    //    }
 
-    val x = maybeReferrer.fold(Redirect("referrer.toString"))(referrer =>
-      Redirect(referrer.toString).withCookies())
-    //Ok(x).withLang(language.toPlayLang)
-
-    val result: Result = maybeReferrer.fold(Redirect("referrer.toString"))(Redirect(_))
-    result.withLang(language.toPlayLang)
-
-    //Ok(survey(surveyForm)).withLang(language.toPlayLang)
-    //Ok(survey(surveyForm)).withLang(Lang("en"))
-
-    //Redirect(controllers.routes.SurveyController.survey())
+    maybeReferrer.fold(Redirect(controllers.routes.LanguageSwitchController.notFound).withLang(language.toPlayLang))(Redirect(_).withCookies().withLang(language.toPlayLang))
   }
+
+  def notFound: Action[AnyContent] = actions.journeyAction { implicit request =>
+    Ok(defaultViews.notFound)
+  }
+
 }

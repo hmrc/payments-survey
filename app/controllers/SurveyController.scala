@@ -18,27 +18,17 @@ package controllers
 
 import action.Actions
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
-import langswitch.Language
-import payapi.corcommon.model.JourneyId
-import play.api.i18n.Lang
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.mvc.Http.HeaderNames
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import javax.inject.Inject
-import model.langswitch.Languages.Welsh
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
-import play.mvc.Http.HeaderNames
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -57,27 +47,7 @@ final class SurveyController @Inject() (
   import requestSupport._
 
   def survey: Action[AnyContent] = actions.journeyAction { implicit request =>
-    Ok(survey(surveyForm)).withLang(Welsh.toPlayLang)
-  }
-
-  def switchToLanguage(language: Language): Action[AnyContent] = actions.journeyAction { implicit request =>
-
-    val maybeReferrer: Option[String] =
-      request
-        .headers
-        .get(HeaderNames.REFERER)
-    //    val x = maybeReferrer.fold {
-    //      referrer => Redirect(referrer.toString).withCookies()
-    //    }
-
-    val x = maybeReferrer.fold(Redirect("referrer.toString"))(referrer =>
-      Redirect(referrer.toString).withCookies())
-    //Ok(x).withLang(language.toPlayLang)
-
-    Ok(survey(surveyForm)).withLang(language.toPlayLang)
-    //Ok(survey(surveyForm)).withLang(Lang("en"))
-
-    //Redirect(controllers.routes.SurveyController.showSurveyThanks)
+    Ok(survey(surveyForm))
   }
 
   def submitSurvey: Action[AnyContent] = actions.journeyAction { implicit request =>

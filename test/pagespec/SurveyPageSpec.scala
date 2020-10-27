@@ -24,64 +24,64 @@ class SurveyPageSpec extends PageSpec {
   val pagePath = s"/payments-survey/survey"
   val surveyThanksPath = s"/payments-survey/survey-thanks"
 
-    "should render correctly" in new TestWithSession {
+  "should render correctly" in new TestWithSession {
 
-      PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
-      goTo(baseUrl + pagePath)
+    goTo(baseUrl + pagePath)
 
-      cssSelector(".header__menu__proposition-name")
-        .element.text shouldEqual journey.contentOptions.title.englishValue
+    cssSelector(".header__menu__proposition-name")
+      .element.text shouldEqual journey.contentOptions.title.englishValue
 
-      webDriver.getTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
+    webDriver.getTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
 
-      find("were-you-able-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "1. Were you able to do what you needed to do today?")
-      find("were-you-able-yes-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Yes")
-      find("were-you-able-no-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "No")
+    find("were-you-able-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "1. Were you able to do what you needed to do today?")
+    find("were-you-able-yes-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Yes")
+    find("were-you-able-no-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "No")
 
-      find("how-easy-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "2. How easy was it for you to do what you needed to do today?")
-      find("how-easy-very-easy-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Very easy")
-      find("how-easy-easy-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Easy")
-      find("how-easy-neutral-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Neither easy or difficult")
-      find("how-easy-difficult-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Difficult")
-      find("how-easy-very-difficult-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Very difficult")
+    find("how-easy-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "2. How easy was it for you to do what you needed to do today?")
+    find("how-easy-very-easy-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Very easy")
+    find("how-easy-easy-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Easy")
+    find("how-easy-neutral-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Neither easy or difficult")
+    find("how-easy-difficult-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Difficult")
+    find("how-easy-very-difficult-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Very difficult")
 
-      find("why-score-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "2b. Why did you give this score?")
-      textArea("why-score-field").value shouldBe ""
+    find("why-score-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "2b. Why did you give this score?")
+    textArea("why-score-field").value shouldBe ""
 
-      find("overall-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "3. Overall, how did you feel about the service you received today?")
-      find("overall-very-good-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Very satisfied")
-      find("overall-good-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Satisfied")
-      find("overall-neutral-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Neither satisfied or dissatisfied")
-      find("overall-poor-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Dissatisfied")
-      find("overall-very-poor-label")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Very dissatisfied")
+    find("overall-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "3. Overall, how did you feel about the service you received today?")
+    find("overall-very-good-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Very satisfied")
+    find("overall-good-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Satisfied")
+    find("overall-neutral-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Neither satisfied or dissatisfied")
+    find("overall-poor-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Dissatisfied")
+    find("overall-very-poor-label")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Very dissatisfied")
 
-      find("thank-you-header")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "Thank you for your feedback")
-      find("thank-you-message")
-        .fold(fail)(elem => elem.underlying.getText shouldBe "We will use your feedback to make our services better.")
+    find("thank-you-header")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "Thank you for your feedback")
+    find("thank-you-message")
+      .fold(fail)(elem => elem.underlying.getText shouldBe "We will use your feedback to make our services better.")
 
-      find("submit-survey-button")
-        .fold(fail)(elem => elem.underlying.getAttribute("value") shouldBe "Send feedback")
+    find("submit-survey-button")
+      .fold(fail)(elem => elem.underlying.getAttribute("value") shouldBe "Send feedback")
 
-      PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
-    }
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
+  }
 
   "should show no errors if the user hasn't clicked submit" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
@@ -135,4 +135,14 @@ class SurveyPageSpec extends PageSpec {
     goTo(baseUrl + pagePath)
     pageTitle shouldBe ("For your security, we timed you out")
   }
+
+  "ensure can switch to Welsh and back" in new TestWithSession {
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
+    goTo(baseUrl + pagePath)
+    click.on("cy-switch")
+    pageTitle shouldBe ("Sut oedd eich gwasanaeth talu? - Talu eich Hunanasesiad - GOV.UK")
+    click.on("en-switch")
+    pageTitle shouldBe ("How was our payment service? - Pay your Self Assessment - GOV.UK")
+  }
+
 }

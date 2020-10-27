@@ -7,3 +7,4 @@ POST        /survey               controllers.SurveyController.submitSurvey
 GET         /survey-thanks        controllers.SurveyController.showSurveyThanks
 
 GET         /survey/language/:language    controllers.LanguageSwitchController.switchToLanguage(language: Language)
+GET        /survey/404                    controllers.LanguageSwitchController.notFound
