@@ -17,12 +17,8 @@
 package pagespec
 
 import model._
-import payapi.cardpaymentjourney.model.journey.Journey
-import payapi.corcommon.model.JourneyId
-import play.api.Logger
-import stubs.{PayApiStubFindJourneyBySessionId, PayApiStubGetJourney}
+import stubs.PayApiStubFindJourneyBySessionId
 import support.PageSpec
-import testdata.TestData._
 
 class SurveyPageSpec extends PageSpec {
   val pagePath = s"/payments-survey/survey"
@@ -139,4 +135,14 @@ class SurveyPageSpec extends PageSpec {
     goTo(baseUrl + pagePath)
     pageTitle shouldBe ("For your security, we timed you out")
   }
+
+  "ensure can switch to Welsh and back" in new TestWithSession {
+    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
+    goTo(baseUrl + pagePath)
+    click.on("cy-switch")
+    pageTitle shouldBe ("Sut oedd eich gwasanaeth talu? - Talu eich Hunanasesiad - GOV.UK")
+    click.on("en-switch")
+    pageTitle shouldBe ("How was our payment service? - Pay your Self Assessment - GOV.UK")
+  }
+
 }

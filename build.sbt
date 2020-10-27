@@ -23,7 +23,8 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     PlayKeys.playDefaultPort := 9966,
     routesImport ++= Seq(
-      "payapi.corcommon.model._"
+      "payapi.corcommon.model._",
+      "model.langswitch.Language"
     ))
   .settings(publishingSettings: _*)
   .settings(

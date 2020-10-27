@@ -18,11 +18,10 @@ package controllers
 
 import action.Actions
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Singleton, Inject}
 import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
-import payapi.corcommon.model.JourneyId
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
