@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
-import play.api.Logger
+import play.api.Logger.logger
 
 trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   self: Suite =>
@@ -33,15 +33,15 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   override protected def beforeAll(): Unit = wireMockServer.start()
 
   override protected def afterAll(): Unit = {
-    Logger.info("Stopping wire mock server ...")
+    logger.info("Stopping wire mock server ...")
     wireMockServer.stop()
-    Logger.info("Stopping wire mock server - done")
+    logger.info("Stopping wire mock server - done")
   }
 
   override def beforeEach() {
-    Logger.info("Resetting wire mock server ...")
+    logger.info("Resetting wire mock server ...")
     WireMock.reset()
-    Logger.info("Resetting wire mock server - done")
+    logger.info("Resetting wire mock server - done")
   }
 
 }
