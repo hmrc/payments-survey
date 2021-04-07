@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ object TraceIdExt {
         case s if s.isEmpty   => None
         case s if s.size == 1 => Some(s.head)
         case s =>
-          Logger.error(s"Multiple traceIds in the URL. [${s.mkString(", ")}] [$request]")
+          Logger(s"Multiple traceIds in the URL. [${s.mkString(", ")}] [$request]")
           Some(s.head)
       }
   }

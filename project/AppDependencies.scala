@@ -10,6 +10,7 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "bootstrap-play-26"                % "1.14.0",
     "uk.gov.hmrc"             %% "govuk-template"                   % "5.56.0-play-26",
     "uk.gov.hmrc"             %% "play-ui"                          % "8.11.0-play-26",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "0.49.0-play-27",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
     "com.beachape"            %% "enumeratum" % "1.6.1",
     "org.typelevel"           %% "cats-core" % catsVersion,

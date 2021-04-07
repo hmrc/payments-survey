@@ -14,29 +14,17 @@
  * limitations under the License.
  *@
 
-@import model.content.IsWelshSupported
+@import payapi.corcommon.model.Origin
 
+@this()
 
-@this(
-    govUkWrapper: views.html.govuk_wrapper
-)
+@(origin: Option[Origin])(implicit request: play.api.mvc.Request[_])
 
-@()(
-  implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
-)
-
-@mainContent = {
-    <h1 class="heading-large" id="not_found_heading">@Messages("error.pageNotFound.heading")</h1>
-
-    <p>@Messages("error.pageNotFound.message")</p>
-}
-
-@govUkWrapper(
-  title =  Messages("error.pageNotFound.title"),
-  navTitle = Some(Messages("error.pageNotFound.heading")),
-  mainContent = mainContent,
-  backButtonUrl = None,
-  isWelshSupported = IsWelshSupported.yes
-)
+<script>
+dataLayer = [{
+            'OPS_sessionid': "@requests.RequestSupport.sessionId",
+            'OPS_status':    "@requests.RequestSupport.isLoggedIn",
+            'OPS_origin':    "@origin.map(_.toString).getOrElse("Unavailable")",
+            'OPS_taxtype':   "@origin.map(_.toTaxType).getOrElse("Unavailable")"
+         }];
+</script>

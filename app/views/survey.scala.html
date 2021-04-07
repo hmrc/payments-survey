@@ -1,5 +1,5 @@
 @*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@
     navTitle = request.journey.contentOptions.title.forCurrentLanguage,
     header = Some(header),
     fullWidth = true,
-    isWelshSupported = request.welsh) {
+    isWelshSupported = request.welsh,
+    journey = Some(request.journey)) {
 
     <p>@Messages("survey.instruction.text.1")</p>
     <p>@Messages("survey.instruction.text.2.1")

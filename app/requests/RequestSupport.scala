@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,11 @@ object RequestSupport {
    * Naive way of checking if user is logged in. Use it in views only.
    */
   def isLoggedIn(implicit request: Request[_]): Boolean = request.session.get(SessionKeys.authToken).isDefined
+
+  /**
+   * Naive way of getting session id. Use it in views only.
+   */
+  def sessionId(implicit request: Request[_]): String = request.session.get(SessionKeys.sessionId).getOrElse("Unknown Session Id")
 
   /**
    * This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code.
