@@ -36,6 +36,10 @@ lazy val microservice = Project(appName, file("."))
         state
     }
   )
+  .settings(
+    //For some reason SBT was adding the stray string "utf8" to the compiler arguments and it was causing the 'doc' task to fail
+    //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
+    scalacOptions in Compile -= "utf8")
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
 
 lazy val scalaCompilerOptions = Seq(
