@@ -16,8 +16,10 @@
 
 @import config.AppConfig
 @import model.content.IsWelshSupported
+@import uk.gov.hmrc.play.views.html.layouts.HeadWithTrackingConsent
 
-@this(govuk_wrapper: views.html.govuk_wrapper)(implicit appConfig: AppConfig)
+@this(govuk_wrapper: views.html.govuk_wrapper,
+      headWithTrackingConsent: HeadWithTrackingConsent)(implicit appConfig: AppConfig)
 
 @(
         title: String,
@@ -27,7 +29,7 @@
         isWelshSupported: IsWelshSupported
         )(content: Html)(implicit request: Request[_], m: Messages)
 
-@head = {
+@headWithTrackingConsent = {
     <!--[if lt IE 8 ]>
 	<link rel='stylesheet' href='@{appConfig.assetsBaseUrl}/stylesheets/application-ie7.min.css' />
     <![endif]-->
@@ -48,6 +50,7 @@
     <script src="@routes.Assets.at("javascripts/formatter.js")"></script>
     <script src="@routes.Assets.at("javascripts/details.polyfill.js")"></script>
 }
+
 @mainContent = {
     <div class="content__body @{if(fullWidth) "full-width"}">
 
