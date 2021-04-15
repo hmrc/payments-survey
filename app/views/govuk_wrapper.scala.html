@@ -18,16 +18,19 @@
 @import model.langswitch.{Language, Languages}
 @import play.twirl.api.HtmlFormat
 @import config.AppConfig
+@import uk.gov.hmrc.play.views.html.layouts.HeadWithTrackingConsent
+@import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 
 @this(
         govUkTemplate: views.html.layouts.GovUkTemplate,
-        uiHead: uk.gov.hmrc.play.views.html.layouts.Head,
+        uiHead: uk.gov.hmrc.play.views.html.layouts.HeadWithTrackingConsent,
         uiHeaderNav: uk.gov.hmrc.play.views.html.layouts.HeaderNav,
         uiServiceInfo: uk.gov.hmrc.play.views.html.layouts.ServiceInfo,
         uiMainContent: uk.gov.hmrc.play.views.html.layouts.MainContent,
         uiFooter: uk.gov.hmrc.play.views.html.layouts.Footer,
         uiFooterLinks: uk.gov.hmrc.play.views.html.layouts.FooterLinks,
-        helperReportAProblemLink: uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+        helperReportAProblemLink: uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink,
+        dataLayer: views.html.analytics.data_layer
 )(implicit appConfig: AppConfig)
 
 @(
@@ -35,7 +38,8 @@
         navTitle: Option[String] = None,
         mainContent: Html = HtmlFormat.empty,
         backButtonUrl: Option[play.api.mvc.Call] = None,
-        isWelshSupported: IsWelshSupported)(implicit request: play.api.mvc.Request[_], messages: Messages)
+        isWelshSupported: IsWelshSupported,
+        journey: Option[Journey[JourneySpecificData]] = None)(implicit request: play.api.mvc.Request[_], messages: Messages)
 
 
 @commonLinkElement = {
@@ -43,6 +47,7 @@
 }
 
 @head = {
+    @dataLayer(journey.map(_.journeySpecificData.origin))
     @uiHead(
         linkElem = Some(commonLinkElement),
         headScripts = None
@@ -52,7 +57,6 @@
 }
 
 @scriptElement = {
-    <script src="@controllers.routes.Assets.at("js/ga-events.js")" type="text/javascript"></script>
     <script src="@controllers.routes.Assets.at("js/disclosure.js")" type="text/javascript"></script>
 }
 

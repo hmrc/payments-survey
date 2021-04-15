@@ -16,20 +16,20 @@
 
 @import config.AppConfig
 @import model.content.IsWelshSupported
-@import uk.gov.hmrc.play.views.html.layouts.HeadWithTrackingConsent
+@import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 
-@this(govuk_wrapper: views.html.govuk_wrapper,
-      headWithTrackingConsent: HeadWithTrackingConsent)(implicit appConfig: AppConfig)
+@this(govuk_wrapper: views.html.govuk_wrapper)(implicit appConfig: AppConfig)
 
 @(
         title: String,
         navTitle: Option[String] = None,
         header: Option[Html] = None,
         fullWidth: Boolean = false,
-        isWelshSupported: IsWelshSupported
+        isWelshSupported: IsWelshSupported,
+        journey: Option[Journey[JourneySpecificData]] = None
         )(content: Html)(implicit request: Request[_], m: Messages)
 
-@headWithTrackingConsent = {
+@head = {
     <!--[if lt IE 8 ]>
 	<link rel='stylesheet' href='@{appConfig.assetsBaseUrl}/stylesheets/application-ie7.min.css' />
     <![endif]-->
@@ -71,4 +71,5 @@
     title = title,
     navTitle = navTitle,
     mainContent = mainContent,
-    isWelshSupported = isWelshSupported)
+    isWelshSupported = isWelshSupported,
+    journey = journey)
