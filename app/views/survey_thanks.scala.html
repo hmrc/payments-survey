@@ -30,7 +30,8 @@
 @main(title = journeyTitleMaker("thanks.heading"),
     navTitle = request.journey.contentOptions.title.forCurrentLanguage,
     header = Some(header),
-    isWelshSupported = request.welsh) {
+    isWelshSupported = request.welsh,
+    journey = Some(request.journey)) {
 
     <p>@Messages("thanks.message")</p>
 

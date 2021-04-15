@@ -46,6 +46,11 @@ object RequestSupport {
   def isLoggedIn(implicit request: Request[_]): Boolean = request.session.get(SessionKeys.authToken).isDefined
 
   /**
+   * Naive way of getting session id. Use it in views only.
+   */
+  def sessionId(implicit request: Request[_]): String = request.session.get(SessionKeys.sessionId).getOrElse("Unknown Session Id")
+
+  /**
    * This is because we want to give responsibility of creation of [[HeaderCarrier]] to the platform code.
    * If they refactor how hc is created our code will pick it up automatically.
    */
