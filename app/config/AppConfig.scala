@@ -37,4 +37,5 @@ class AppConfig @Inject() (config: ServicesConfig) {
   lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val accessibilityStatementUrl: String = s"${config.getString("payFrontendBaseUrl")}/accessibility-statement/pay?referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Fpay-frontend"
 }
