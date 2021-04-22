@@ -89,11 +89,11 @@
     @if(Language() == Languages.English){
         @uiFooterLinks(
             Some(Html(
-                s"""<li><a href="/pay/accessibility-statement" target="_blank" data-sso="false" data-journey-click="footer:Click:Accessibility">Accessibility</a></li>""") ))
+                s"""<li><a href="AppConfig.accessibilityStatementUrl" target="_blank" data-sso="false" data-journey-click="footer:Click:Accessibility">Accessibility</a></li>""") ))
     } else {
         @uiFooterLinks(
             Some(Html(
-                s"""<li><a href="/pay/accessibility-statement" target="_blank" data-sso="false" data-journey-click="footer:Click:Accessibility">Hygyrchedd</a></li>""") ))
+                s"""<li><a href="AppConfig.accessibilityStatementUrl" target="_blank" data-sso="false" data-journey-click="footer:Click:Accessibility">Hygyrchedd</a></li>""") ))
     }
 }
 
