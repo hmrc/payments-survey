@@ -330,5 +330,12 @@ object JsdToContentOptions {
         welshValue   = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
       )
     )
+    case _: JsdPfChildBenefitRepayments => ContentOptions(
+      isWelshSupported = IsWelshSupported.yes,
+      title            = BannerTitle(
+        englishValue = "Pay Coronavirus Job Retention Scheme grants back",
+        welshValue   = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+      )
+    )
   }
 }

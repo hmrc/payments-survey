@@ -142,10 +142,10 @@ lazy val commonSettings = Seq(
   scalacOptions ++= scalaCompilerOptions,
   resolvers ++= Seq(
     "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/",
-    "emueller-bintray" at "http://dl.bintray.com/emueller/maven",
+    "third-party-maven-releases" at "https://artefacts.tax.service.gov.uk/artifactory/third-party-maven-releases/",
     Resolver.bintrayRepo("hmrc", "releases"),
     Resolver.jcenterRepo,
-    "emueller-bintray" at "http://dl.bintray.com/emueller/maven"
+    "third-party-maven-releases" at "https://artefacts.tax.service.gov.uk/artifactory/third-party-maven-releases/"
   ),
   evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
   wartremoverExcluded ++=
