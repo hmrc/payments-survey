@@ -17,14 +17,15 @@
 @import config.AppConfig
 @import model.content.IsWelshSupported
 
-@this(govuk_wrapper: views.html.govuk_wrapper)(implicit appConfig: AppConfig)
+@this(main: views.html.main)(implicit appConfig: AppConfig)
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+@(title: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
-@mainContent = {
-  <h1>@heading</h1>
+@main(
+ pageTitle = Some(title),
+ backUrl = None
+) {
+ <h1>@heading</h1>
 
-  <p>@message</p>
+ <p>@message</p>
 }
-
-@govuk_wrapper(title = pageTitle, mainContent = mainContent, isWelshSupported = IsWelshSupported.yes)

@@ -14,46 +14,40 @@
  * limitations under the License.
  */
 
-package controllers
+package langswitch
 
 import action.Actions
 import config.AppConfig
-import model._
-import langswitch.Language
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import requests.RequestSupport
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import javax.inject.Inject
+import play.api.i18n.I18nSupport
+import play.api.mvc._
 import play.mvc.Http.HeaderNames
+import requests.RequestSupport
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.DefaultViews
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class LanguageSwitchController @Inject() (
     actions:        Actions,
-    auditConnector: AuditConnector,
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,
     defaultViews:   DefaultViews
-)(implicit
-    ec: ExecutionContext,
-  appConfig: AppConfig
-) extends FrontendController(cc) {
-
-  import requestSupport._
+)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
 
   def switchToLanguage(language: Language): Action[AnyContent] = actions.journeyAction { implicit request =>
-
     val maybeReferrer: Option[String] =
       request
         .headers
         .get(HeaderNames.REFERER)
 
-    maybeReferrer.fold(Redirect(controllers.routes.LanguageSwitchController.notFound).withLang(language.toPlayLang))(Redirect(_).withCookies().withLang(language.toPlayLang))
+    maybeReferrer.fold(
+      ifEmpty = Redirect(routes.LanguageSwitchController.notFound()).withLang(language.toPlayLang)
+    )(Redirect(_).withCookies().withLang(language.toPlayLang))
   }
 
   def notFound: Action[AnyContent] = actions.journeyAction { implicit request =>
     Ok(defaultViews.notFound)
   }
 }
+

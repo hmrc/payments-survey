@@ -14,10 +14,8 @@
  * limitations under the License.
  *@
 
-@import model.content.IsWelshSupported
-
 @this(
-    govUkWrapper: views.html.govuk_wrapper
+    main: views.html.main
 )
 
 @()(
@@ -26,9 +24,11 @@
   messages: Messages
 )
 
-@mainContent = {
-
-  <h1 class="heading-large">Error Pages</h1>
+@main(
+  pageTitle =  Some("Error pages"),
+  backUrl = None
+) {
+    <h1 class="heading-large">Error Pages</h1>
     <p>
         <a href="/payments-survey/no-such-page">not found</a>
     </p>
@@ -36,11 +36,3 @@
         <a href="/payments-survey/test-only/error-5xx">server error</a>
     </p>
 }
-
-@govUkWrapper(
-  title =  "Error pages",
-  navTitle = Some("Error pages"),
-  mainContent = mainContent,
-  backButtonUrl = None,
-  isWelshSupported = IsWelshSupported.no
-)

@@ -15,45 +15,43 @@
  *@
 
 @import config.AppConfig
-@import model._
+@import play.api.i18n.Messages
 @import requests.JourneyRequest
 @import views.TitleMaker.journeyTitleMaker
+@import uk.gov.hmrc.govukfrontend.views.Aliases._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichFormErrors
 
-@this(main: views.html.main, formHelper: uk.gov.hmrc.play.views.html.helpers.FormWithCSRF, errorSummary: uk.gov.hmrc.play.views.html.helpers.ErrorSummary)
+@this(
+        main: views.html.main,
+        formWithCsrf: uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF,
+        errorSummary: uk.gov.hmrc.govukfrontend.views.html.components.govukErrorSummary,
+        button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton,
+        appConfig: AppConfig
+)
 
-@(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
-
-
-@header = {
-  <h1 class="heading-xlarge">@Messages("survey.heading")</h1>
-}
+@(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages)
 
 @radioInput(id: String, name: String, value: String) = {
     <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map{_ => checked="checked"} >
 }
 
 @main(
-    title = journeyTitleMaker("survey.heading", Some(form)),
-    navTitle = request.journey.contentOptions.title.forCurrentLanguage,
-    header = Some(header),
-    fullWidth = true,
-    isWelshSupported = request.welsh,
-    journey = Some(request.journey)) {
+    pageTitle = Some(journeyTitleMaker("survey.heading", Some(form))),
+    backUrl = None
+) {
 
-    <p>@Messages("survey.instruction.text.1")</p>
-    <p>@Messages("survey.instruction.text.2.1")
+    <p class="govuk-body govuk-!-font-size-24">@Messages("survey.instruction.text.1")</p>
+    <p class="govuk-body govuk-!-font-size-24">@Messages("survey.instruction.text.2.1")
         <a href="https://www.gov.uk/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you">
             @Messages("survey.privacy.notice.linktext")
         </a>
         @Messages("survey.instruction.text.2.2")</p>
-    <p>@Messages("survey.instruction.text.3")</p>
+    <p class="govuk-body govuk-!-font-size-24">@Messages("survey.instruction.text.3")</p>
 
-    @if(form.hasErrors) {
-        @errorSummary("There's a problem", form.copy(errors = form.errors))
-    }
+    @if(form.hasErrors) { @errorSummary(ErrorSummary(errorList = form.errors.asTextErrorLinks, title = Text("There's a problem"))) }
 
     <div class="sign-out-survey">
-        @formHelper(action = controllers.routes.SurveyController.submitSurvey(), 'class -> "form") {
+        @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey()) {
 
             <input type="hidden" name="journey" value = "@request.journey.status"/>
 
@@ -152,14 +150,15 @@
                 </fieldset>
             </div>
 
-            <p id="thank-you-header" class="bold-medium">@Messages("survey.footnote.header")</p>
-            <p id="thank-you-message">@Messages("survey.footnote.text")</p>
+            <p id="thank-you-header" class="govuk-body govuk-!-font-size-24">@Messages("survey.footnote.header")</p>
+            <p id="thank-you-message" class="govuk-body govuk-!-font-size-24">@Messages("survey.footnote.text")</p>
 
-            <p>
-                <input id="submit-survey-button" type="submit" class="button" value="@Messages("survey.submit")"/>
-            </p>
+            @button(Button(
+                content = Text(Messages("survey.submit")),
+                attributes = Map("id" -> "continue-button")
+            ))
 
-            <p>@views.html.no_survey_back_link()</p>
+            <p class="govuk-body govuk-!-font-size-24">@views.html.no_survey_back_link()</p>
         }
     </div>
 }

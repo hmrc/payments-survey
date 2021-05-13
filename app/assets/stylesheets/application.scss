@@ -1,0 +1,49 @@
+$govuk-assets-path: "/payments-survey/assets/lib/govuk-frontend/govuk/assets/";
+$hmrc-assets-path: "/payments-survey/assets/lib/hmrc-frontend/hmrc/";
+
+@import "lib/govuk-frontend/govuk/all";
+@import "lib/hmrc-frontend/hmrc/all";
+
+.language-toggle-position {
+  float: right;
+}
+
+.input-error {
+  border: 4px solid #d4351c;
+}
+
+.conditional-error {
+  border-left: 4px solid #d4351c;
+}
+
+.select-full-width {
+  width: 100%;
+}
+
+.select-width-10 {
+  width: 23ex;
+}
+
+.address-input-width {
+  width: 75%;
+}
+
+.post-code-width {
+  width: 150px;
+}
+
+.panel-subheading {
+  margin: 0;
+  font-size: 48px
+}
+
+@media (max-width: 640px){
+  .panel-subheading{
+    font-size:32px;
+    line-height:1.09375
+  }
+}
+
+.govuk-header__link--service-name {
+  max-width: 16em;
+}

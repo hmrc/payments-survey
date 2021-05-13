@@ -14,29 +14,14 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-@import model._
-@import requests.JourneyRequest
-@import views.TitleMaker.journeyTitleMaker
+@this(
+        appConfig: config.AppConfig,
+        hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.hmrcScripts,
+        dataLayer: views.html.analytics.data_layer
+)
 
-@this(main: views.html.main)
+@()(implicit request: play.api.mvc.Request[_], messages: Messages)
 
-@()(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
+@hmrcScripts()
 
-@header = {
-<h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
-}
-
-@main(
-    pageTitle = Some(journeyTitleMaker("thanks.heading")),
-    backUrl = Some("")
-) {
-
-    <p>@Messages("thanks.message")</p>
-
-    <div class="transaction-nav">
-
-    @views.html.survey_thanks_back_link("")
-
-    </div>
-}
+<script src='@routes.Assets.versioned("javascripts/application.js")'></script>

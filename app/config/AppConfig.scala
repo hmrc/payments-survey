@@ -32,7 +32,6 @@ class AppConfig @Inject() (config: ServicesConfig) {
 
   lazy val payFrontendBaseUrl: String = s"${config.getString("payFrontendBaseUrl")}/pay"
 
-  lazy val assetsBaseUrl: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
