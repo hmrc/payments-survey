@@ -17,21 +17,21 @@
 package model
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, number, text}
-import play.api.libs.json.{Json, OFormat}
+import play.api.data.Forms.{mapping, number, optional, text}
+import play.api.libs.json.{Format, Json}
 
-final case class SurveyForm(wereYouAble: Int, overallRate: Int, howEasy: Int, journey: String, comments: String)
+final case class SurveyForm(wereYouAble: String, howEasy: String, overallRate: String, journey: String, comments: Option[String])
 
 object SurveyForm {
-  implicit val format: OFormat[SurveyForm] = Json.format[SurveyForm]
+  implicit val format: Format[SurveyForm] = Json.format[SurveyForm]
 
   val surveyForm: Form[SurveyForm] = Form(
     mapping(
-      "wereYouAble" -> number(min = 0, max = 1),
-      "overallRate" -> number(min = 1, max = 5),
-      "howEasy" -> number(min = 1, max = 5),
+      "wereYouAble" -> text,
+      "howEasy" -> text,
+      "overallRate" -> text,
       "journey" -> text(maxLength = 30),
-      "comments" -> text(maxLength = 1200)
+      "comments" -> optional(text)
     )(SurveyForm.apply)(SurveyForm.unapply)
   )
 }

@@ -14,11 +14,14 @@
  * limitations under the License.
  *@
 
-@import model.content.IsWelshSupported
-
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import config.AppConfig
 
 @this(
-        main: views.html.main
+        main: views.html.main,
+        button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton,
+        appConfig: AppConfig
 )
 
 @()(
@@ -29,13 +32,10 @@
 
 @main(
     pageTitle = Some(Messages("error.auth.heading.logged-out")),
+    navTitle = Some(Messages("header.default")),
     backUrl = None
 ) {
     <h1 class="govuk-heading-l" id="not_found_heading">@Messages("error.auth.heading.logged-out")</h1>
-    <div class="form-group">
-
-        <a class="button" id="back_button" href="/pay">
-        @Messages("error.auth.button.logged-out")
-        </a>
-    </div>
+    @button(Button(content = Text(Messages("error.auth.button.logged-out")),
+        href = Some(appConfig.payFrontendBaseUrl)))
 }

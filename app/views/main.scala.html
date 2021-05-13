@@ -34,65 +34,69 @@
         appConfig: AppConfig
 )
 
-@(pageTitle: Option[String] = None, backUrl: Option[String] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(
+        pageTitle: Option[String] = None,
+        navTitle: Option[String],
+        backUrl: Option[String] = None
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
-    @head = {
-    @hmrcTrackingConsentSnippet()
-        <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
-    }
+@head = {
+@hmrcTrackingConsentSnippet()
+    <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
+}
 
-    @beforeContentBlock = {
-    @backUrl.map { url =>
-        @govukBackLink(BackLink(href = url, classes = "govuk-!-display-none-print", content = Text("generic_back.show")))
-    }
+@beforeContentBlock = {
+@backUrl.map { url =>
+    @govukBackLink(BackLink(href = url, classes = "govuk-!-display-none-print", content = Text("generic_back.show")))
+}
 
-        <div class="language-toggle-position">
-        @languageSelect(LanguageSelect(
-            if(messages.lang.code == "cy") Cy else En,
-            En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
-            Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
-        ))
-        </div>
-    }
+    <div class="language-toggle-position">
+    @languageSelect(LanguageSelect(
+        if(messages.lang.code == "cy") Cy else En,
+        En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
+        Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
+    ))
+    </div>
+}
 
-    @mainContent = {
-    @contentBlock
-        <div class="govuk-!-display-none-print">
-        @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "payments-survey"))
-        </div>
-    }
+@mainContent = {
+@contentBlock
+    <div class="govuk-!-display-none-print">
+    @reportTechnicalIssues(ReportTechnicalIssue(serviceCode = "payments-survey"))
+    </div>
+}
 
-    @govukLayout(
-        pageTitle = pageTitle,
-        headBlock = Some(head),
-        headerBlock = Some(hmrcHeader(Header(
-            homepageUrl = "https://www.gov.uk",
-            serviceName = Some("serviceName(request.origin).show"),
-            serviceUrl = "controllers.routes.IndexController.index().url",
-            signOutHref = if(isLoggedIn) Some("appConfig.signOutUrl") else None
-        ))),
-        scriptsBlock = Some(scripts()),
-        beforeContentBlock = Some(beforeContentBlock),
-        footerItems = Seq(
-            FooterItem(
-                text = Some("footer_cookies.show"),
-                href = Some("appConfig.cookiesUrl")
-            ),
-            FooterItem(
-                text = Some("footer_privacyNotice.show"),
-                href = Some("appConfig.privacyNoticeUrl")
-            ),
-            FooterItem(
-                text = Some("footer_termsAndConditions.show"),
-                href = Some("appConfig.termsAndConditionsUrl")
-            ),
-            FooterItem(
-                text = Some("footer_helpUsingGovUk.show"),
-                href = Some("appConfig.helpUsingGovUkUrl")
-            ),
-            FooterItem(
-                text = Some("footer_accessibilityStatement.show"),
-                href = Some("appConfig.accessibilityStatementUrlrequest.uri")
-            )
+@govukLayout(
+    pageTitle = pageTitle,
+    headBlock = Some(head),
+    headerBlock = Some(hmrcHeader(Header(
+        homepageUrl = "https://www.gov.uk",
+        serviceName = navTitle,
+        serviceUrl = "controllers.routes.IndexController.index().url",
+        signOutHref = if(isLoggedIn) Some(appConfig.signOutUrl) else None
+    ))),
+    scriptsBlock = Some(scripts()),
+    beforeContentBlock = Some(beforeContentBlock),
+    footerItems = Seq(
+        FooterItem(
+            text = Some("footer_cookies.show"),
+            href = Some("appConfig.cookiesUrl")
         ),
-        bodyEndBlock = None)(mainContent)
+        FooterItem(
+            text = Some("footer_privacyNotice.show"),
+            href = Some("appConfig.privacyNoticeUrl")
+        ),
+        FooterItem(
+            text = Some("footer_termsAndConditions.show"),
+            href = Some("appConfig.termsAndConditionsUrl")
+        ),
+        FooterItem(
+            text = Some("footer_helpUsingGovUk.show"),
+            href = Some("appConfig.helpUsingGovUkUrl")
+        ),
+        FooterItem(
+            text = Some("footer_accessibilityStatement.show"),
+            href = Some("appConfig.accessibilityStatementUrlrequest.uri")
+        )
+    ),
+    bodyEndBlock = None)(mainContent)

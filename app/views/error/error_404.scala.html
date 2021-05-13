@@ -18,19 +18,20 @@
 
 
 @this(
-    main: views.html.main
+        main: views.html.main
 )
 
 @()(
-  implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
+        implicit
+        request: play.api.mvc.Request[_],
+        messages: Messages
 )
 
 @main(
-  pageTitle =  Some(Messages("error.pageNotFound.title")),
-  backUrl = None
-){
+    pageTitle = Some(Messages("error.pageNotFound.title")),
+    navTitle = Some(Messages("error.pageNotFound.heading")),
+    backUrl = None
+) {
     <h1 class="heading-large" id="not_found_heading">@Messages("error.pageNotFound.heading")</h1>
 
     <p>@Messages("error.pageNotFound.message")</p>
