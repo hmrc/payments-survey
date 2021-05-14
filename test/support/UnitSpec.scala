@@ -17,6 +17,7 @@
 package support
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{FreeSpecLike, Matchers}
+import org.scalatest.freespec.AnyFreeSpecLike
+import org.scalatest.matchers.should.Matchers
 
-trait UnitSpec extends FreeSpecLike with Matchers with ScalaFutures
+trait UnitSpec extends AnyFreeSpecLike with Matchers with ScalaFutures

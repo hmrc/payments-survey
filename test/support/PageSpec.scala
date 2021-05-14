@@ -16,9 +16,12 @@
 
 package support
 
-import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
+import org.openqa.selenium.By
 
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.scalatest.concurrent.Eventually.eventually
+import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.{OptionValues, TestData}
 import org.scalatestplus.selenium.WebBrowser
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
@@ -26,10 +29,10 @@ import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
 import payapi.corcommon.model.JourneyId
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import testdata.{TdAll, TdJourney, TestData}
+import testdata.{TdAll, TdJourney}
 import uk.gov.hmrc.http.SessionKeys
 
-trait PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with WireMockSupport with OptionValues {
+class PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with WireMockSupport with OptionValues with IntegrationPatience {
 
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
@@ -40,7 +43,8 @@ trait PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with 
     ))
     .build()
 
-  val baseUrl = s"http://localhost:$port"
+  //this HAS to be def or the tests implode - so much time wasted :'(
+  def baseUrl = s"http://localhost:$port"
 
   def frozenTimeString: String = "2027-11-02T16:33:51.880"
   implicit val testClock: Clock = {

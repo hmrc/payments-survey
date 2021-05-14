@@ -11,8 +11,6 @@ scalaVersion := "2.12.12"
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
     play.sbt.PlayScala,
-    SbtAutoBuildPlugin,
-    SbtGitVersioning,
     SbtDistributablesPlugin,
     SbtArtifactory
   )
