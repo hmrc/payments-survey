@@ -4,6 +4,7 @@ header.default = Pay your tax
 global.back = Back
 global.sign-out = Sign out
 global.title-suffix = GOV.UK
+global.error-prefix = There is a problem
 
 error.InternalServerError.heading = Sorry, we’re experiencing technical difficulties
 error.InternalServerError.message = Please try again in a few minutes.
@@ -22,26 +23,26 @@ survey.nothanks.return-to-govuk = Skip survey
 survey.nothanks.return-to-bta = Skip survey, return to business tax account
 survey.nothanks.return-to-pta = Skip survey, return to personal tax account
 # question 1
-survey.wereYouAble.question = Were you able to do what you needed to do today?
+survey.wereYouAble.question = 1. Were you able to do what you needed to do today?
 survey.wereYouAble.response.yes = Yes
 survey.wereYouAble.response.no = No
 # question 2
-survey.howEasy.question = How easy was it for you to do what you needed to do today?
-survey.howEasy.response.5 = Very easy
-survey.howEasy.response.4 = Easy
-survey.howEasy.response.3 = Neither easy or difficult
-survey.howEasy.response.2 = Difficult
-survey.howEasy.response.1 = Very difficult
+survey.howEasy.question = 2. How easy was it for you to do what you needed to do today?
+survey.howEasy.response.veryEasy = Very easy
+survey.howEasy.response.easy = Easy
+survey.howEasy.response.neitherEasyOrDifficult = Neither easy or difficult
+survey.howEasy.response.difficult = Difficult
+survey.howEasy.response.veryDifficult = Very difficult
 # question 3
-survey.comment.question = Why did you give this score?
+survey.comment.question = 2b. Why did you give this score?
 survey.comment.limit = (Limit is 1200 characters)
 # question 4
-survey.overallRate.question = Overall, how did you feel about the service you received today?
-survey.overallRate.response.5 = Very satisfied
-survey.overallRate.response.4 = Satisfied
-survey.overallRate.response.3 = Neither satisfied or dissatisfied
-survey.overallRate.response.2 = Dissatisfied
-survey.overallRate.response.1 = Very dissatisfied
+survey.overallRate.question = 3. Overall, how did you feel about the service you received today?
+survey.overallRate.response.verySatisfied = Very satisfied
+survey.overallRate.response.satisfied = Satisfied
+survey.overallRate.response.neitherSatisfiedOrDissatisfied = Neither satisfied or dissatisfied
+survey.overallRate.response.dissatisfied = Dissatisfied
+survey.overallRate.response.veryDissatisfied = Very dissatisfied
 survey.submit = Send feedback
 survey.footnote.header = Thank you for your feedback
 survey.footnote.text = We will use your feedback to make our services better.
@@ -52,3 +53,9 @@ thanks.return-to-bta = Return to business tax account
 thanks.return-to-pta = Return to personal tax account
 error.auth.heading.logged-out = For your security, we timed you out
 error.auth.button.logged-out = Start again
+
+footer_cookies = Cookies
+footer_privacyNotice = Privacy
+footer_termsAndConditions = Terms and conditions
+footer_helpUsingGovUk = Help using GOV.UK
+footer_accessibilityStatement = Accessibility statement

@@ -17,7 +17,7 @@
 package model
 
 import play.api.data.Form
-import play.api.data.Forms.{mapping, number, optional, text}
+import play.api.data.Forms.{mapping, optional, text}
 import play.api.libs.json.{Format, Json}
 
 final case class SurveyForm(wereYouAble: String, howEasy: String, overallRate: String, journey: String, comments: Option[String])

@@ -31,9 +31,7 @@
     navTitle = Some(Messages("error.InternalServerError.heading")),
     backUrl = None,
 ) {
-    <h1 class="heading-large">@Messages("error.InternalServerError.heading")</h1>
+    <h1 class="govuk-heading-xl">@Messages("error.InternalServerError.heading")</h1>
 
-    <p>
-    @Messages("error.InternalServerError.message")
-    </p>
+    <p class="govuk-body">@Messages("error.InternalServerError.message")</p>
 }

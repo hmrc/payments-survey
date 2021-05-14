@@ -1,18 +1,19 @@
 @*
-* Copyright 2021 HM Revenue & Customs
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*@
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
 @import config.AppConfig
 @import play.api.i18n.Messages
 @import requests.JourneyRequest
@@ -33,10 +34,6 @@
 )
 
 @(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages)
-
-@radioInput(id: String, name: String, value: String) = {
-    <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map { _ => checked="checked" } >
-}
 
 @main(
     pageTitle = Some(journeyTitleMaker("survey.heading", Some(form))),
@@ -60,42 +57,46 @@
         <input type="hidden" name="journey" value = "@request.journey.status"/>
             <!-- 1. Were you able to do what you needed to do today? -->
         <div class="form-group payments">
-            <p id="were-you-able-label" class="govuk-heading-m">1. @Messages("survey.wereYouAble.question")</p>
+            <h2 id="were-you-able-label" class="govuk-heading-m">@Messages("survey.wereYouAble.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("wereYouAble").map(err => ErrorMessage(content = Text("selectBank_validation.show"))),
+                errorMessage = form.error("wereYouAble").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "wereYouAble",
-                items = Seq(
-                    RadioItem(content = Text(Messages("survey.wereYouAble.response.yes"))),
-                    RadioItem(content = Text(Messages("survey.wereYouAble.response.no")))
-                )
+                items = Seq("yes", "no").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.wereYouAble.response.$radioItem")),
+                        checked = form("wereYouAble").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
             ))
         </div>
             <!-- 2. How easy was it for you to do what you needed to do today? -->
         <div class="form-group payments">
-            <p id="how-easy-label" class="govuk-heading-m">2. @Messages("survey.howEasy.question")</p>
+            <h2 id="how-easy-label" class="govuk-heading-m">@Messages("survey.howEasy.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("howEasy").map(err => ErrorMessage(content = Text("howEasy"))),
+                errorMessage = form.error("howEasy").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "howEasy",
-                items = Seq(
-                    RadioItem(content = Text(Messages("survey.howEasy.response.5"))),
-                    RadioItem(content = Text(Messages("survey.howEasy.response.4"))),
-                    RadioItem(content = Text(Messages("survey.howEasy.response.3"))),
-                    RadioItem(content = Text(Messages("survey.howEasy.response.2"))),
-                    RadioItem(content = Text(Messages("survey.howEasy.response.1")))
-                )
+                items = Seq("veryEasy", "easy", "neitherEasyOrDifficult", "difficult", "veryDifficult").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.howEasy.response.$radioItem")),
+                        checked = form("howEasy").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
             ))
         </div>
             <!-- 2b. Why did you give this score? -->
         <div class="form-group payments">
-            <p id="why-score-label" class="govuk-heading-m">2b. @Messages("survey.comment.question")</p>
+            <h2 id="why-score-label" class="govuk-heading-m">@Messages("survey.comment.question")</h2>
             @textArea(
                 Textarea(
-                    id = "why-score-field",
+                    id = "comments",
                     name = "comments",
                     rows = 4,
                     value = form("comments").value,
+                    describedBy = Some("why-score-label"),
                     hint = Some(Hint(content = Text(Messages("survey.comment.limit")))),
                     attributes = Map("maxLength" -> "1200")
                 )
@@ -103,28 +104,29 @@
         </div>
             <!-- 3. Overall, how did you feel about the service you received today? -->
         <div class="form-group payments">
-            <p id="overall-label" class="govuk-heading-m">3. @Messages("survey.overallRate.question")</p>
+            <h2 id="overall-label" class="govuk-heading-m">@Messages("survey.overallRate.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("overallRate").map(err => ErrorMessage(content = Text("selectBank_validation.show"))),
+                errorMessage = form.error("overallRate").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "overallRate",
-                items = Seq(
-                    RadioItem(content = Text(Messages("survey.overallRate.response.5"))),
-                    RadioItem(content = Text(Messages("survey.overallRate.response.4"))),
-                    RadioItem(content = Text(Messages("survey.overallRate.response.3"))),
-                    RadioItem(content = Text(Messages("survey.overallRate.response.2"))),
-                    RadioItem(content = Text(Messages("survey.overallRate.response.1")))
-                )
+                items = Seq("verySatisfied", "satisfied", "neitherSatisfiedOrDissatisfied", "dissatisfied", "veryDissatisfied").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.overallRate.response.$radioItem")),
+                        checked = form("overallRate").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
             ))
         </div>
         <br>
-        <p id="thank-you-header" class="govuk-body">@Messages("survey.footnote.header")</p>
+        <h3 id="thank-you-header" class="govuk-heading-m">@Messages("survey.footnote.header")</h3>
         <p id="thank-you-message" class="govuk-body">@Messages("survey.footnote.text")</p>
-
+        <div class="form-actions">
         @button(Button(
             content = Text(Messages("survey.submit")),
             attributes = Map("id" -> "continue-button")
         ))
+        </div>
         <p class="govuk-body">@views.html.no_survey_back_link()</p>
     }
     </div>
