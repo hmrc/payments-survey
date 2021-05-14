@@ -18,25 +18,21 @@
 
 
 @this(
-    govUkWrapper: views.html.govuk_wrapper
+        main: views.html.main
 )
 
 @()(
-  implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
+        implicit
+        request: play.api.mvc.Request[_],
+        messages: Messages
 )
 
-@mainContent = {
-    <h1 class="heading-large" id="not_found_heading">@Messages("error.pageNotFound.heading")</h1>
+@main(
+    pageTitle = Some(Messages("error.pageNotFound.title")),
+    navTitle = Some(Messages("error.pageNotFound.heading")),
+    backUrl = None
+) {
+    <h1 class="govuk-heading-xl" id="not_found_heading">@Messages("error.pageNotFound.heading")</h1>
 
-    <p>@Messages("error.pageNotFound.message")</p>
+    <p class="govuk-body">@Messages("error.pageNotFound.message")</p>
 }
-
-@govUkWrapper(
-  title =  Messages("error.pageNotFound.title"),
-  navTitle = Some(Messages("error.pageNotFound.heading")),
-  mainContent = mainContent,
-  backButtonUrl = None,
-  isWelshSupported = IsWelshSupported.yes
-)

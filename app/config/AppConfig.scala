@@ -32,10 +32,17 @@ class AppConfig @Inject() (config: ServicesConfig) {
 
   lazy val payFrontendBaseUrl: String = s"${config.getString("payFrontendBaseUrl")}/pay"
 
-  lazy val assetsBaseUrl: String = loadConfig(s"assets.url") + loadConfig(s"assets.version")
+  val ggBaseUrl: String = loadConfig("ggBaseUrl") + "/gg"
+  val signOutUrl = s"$ggBaseUrl/sign-out"
+
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   lazy val accessibilityStatementUrl: String = s"${config.getString("payFrontendBaseUrl")}/accessibility-statement/pay?referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Fpay-frontend"
+  val privacyNoticeUrl: String = loadConfig("govUkUrls.privacyNoticeUrl")
+  val paymentSupportUrl: String = loadConfig("govUkUrls.paymentSupportUrl")
+  val cookiesUrl: String = loadConfig("govUkUrls.cookiesUrl")
+  val termsAndConditionsUrl: String = loadConfig("govUkUrls.termsAndConditionsUrl")
+  val helpUsingGovUkUrl: String = loadConfig("govUkUrls.helpUsingGovUkUrl")
 }

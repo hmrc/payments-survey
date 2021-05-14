@@ -17,27 +17,21 @@
 @import model.content.IsWelshSupported
 
 @this(
-    govUkWrapper: views.html.govuk_wrapper
+        main: views.html.main
 )
 
 @()(
-  implicit
-  request: play.api.mvc.Request[_],
-  messages: Messages
+        implicit
+        request: play.api.mvc.Request[_],
+        messages: Messages
 )
 
-@mainContent = {
-    <h1 class="heading-large">@Messages("error.InternalServerError.heading")</h1>
+@main(
+    pageTitle = Some(Messages("error.InternalServerError.heading")),
+    navTitle = Some(Messages("error.InternalServerError.heading")),
+    backUrl = None,
+) {
+    <h1 class="govuk-heading-xl">@Messages("error.InternalServerError.heading")</h1>
 
-    <p>
-        @Messages("error.InternalServerError.message")
-    </p>
+    <p class="govuk-body">@Messages("error.InternalServerError.message")</p>
 }
-
-@govUkWrapper(
-  title =  Messages("error.InternalServerError.heading"),
-  navTitle = Some(Messages("error.InternalServerError.heading")),
-  mainContent = mainContent,
-  backButtonUrl = None,
-  isWelshSupported = IsWelshSupported.yes
-)

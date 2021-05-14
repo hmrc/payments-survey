@@ -21,12 +21,12 @@
 
     @request.journey.origin.presentationMode match {
         case "BTA" | "MTD-BTA"=> {
-            <a id="back-to-bta" href="/business-account">@Messages("survey.nothanks.return-to-bta")</a>
+            <a id="back-to-bta" class="govuk-link" href="/business-account">@Messages("survey.nothanks.return-to-bta")</a>
         }
         case "PTA" | "MTD-PTA" => {
-            <a href="/personal-account" class="back-link">@Messages("survey.nothanks.return-to-pta")</a>
+            <a href="/personal-account" class="govuk-link">@Messages("survey.nothanks.return-to-pta")</a>
         }
         case _ => {
-            <a id="back-to-govuk" href="https://www.gov.uk/government/organisations/hm-revenue-customs">@Messages("survey.nothanks.return-to-govuk")</a>
+            <a id="back-to-govuk" class="govuk-link" href="https://www.gov.uk/government/organisations/hm-revenue-customs">@Messages("survey.nothanks.return-to-govuk")</a>
         }
     }

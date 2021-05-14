@@ -14,17 +14,14 @@
  * limitations under the License.
  *@
 
-@(presentationMode: String)(implicit request: Request[_], m: Messages)
+@this(
+        appConfig: config.AppConfig,
+        hmrcScripts: uk.gov.hmrc.hmrcfrontend.views.html.helpers.hmrcScripts,
+        dataLayer: views.html.analytics.data_layer
+)
 
+@()(implicit request: play.api.mvc.Request[_], messages: Messages)
 
-    @presentationMode match {
-        case "BTA" => {
-            <a href="/business-account">@Messages("thanks.return-to-bta")</a>
-        }
-        case "PTA" => {
-            <a href="/personal-account" class="back-link">@Messages("thanks.return-to-pta")</a>
-        }
-        case _ => {
-            <a class="button" href="https://www.gov.uk">@Messages("thanks.return-to-govuk")</a>
-        }
-    }
+@hmrcScripts()
+
+<script src='@routes.Assets.versioned("javascripts/application.js")'></script>

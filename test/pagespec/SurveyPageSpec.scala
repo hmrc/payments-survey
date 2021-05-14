@@ -17,132 +17,110 @@
 package pagespec
 
 import model._
+import org.openqa.selenium.By
+import org.scalatest.concurrent.Eventually.eventually
 import stubs.PayApiStubFindJourneyBySessionId
 import support.PageSpec
 
 class SurveyPageSpec extends PageSpec {
   val pagePath = s"/payments-survey/survey"
   val surveyThanksPath = s"/payments-survey/survey-thanks"
-
   "should render correctly" in new TestWithSession {
 
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
 
     goTo(baseUrl + pagePath)
 
-    cssSelector(".header__menu__proposition-name")
+    cssSelector(".govuk-header__link--service-name")
       .element.text shouldEqual journey.contentOptions.title.englishValue
 
-    webDriver.getTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
+    pageTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
 
-    find("were-you-able-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "1. Were you able to do what you needed to do today?")
-    find("were-you-able-yes-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Yes")
-    find("were-you-able-no-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "No")
+    id("were-you-able-label").element.text shouldBe "1. Were you able to do what you needed to do today?"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(3) > div > fieldset > div > div:nth-child(1) > label")
+      .element.text shouldBe "Yes"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(3) > div > fieldset > div > div:nth-child(2) > label")
+      .element.text shouldBe "No"
 
-    find("how-easy-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "2. How easy was it for you to do what you needed to do today?")
-    find("how-easy-very-easy-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Very easy")
-    find("how-easy-easy-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Easy")
-    find("how-easy-neutral-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Neither easy or difficult")
-    find("how-easy-difficult-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Difficult")
-    find("how-easy-very-difficult-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Very difficult")
+    id("how-easy-label")
+      .element.text shouldBe "2. How easy was it for you to do what you needed to do today?"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(1) > label")
+      .element.text shouldBe "Very easy"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(2) > label")
+      .element.text shouldBe "Easy"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(3) > label")
+      .element.text shouldBe "Neither easy or difficult"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(4) > label")
+      .element.text shouldBe "Difficult"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(5) > label")
+      .element.text shouldBe "Very difficult"
 
-    find("why-score-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "2b. Why did you give this score?")
-    textArea("why-score-field").value shouldBe ""
+    id("why-score-label").element.text shouldBe "2b. Why did you give this score?"
+    id("comments").element.attribute("value") shouldBe Some("")
 
-    find("overall-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "3. Overall, how did you feel about the service you received today?")
-    find("overall-very-good-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Very satisfied")
-    find("overall-good-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Satisfied")
-    find("overall-neutral-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Neither satisfied or dissatisfied")
-    find("overall-poor-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Dissatisfied")
-    find("overall-very-poor-label")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Very dissatisfied")
+    id("overall-label")
+      .element.text shouldBe "3. Overall, how did you feel about the service you received today?"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(1) > label")
+      .element.text shouldBe "Very satisfied"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(2) > label")
+      .element.text shouldBe "Satisfied"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(3) > label")
+      .element.text shouldBe "Neither satisfied or dissatisfied"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(4) > label")
+      .element.text shouldBe "Dissatisfied"
+    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(5) > label")
+      .element.text shouldBe "Very dissatisfied"
 
-    find("thank-you-header")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "Thank you for your feedback")
-    find("thank-you-message")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "We will use your feedback to make our services better.")
-
-    find("submit-survey-button")
-      .fold(fail)(elem => elem.underlying.getAttribute("value") shouldBe "Send feedback")
+    id("thank-you-header").element.text shouldBe "Thank you for your feedback"
+    id("thank-you-message").element.text shouldBe "We will use your feedback to make our services better."
+    id("continue-button").element.text shouldBe "Send feedback"
 
     PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
   }
 
   "should show no errors if the user hasn't clicked submit" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-
     goTo(baseUrl + pagePath)
-
-    find("were-you-able-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "")
-
-    find("how-easy-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "")
-
-    find("overall-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "")
+    webDriver.findElementsById("error-summary-title").isEmpty shouldBe true
+    webDriver.findElementsById("wereYouAble-error").isEmpty shouldBe true
+    webDriver.findElementsById("howEasy-error").isEmpty shouldBe true
+    webDriver.findElementsById("overallRate-error").isEmpty shouldBe true
   }
 
   "should show an error if the user tries to submit without filling in any fields" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-
     goTo(baseUrl + pagePath)
-
-    click.on("submit-survey-button")
-
+    click.on("continue-button")
     currentUrl shouldBe (baseUrl + pagePath)
-
-    find("were-you-able-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "This field is required")
-
-    find("how-easy-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "This field is required")
-
-    find("overall-error")
-      .fold(fail)(elem => elem.underlying.getText shouldBe "This field is required")
+    id("error-summary-title").element.text shouldBe "There's a problem"
+    id("wereYouAble-error").element.text shouldBe "Error: This field is required"
+    id("howEasy-error").element.text shouldBe "Error: This field is required"
+    id("overallRate-error").element.text shouldBe "Error: This field is required"
   }
 
   "should proceed to the survey thanks page if the user submits after filling in all necessary fields" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-
     goTo(baseUrl + pagePath)
-
-    click.on("able-yes")
-    click.on("difficulty-radio-very-easy")
-    click.on("rate-very-poor")
-    click.on("submit-survey-button")
-
+    click.on("wereYouAble")
+    click.on("howEasy")
+    click.on("overallRate")
+    click.on("continue-button")
     currentUrl shouldBe (baseUrl + surveyThanksPath)
   }
 
   "ensure goes to timeout page when session not found" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId404(tdJourney)
     goTo(baseUrl + pagePath)
-    pageTitle shouldBe ("For your security, we timed you out")
+    pageTitle shouldBe "For your security, we timed you out"
   }
 
   "ensure can switch to Welsh and back" in new TestWithSession {
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
     goTo(baseUrl + pagePath)
-    click.on("cy-switch")
-    pageTitle shouldBe ("Sut oedd eich gwasanaeth talu? - Talu eich Hunanasesiad - GOV.UK")
-    click.on("en-switch")
-    pageTitle shouldBe ("How was our payment service? - Pay your Self Assessment - GOV.UK")
+    click.on(xpath("/html/body/div/div/nav/ul/li[2]/a/span[2]"))
+    pageTitle shouldBe "Sut oedd eich gwasanaeth talu? - Talu eich Hunanasesiad - GOV.UK"
+    click.on(xpath("/html/body/div/div/nav/ul/li[1]/a/span[2]"))
+    pageTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
   }
 
 }

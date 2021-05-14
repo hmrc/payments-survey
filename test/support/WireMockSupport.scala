@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
-import play.api.Logger.logger
+import play.api.Logger
 
 trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   self: Suite =>
@@ -33,15 +33,15 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   override protected def beforeAll(): Unit = wireMockServer.start()
 
   override protected def afterAll(): Unit = {
-    logger.info("Stopping wire mock server ...")
+    Logger(this.getClass).info("Stopping wire mock server ...")
     wireMockServer.stop()
-    logger.info("Stopping wire mock server - done")
+    Logger(this.getClass).info("Stopping wire mock server - done")
   }
 
   override def beforeEach() {
-    logger.info("Resetting wire mock server ...")
+    Logger(this.getClass).info("Resetting wire mock server ...")
     WireMock.reset()
-    logger.info("Resetting wire mock server - done")
+    Logger(this.getClass).info("Resetting wire mock server - done")
   }
 
 }

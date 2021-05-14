@@ -15,151 +15,119 @@
  *@
 
 @import config.AppConfig
-@import model._
+@import play.api.i18n.Messages
 @import requests.JourneyRequest
 @import views.TitleMaker.journeyTitleMaker
+@import uk.gov.hmrc.govukfrontend.views.Aliases._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichFormErrors
+@import model.JourneyExt
 
-@this(main: views.html.main, formHelper: uk.gov.hmrc.play.views.html.helpers.FormWithCSRF, errorSummary: uk.gov.hmrc.play.views.html.helpers.ErrorSummary)
+@this(
+        main: views.html.main,
+        formWithCsrf: uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF,
+        errorSummary: uk.gov.hmrc.govukfrontend.views.html.components.govukErrorSummary,
+        button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton,
+        radios: uk.gov.hmrc.govukfrontend.views.html.components.govukRadios,
+        select: uk.gov.hmrc.govukfrontend.views.html.components.govukSelect,
+        textArea: uk.gov.hmrc.govukfrontend.views.html.components.GovukTextarea,
+        appConfig: AppConfig
+)
 
-@(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
-
-
-@header = {
-  <h1 class="heading-xlarge">@Messages("survey.heading")</h1>
-}
-
-@radioInput(id: String, name: String, value: String) = {
-    <input type="radio" id="@id" name="@name" value="@value" @form(name).value.filter(_ == value).map{_ => checked="checked"} >
-}
+@(form: Form[model.SurveyForm])(implicit request: JourneyRequest[_], m: Messages)
 
 @main(
-    title = journeyTitleMaker("survey.heading", Some(form)),
+    pageTitle = Some(journeyTitleMaker("survey.heading", Some(form))),
     navTitle = request.journey.contentOptions.title.forCurrentLanguage,
-    header = Some(header),
-    fullWidth = true,
-    isWelshSupported = request.welsh,
-    journey = Some(request.journey)) {
-
-    <p>@Messages("survey.instruction.text.1")</p>
-    <p>@Messages("survey.instruction.text.2.1")
-        <a href="https://www.gov.uk/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you">
-            @Messages("survey.privacy.notice.linktext")
+    backUrl = None
+) {
+    <h1 class="govuk-heading-xl">@Messages("survey.heading")</h1>
+    <p class="govuk-body">@Messages("survey.instruction.text.1")</p>
+    <p class="govuk-body">@Messages("survey.instruction.text.2.1")
+        <a class="govuk-link" href="https://www.gov.uk/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you">
+        @Messages("survey.privacy.notice.linktext")
         </a>
-        @Messages("survey.instruction.text.2.2")</p>
-    <p>@Messages("survey.instruction.text.3")</p>
-
+        @Messages("survey.instruction.text.2.2")
+    </p>
+    <p class="govuk-body">@Messages("survey.instruction.text.3")</p>
     @if(form.hasErrors) {
-        @errorSummary("There's a problem", form.copy(errors = form.errors))
+        @errorSummary(ErrorSummary(errorList = form.errors.asTextErrorLinks, title = Text("There's a problem")))
     }
-
     <div class="sign-out-survey">
-        @formHelper(action = controllers.routes.SurveyController.submitSurvey(), 'class -> "form") {
-
-            <input type="hidden" name="journey" value = "@request.journey.status"/>
-
+    @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey()) {
+        <input type="hidden" name="journey" value = "@request.journey.status"/>
             <!-- 1. Were you able to do what you needed to do today? -->
-            <div class="form-group payments">
-                <fieldset class="form-field-group @if(form.error("wereYouAble").isDefined) { form-group-error }" id="wereYouAble">
-                    <legend>
-                        <p id="were-you-able-label" class="bold-medium">1. @Messages("survey.wereYouAble.question")</p>
-                        <span id="were-you-able-error" style="color: #af1324">
-                        @form.error("wereYouAble").map(x => Messages(x.message)).getOrElse("")
-                        </span>
-                    </legend>
-                    <div class="multiple-choice">
-                        @radioInput("able-yes", "wereYouAble", "1")
-                        <label id="were-you-able-yes-label" class="block-label--stacked" for="able-yes">@Messages("survey.wereYouAble.response.yes")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("able-no", "wereYouAble", "0")
-                        <label id="were-you-able-no-label" class="block-label--stacked" for="able-no">@Messages("survey.wereYouAble.response.no")</label>
-                    </div>
-                </fieldset>
-            </div>
-
+        <div class="form-group payments">
+            <h2 id="were-you-able-label" class="govuk-heading-m">@Messages("survey.wereYouAble.question")</h2>
+            @radios(Radios(
+                fieldset = Some(Fieldset(legend = None)),
+                errorMessage = form.error("wereYouAble").map(err => ErrorMessage(content = Text("This field is required"))),
+                name = "wereYouAble",
+                items = Seq("yes", "no").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.wereYouAble.response.$radioItem")),
+                        checked = form("wereYouAble").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
+            ))
+        </div>
             <!-- 2. How easy was it for you to do what you needed to do today? -->
-            <div class="form-group payments">
-                <fieldset class="form-field-group @if(form.error("howEasy").isDefined) { form-group-error }" id="howEasy">
-                    <legend>
-                        <p id="how-easy-label" class="bold-medium">2. @Messages("survey.howEasy.question")</p>
-                        <span id="how-easy-error" style ="color: #af1324">
-                        @form.error("howEasy").map(x => Messages(x.message)).getOrElse("")
-                        </span>
-                    </legend>
-                    <div class="multiple-choice">
-                        @radioInput("difficulty-radio-very-easy", "howEasy", "5")
-                        <label id="how-easy-very-easy-label" class="block-label--stacked" for="difficulty-radio-very-easy">@Messages("survey.howEasy.response.5")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("difficulty-radio-easy", "howEasy", "4")
-                        <label id="how-easy-easy-label" class="block-label--stacked" for="difficulty-radio-easy">@Messages("survey.howEasy.response.4")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("difficulty-radio-neutral","howEasy","3")
-                        <label id="how-easy-neutral-label" class="block-label--stacked" for="difficulty-radio-neutral">@Messages("survey.howEasy.response.3")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("difficulty-radio-difficult", "howEasy", "2")
-                        <label id="how-easy-difficult-label" class="block-label--stacked" for="difficulty-radio-difficult">@Messages("survey.howEasy.response.2")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("difficulty-radio-very-difficult", "howEasy", "1")
-                        <label id="how-easy-very-difficult-label" class="block-label--stacked" for="difficulty-radio-very-difficult">@Messages("survey.howEasy.response.1")</label>
-                    </div>
-                </fieldset>
-            </div>
-
+        <div class="form-group payments">
+            <h2 id="how-easy-label" class="govuk-heading-m">@Messages("survey.howEasy.question")</h2>
+            @radios(Radios(
+                fieldset = Some(Fieldset(legend = None)),
+                errorMessage = form.error("howEasy").map(err => ErrorMessage(content = Text("This field is required"))),
+                name = "howEasy",
+                items = Seq("veryEasy", "easy", "neitherEasyOrDifficult", "difficult", "veryDifficult").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.howEasy.response.$radioItem")),
+                        checked = form("howEasy").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
+            ))
+        </div>
             <!-- 2b. Why did you give this score? -->
-            <div class="form-group payments">
-                <fieldset class="form-field-group">
-                    <label for="comments">
-                        <p id="why-score-label" class="bold-medium">2b. @Messages("survey.comment.question")</p>
-                    </label>
-                    <textarea id="why-score-field" maxlength="1200" name="comments" style="width:80%" rows="4" id="comments" class="form-control">@form("comments").value</textarea>
-                    <small>@Messages("survey.comment.limit")</small>
-                </fieldset>
-            </div>
-
+        <div class="form-group payments">
+            <h2 id="why-score-label" class="govuk-heading-m">@Messages("survey.comment.question")</h2>
+            @textArea(
+                Textarea(
+                    id = "comments",
+                    name = "comments",
+                    rows = 4,
+                    value = form("comments").value,
+                    describedBy = Some("why-score-label"),
+                    hint = Some(Hint(content = Text(Messages("survey.comment.limit")))),
+                    attributes = Map("maxLength" -> "1200")
+                )
+            )
+        </div>
             <!-- 3. Overall, how did you feel about the service you received today? -->
-            <div class="form-group payments">
-                <fieldset class="form-field-group @if(form.error("overallRate").isDefined) { form-group-error }" id="overallRate">
-                    <legend>
-                        <p id="overall-label" class="bold-medium">3. @Messages("survey.overallRate.question")</p>
-                        <span id="overall-error" style ="color: #af1324">
-                        @form.error("overallRate").map(x => Messages(x.message)).getOrElse("")
-                        </span>
-                    </legend>
-                    <div class="multiple-choice">
-                        @radioInput("rate-very-good", "overallRate", "5")
-                        <label id="overall-very-good-label" class="block-label--stacked" for="rate-very-good">@Messages("survey.overallRate.response.5")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("rate-good", "overallRate", "4")
-                        <label id="overall-good-label" class="block-label--stacked" for="rate-good">@Messages("survey.overallRate.response.4")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("rate-neutral", "overallRate", "3")
-                        <label id="overall-neutral-label" class="block-label--stacked" for="rate-neutral">@Messages("survey.overallRate.response.3")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("rate-poor", "overallRate", "2")
-                        <label id="overall-poor-label" class="block-label--stacked" for="rate-poor">@Messages("survey.overallRate.response.2")</label>
-                    </div>
-                    <div class="multiple-choice">
-                        @radioInput("rate-very-poor", "overallRate", "1")
-                        <label id="overall-very-poor-label" class="block-label--stacked" for="rate-very-poor">@Messages("survey.overallRate.response.1")</label>
-                    </div>
-                </fieldset>
-            </div>
-
-            <p id="thank-you-header" class="bold-medium">@Messages("survey.footnote.header")</p>
-            <p id="thank-you-message">@Messages("survey.footnote.text")</p>
-
-            <p>
-                <input id="submit-survey-button" type="submit" class="button" value="@Messages("survey.submit")"/>
-            </p>
-
-            <p>@views.html.no_survey_back_link()</p>
-        }
+        <div class="form-group payments">
+            <h2 id="overall-label" class="govuk-heading-m">@Messages("survey.overallRate.question")</h2>
+            @radios(Radios(
+                fieldset = Some(Fieldset(legend = None)),
+                errorMessage = form.error("overallRate").map(err => ErrorMessage(content = Text("This field is required"))),
+                name = "overallRate",
+                items = Seq("verySatisfied", "satisfied", "neitherSatisfiedOrDissatisfied", "dissatisfied", "veryDissatisfied").map { radioItem =>
+                    RadioItem(
+                        content = Text(Messages(s"survey.overallRate.response.$radioItem")),
+                        checked = form("overallRate").value.contains(Messages(radioItem)),
+                        value = Some(radioItem)
+                    )
+                }
+            ))
+        </div>
+        <br>
+        <h3 id="thank-you-header" class="govuk-heading-m">@Messages("survey.footnote.header")</h3>
+        <p id="thank-you-message" class="govuk-body">@Messages("survey.footnote.text")</p>
+        <div class="form-actions">
+        @button(Button(
+            content = Text(Messages("survey.submit")),
+            attributes = Map("id" -> "continue-button")
+        ))
+        </div>
+        <p class="govuk-body">@views.html.no_survey_back_link()</p>
+    }
     </div>
 }

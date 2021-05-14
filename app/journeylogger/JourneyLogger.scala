@@ -21,7 +21,7 @@ import play.api.mvc.Request
 import requests.JourneyRequest
 import traceid.TraceIdExt
 import uk.gov.hmrc.http.{CookieNames, HeaderCarrier}
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 object JourneyLogger {
 
@@ -43,7 +43,7 @@ object JourneyLogger {
 
   def error(message: => String, ex: Throwable)(implicit request: Request[_]): Unit = logMessage(message, ex, Error)
 
-  private def hc(implicit r: Request[_]): HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(r.headers)
+  private def hc(implicit r: Request[_]): HeaderCarrier = HeaderCarrierConverter.fromRequest(r)
 
   private def journeyId(implicit request: JourneyRequest[_]) = s"[journeyId: ${request.journey._id}]"
 

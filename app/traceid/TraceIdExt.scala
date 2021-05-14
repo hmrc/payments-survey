@@ -17,7 +17,7 @@
 package traceid
 
 import payapi.corcommon.model.TraceId
-import play.api.Logger.logger
+import play.api.Logger
 import play.api.mvc.Request
 
 object TraceIdExt {
@@ -38,7 +38,7 @@ object TraceIdExt {
         case s if s.isEmpty   => None
         case s if s.size == 1 => Some(s.head)
         case s =>
-          logger.error(s"Multiple traceIds in the URL. [${s.mkString(", ")}] [$request]")
+          Logger(this.getClass).error(s"Multiple traceIds in the URL. [${s.mkString(", ")}] [$request]")
           Some(s.head)
       }
   }
