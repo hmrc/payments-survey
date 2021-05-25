@@ -62,7 +62,7 @@
                 fieldset = Some(Fieldset(legend = None)),
                 errorMessage = form.error("wereYouAble").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "wereYouAble",
-                items = Seq("yes", "no").map { radioItem =>
+                items = Seq("1", "0").map { radioItem =>
                     RadioItem(
                         content = Text(Messages(s"survey.wereYouAble.response.$radioItem")),
                         checked = form("wereYouAble").value.contains(Messages(radioItem)),
@@ -78,7 +78,7 @@
                 fieldset = Some(Fieldset(legend = None)),
                 errorMessage = form.error("howEasy").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "howEasy",
-                items = Seq("veryEasy", "easy", "neitherEasyOrDifficult", "difficult", "veryDifficult").map { radioItem =>
+                items = Seq("5", "4", "3", "2", "1").map { radioItem =>
                     RadioItem(
                         content = Text(Messages(s"survey.howEasy.response.$radioItem")),
                         checked = form("howEasy").value.contains(Messages(radioItem)),
@@ -109,7 +109,7 @@
                 fieldset = Some(Fieldset(legend = None)),
                 errorMessage = form.error("overallRate").map(err => ErrorMessage(content = Text("This field is required"))),
                 name = "overallRate",
-                items = Seq("verySatisfied", "satisfied", "neitherSatisfiedOrDissatisfied", "dissatisfied", "veryDissatisfied").map { radioItem =>
+                items = Seq("5", "4", "3", "2", "1").map { radioItem =>
                     RadioItem(
                         content = Text(Messages(s"survey.overallRate.response.$radioItem")),
                         checked = form("overallRate").value.contains(Messages(radioItem)),
