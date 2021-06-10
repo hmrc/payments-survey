@@ -40,7 +40,7 @@ class LanguageSwitchController @Inject() (
     result.withLang(language.toPlayLang)
   }
 
-  def notFound: Action[AnyContent] = actions.journeyAction { implicit request =>
+  def notFound: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
     Ok(defaultViews.notFound)
   }
 }

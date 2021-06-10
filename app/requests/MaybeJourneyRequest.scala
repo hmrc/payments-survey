@@ -16,15 +16,10 @@
 
 package requests
 
-import model._
-import model.content.IsWelshSupported
 import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 import play.api.mvc.{Request, WrappedRequest}
 
-final class JourneyRequest[A](
-    val journey: Journey[JourneySpecificData],
+final class MaybeJourneyRequest[A](
+    val journey: Option[Journey[JourneySpecificData]],
     val request: Request[A]
-) extends WrappedRequest[A](request) {
-
-  def welsh: IsWelshSupported = journey.contentOptions.isWelshSupported
-}
+) extends WrappedRequest[A](request)

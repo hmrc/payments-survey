@@ -15,20 +15,20 @@
  *@
 
 @import config.AppConfig
-@import requests.JourneyRequest
-@import views.TitleMaker.journeyTitleMaker
+@import requests.MaybeJourneyRequest
+@import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 
 @this(main: views.html.main, button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton)
 
-@()(implicit request: JourneyRequest[_], m: Messages, appConfig: AppConfig)
+@()(implicit request: MaybeJourneyRequest[_], m: Messages, appConfig: AppConfig)
 
 @header = {
     <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
 }
 
 @main(
-    pageTitle = Some(journeyTitleMaker("thanks.heading")),
+    pageTitle = Some(titleMaker("thanks.heading", request.journey)),
     navTitle = Some(Messages("header.default")),
     backUrl = None
 ) {
@@ -36,15 +36,15 @@
     <h1 class="govuk-heading-xl">@Messages("thanks.heading")</h1>
     <p class="govuk-body">@Messages("thanks.message")</p>
 
-    @request.journey.origin.toString match {
-        case bta if bta.contains("Bta") => {
+    @request.journey.map(_.origin.toString) match {
+        case Some(bta) if bta.contains("Bta") => {
             @button(Button(
                 content = Text(Messages("thanks.return-to-bta")),
                 href = Some("/business-account"),
                 inputType = Some("button")
             ))
         }
-        case pta if pta.contains("Pta") => {
+        case Some(pta) if pta.contains("Pta") => {
             @button(Button(
                 content = Text(Messages("thanks.return-to-pta")),
                 href = Some("/personal-account"),
