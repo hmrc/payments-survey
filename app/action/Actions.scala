@@ -17,18 +17,15 @@
 package action
 
 import com.google.inject.Inject
-import payapi.corcommon.model.JourneyId
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
-import requests.JourneyRequest
+import requests.MaybeJourneyRequest
 
 final class Actions @Inject() (
     getJourneyActionFactory: GetJourneyActionFactory,
     actionBuilder:           DefaultActionBuilder
 ) {
-
   import getJourneyActionFactory._
 
-  def journeyAction: ActionBuilder[JourneyRequest, AnyContent] =
-    actionBuilder andThen
-      journeyActionRefiner
+  def maybeJourneyAction: ActionBuilder[MaybeJourneyRequest, AnyContent] =
+    actionBuilder andThen maybeJourneyActionRefiner
 }

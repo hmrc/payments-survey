@@ -18,8 +18,6 @@ package controllers
 
 import action.Actions
 import config.AppConfig
-import javax.inject.{Singleton, Inject}
-import journeylogger.JourneyLogger
 import model.SurveyForm.surveyForm
 import model._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,6 +26,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -45,11 +44,11 @@ final class SurveyController @Inject() (
 
   import requestSupport._
 
-  def survey: Action[AnyContent] = actions.journeyAction { implicit request =>
+  def survey: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
     Ok(survey(surveyForm))
   }
 
-  def submitSurvey: Action[AnyContent] = actions.journeyAction { implicit request =>
+  def submitSurvey: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
     surveyForm.bindFromRequest().fold(
       formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
@@ -63,11 +62,10 @@ final class SurveyController @Inject() (
 
         val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
 
-        if (request.journey.reference.isEmpty) JourneyLogger.error("Expected reference to be defined in the journey. Investigate what happened.")
-        val referenceString = request.journey.reference.map(_.value).getOrElse("?")
+        val referenceString = request.journey.flatMap(_.reference.map(_.value)).getOrElse("Unknown")
         val details: Map[String, String] = Map("orderId" -> referenceString, "userType" -> userType) ++
           surveyMap ++
-          Map("liability" -> request.journey.origin.auditName)
+          Map("liability" -> request.journey.map(_.origin.auditName).getOrElse("Unknown"))
 
         auditConnector.sendEvent(
           DataEvent(
@@ -83,7 +81,7 @@ final class SurveyController @Inject() (
     )
   }
 
-  def showSurveyThanks: Action[AnyContent] = actions.journeyAction { implicit request =>
+  def showSurveyThanks: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
     Ok(surveyThanks())
   }
 }

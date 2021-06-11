@@ -43,10 +43,10 @@ final class SurveyControllerSpec extends AppSpec {
     contentAsString(result).contains("How was our payment service?") shouldBe true
     contentAsString(result).contains(journey.contentOptions.title.englishValue) shouldBe true
 
-    PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
   }
 
-  "surveyThanks should render the survey page if pay-api is responsive" in {
+  "surveyThanks should render the survey thanks page if pay-api is responsive" in {
     val tdJourney: TdJourney[JsdPfSa] = TdAll.lifecyclePfSa.afterSucceedWebPayment.credit
     val journey = tdJourney.journey
     PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
@@ -59,6 +59,46 @@ final class SurveyControllerSpec extends AppSpec {
     contentAsString(result).contains("Thank you") shouldBe true
     contentAsString(result).contains(journey.contentOptions.title.englishValue) shouldBe true
 
-    PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
+  }
+
+  "survey should render the survey page if pay-api is responsive but returns None" in {
+    PayApiStubFindJourneyBySessionId.findBySessionId404()
+
+    val result = controller.survey()(FakeRequest("GET", "/").withSession((SessionKeys.sessionId, "123")))
+
+    status(result) shouldBe Status.OK
+    contentAsString(result).contains("How was our payment service?") shouldBe true
+
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
+  }
+
+  "surveyThanks should render the survey thanks page if pay-api is responsive but returns None" in {
+    PayApiStubFindJourneyBySessionId.findBySessionId404()
+
+    val result = controller.showSurveyThanks()(FakeRequest("GET", "/").withSession((SessionKeys.sessionId, "123")))
+
+    status(result) shouldBe Status.OK
+    contentAsString(result).contains("Thank you") shouldBe true
+
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
+  }
+
+  "survey should render the survey page if there is no session ID in the session" in {
+    val result = controller.survey()(FakeRequest("GET", "/"))
+
+    status(result) shouldBe Status.OK
+    contentAsString(result).contains("How was our payment service?") shouldBe true
+
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerifyNot()
+  }
+
+  "surveyThanks should render the survey thanks page if there is no session ID in the session" in {
+    val result = controller.showSurveyThanks()(FakeRequest("GET", "/"))
+
+    status(result) shouldBe Status.OK
+    contentAsString(result).contains("Thank you") shouldBe true
+
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerifyNot()
   }
 }

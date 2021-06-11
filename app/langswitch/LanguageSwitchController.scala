@@ -35,12 +35,12 @@ class LanguageSwitchController @Inject() (
   def switchToLanguage(language: Language): Action[AnyContent] = cc.actionBuilder { implicit request =>
     val result: Result = request.headers.get(HeaderNames.REFERER) match {
       case Some(referrer) => Redirect(referrer)
-      case None           => Redirect(routes.LanguageSwitchController.notFound())
+      case None           => Redirect(routes.LanguageSwitchController.notFound)
     }
     result.withLang(language.toPlayLang)
   }
 
-  def notFound: Action[AnyContent] = actions.journeyAction { implicit request =>
+  def notFound: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
     Ok(defaultViews.notFound)
   }
 }

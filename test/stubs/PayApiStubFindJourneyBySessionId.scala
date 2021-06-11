@@ -36,14 +36,14 @@ object PayApiStubFindJourneyBySessionId {
       )
   )
 
-  def findBySessionId404[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd], wireMockState: Int = 0): StubMapping = stubFor(
+  def findBySessionId404[Jsd <: JourneySpecificData](wireMockState: Int = 0): StubMapping = stubFor(
     get(urlPathEqualTo(path))
       .inScenario("pay-api-getJourney")
       .whenScenarioStateIs(state(wireMockState))
       .willReturn(
         aResponse()
           .withStatus(Status.NOT_FOUND)
-          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found [${tdJourney.journey._id}]"}""")
+          .withBody(s"""{"statusCode":${Status.NOT_FOUND},"message":"Journey not found"}""")
       )
       .willSetStateTo(nextState(wireMockState))
   )
@@ -69,9 +69,11 @@ object PayApiStubFindJourneyBySessionId {
       )
   )
 
-  def findBySessionIdVerify[Jsd <: JourneySpecificData](tdJourney: TdJourney[Jsd], times: Int = 1): Unit = verify(
+  def findBySessionIdVerify[Jsd <: JourneySpecificData](times: Int = 1): Unit = verify(
     times,
     getRequestedFor(urlEqualTo(path))
   )
+
+  def findBySessionIdVerifyNot(): Unit = verify(0, getRequestedFor(urlEqualTo(path)))
 }
 

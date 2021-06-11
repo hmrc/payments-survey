@@ -75,7 +75,7 @@ class SurveyPageSpec extends PageSpec {
     id("thank-you-message").element.text shouldBe "We will use your feedback to make our services better."
     id("continue-button").element.text shouldBe "Send feedback"
 
-    PayApiStubFindJourneyBySessionId.findBySessionIdVerify(tdJourney)
+    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
   }
 
   "should show no errors if the user hasn't clicked submit" in new TestWithSession {
@@ -106,12 +106,6 @@ class SurveyPageSpec extends PageSpec {
     click.on("overallRate")
     click.on("continue-button")
     currentUrl shouldBe (baseUrl + surveyThanksPath)
-  }
-
-  "ensure goes to timeout page when session not found" in new TestWithSession {
-    PayApiStubFindJourneyBySessionId.findBySessionId404(tdJourney)
-    goTo(baseUrl + pagePath)
-    pageTitle shouldBe "For your security, we timed you out"
   }
 
   "ensure can switch to Welsh and back" in new TestWithSession {

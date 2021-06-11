@@ -1,7 +1,7 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import scalariform.formatter.preferences.{AlignArguments, AlignParameters, AlignSingleLineCaseStatements, AllowParamGroupsOnNewlines, CompactControlReadability, CompactStringConcatenation, DanglingCloseParenthesis, DoubleIndentConstructorArguments, DoubleIndentMethodDeclaration, FirstArgumentOnNewline, FirstParameterOnNewline, Force, FormatXml, IndentLocalDefs, IndentPackageBlocks, IndentSpaces, IndentWithTabs, MultilineScaladocCommentsStartOnFirstLine, NewlineAtEndOfFile, PlaceScaladocAsterisksBeneathSecondAsterisk, PreserveSpaceBeforeArguments, RewriteArrowSymbols, SpaceBeforeColon, SpaceBeforeContextColon, SpaceInsideBrackets, SpaceInsideParentheses, SpacesAroundMultiImports, SpacesWithinPatternBinders}
-import uk.gov.hmrc.DefaultBuildSettings.{integrationTestSettings, scalaSettings}
-import uk.gov.hmrc.{SbtArtifactory, ShellPrompt}
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+import uk.gov.hmrc.ShellPrompt
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import wartremover.Wart
 
@@ -9,11 +9,7 @@ val appName = "payments-survey"
 scalaVersion := "2.12.12"
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(
-    play.sbt.PlayScala,
-    SbtDistributablesPlugin,
-    SbtArtifactory
-  )
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtGitVersioning)
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
@@ -87,13 +83,6 @@ lazy val scalariformSettings: Def.SettingsDefinition = {
     .setPreference(SpacesWithinPatternBinders, true)
 }
 
-lazy val wartRemoverWarning = {
-  val warningWarts = Seq(
-    //Wart.Any
-  )
-  wartremoverWarnings in(Compile, compile) ++= warningWarts
-}
-
 lazy val wartRemoverError = {
   // Error
   val errorWarts: Seq[Wart] = Seq(
@@ -138,6 +127,9 @@ lazy val scoverageSettings = {
 
 lazy val commonSettings = Seq(
   majorVersion := 0,
+  //For some reason SBT was adding the stray string "-encoding" to the compiler arguments and it was causing the build to fail
+  //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
+  scalacOptions in Compile -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
   resolvers ++= Seq(
     "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/",
@@ -156,11 +148,9 @@ lazy val commonSettings = Seq(
   shellPrompt := ShellPrompt(version.value)
 )
   .++(wartRemoverError)
-  .++(wartRemoverWarning)
   .++(Seq(
     wartremoverErrors in(Test, compile) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference)
   ))
   .++(scoverageSettings)
-  .++(scalaSettings)
   .++(uk.gov.hmrc.DefaultBuildSettings.defaultSettings())
 

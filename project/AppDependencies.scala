@@ -2,19 +2,14 @@ import play.core.PlayVersion.current
 import sbt._
 
 object AppDependencies {
-
-  private val catsVersion = "2.1.1"
   private val payApiVersion = "[1.25.0,)"
 
   val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"       % "5.2.0",
-    "uk.gov.hmrc"             %% "play-frontend-govuk"              % "0.71.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "0.60.0-play-28",
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"       % "5.3.0",
+    "uk.gov.hmrc"             %% "play-frontend-govuk"              % "0.74.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "0.69.0-play-28",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
-    "com.beachape"            %% "enumeratum"                       % "1.6.1",
-    "org.typelevel"           %% "cats-core"                        % catsVersion,
-    "org.typelevel"           %% "cats-kernel"                      % catsVersion,
-    "org.typelevel"           %% "cats-macros"                      % catsVersion
+    "com.beachape"            %% "enumeratum"                       % "1.6.1"
   )
 
   val test = Seq(
