@@ -83,11 +83,6 @@ lazy val scalariformSettings: Def.SettingsDefinition = {
     .setPreference(SpacesWithinPatternBinders, true)
 }
 
-lazy val wartRemoverWarning = {
-  val warningWarts = Seq()
-  wartremoverWarnings in(Compile, compile) ++= warningWarts
-}
-
 lazy val wartRemoverError = {
   // Error
   val errorWarts: Seq[Wart] = Seq(
@@ -153,7 +148,6 @@ lazy val commonSettings = Seq(
   shellPrompt := ShellPrompt(version.value)
 )
   .++(wartRemoverError)
-  .++(wartRemoverWarning)
   .++(Seq(
     wartremoverErrors in(Test, compile) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference)
   ))
