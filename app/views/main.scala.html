@@ -72,7 +72,7 @@
     headerBlock = Some(hmrcHeader(Header(
         homepageUrl = "https://www.gov.uk",
         serviceName = navTitle,
-        serviceUrl = controllers.routes.SurveyController.survey().url,
+        serviceUrl = controllers.routes.SurveyController.survey .url,
         signOutHref = if(isLoggedIn) Some(appConfig.signOutUrl) else None
     ))),
     scriptsBlock = Some(scripts()),

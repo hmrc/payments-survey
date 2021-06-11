@@ -76,7 +76,7 @@ final class SurveyController @Inject() (
           )
         )
 
-        Redirect(controllers.routes.SurveyController.showSurveyThanks())
+        Redirect(controllers.routes.SurveyController.showSurveyThanks)
       }
     )
   }

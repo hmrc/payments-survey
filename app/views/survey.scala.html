@@ -54,7 +54,7 @@
         @errorSummary(ErrorSummary(errorList = form.errors.asTextErrorLinks, title = Text("There's a problem")))
     }
     <div class="sign-out-survey">
-    @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey()) {
+    @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey) {
         <input type="hidden" name="journey" value = "@request.journey.map(_.status.toString).getOrElse("Unknown")"/>
             <!-- 1. Were you able to do what you needed to do today? -->
         <div class="form-group payments">

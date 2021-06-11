@@ -132,7 +132,7 @@ lazy val scoverageSettings = {
 
 lazy val commonSettings = Seq(
   majorVersion := 0,
-  //For some reason SBT was adding the stray string "-encoding" to the compiler arguments and it was causing the build
+  //For some reason SBT was adding the stray string "-encoding" to the compiler arguments and it was causing the build to fail
   //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
   scalacOptions in Compile -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
