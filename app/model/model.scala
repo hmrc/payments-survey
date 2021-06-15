@@ -66,7 +66,7 @@ package object model {
       case Parcels => "parcels"
       case PfJobRetentionScheme => "job-retention-scheme"
       case JrsJobRetentionScheme => "job-retention-scheme"
-      case PfChildBenefitRepayments => "job-retention-scheme"
+      case PfChildBenefitRepayments => "child-benefit-repayments"
     }
 
     //TODO: is it used anywhere?
