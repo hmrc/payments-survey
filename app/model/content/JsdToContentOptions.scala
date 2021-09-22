@@ -209,7 +209,11 @@ object JsdToContentOptions {
       title            = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Some("Talu eich Hunanasesiad"))
     )
 
-    case _: JsdNi => ContentOptions(
+    case _: JsdNiEuVatOss => ContentOptions(
+      isWelshSupported = IsWelshSupported.no,
+      title            = BannerTitle(englishValue = "Manage your Northern Ireland import VAT", welshValue = None)
+    )
+    case _: JsdPfNiEuVatOss => ContentOptions(
       isWelshSupported = IsWelshSupported.no,
       title            = BannerTitle(englishValue = "Manage your Northern Ireland import VAT", welshValue = None)
     )

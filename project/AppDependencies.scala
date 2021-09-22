@@ -2,7 +2,7 @@ import play.core.PlayVersion.current
 import sbt._
 
 object AppDependencies {
-  private val payApiVersion = "[1.25.0,)"
+  private val payApiVersion = "[1.43.1,)"
 
   val compile = Seq(
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % "5.4.0",
