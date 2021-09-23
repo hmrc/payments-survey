@@ -62,7 +62,7 @@ package object model {
       case BcPngr => "passengers"
       case CapitalGainsTax => "capital-gains-tax"
       case Mib => "merchandise-in-baggage"
-      case NiEuVatOss | PfNiEuVatOss => "northern-ireland"
+      case NiEuVatOss | PfNiEuVatOss => "vat-oss"
       case Parcels => "parcels"
       case PfJobRetentionScheme => "job-retention-scheme"
       case JrsJobRetentionScheme => "job-retention-scheme"
