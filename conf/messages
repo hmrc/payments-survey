@@ -9,7 +9,7 @@ global.error-prefix = There is a problem
 error.InternalServerError.heading = Sorry, we’re experiencing technical difficulties
 error.InternalServerError.message = Please try again in a few minutes.
 
-error.pageNotFound.title = Page not found
+error.pageNotFound.title = Pay your tax
 error.pageNotFound.heading = This page can’t be found
 error.pageNotFound.message = Please check that you have entered the correct web address.
 

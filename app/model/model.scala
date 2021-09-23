@@ -62,7 +62,7 @@ package object model {
       case BcPngr => "passengers"
       case CapitalGainsTax => "capital-gains-tax"
       case Mib => "merchandise-in-baggage"
-      case Ni => "northern-ireland"
+      case NiEuVatOss | PfNiEuVatOss => "vat-oss"
       case Parcels => "parcels"
       case PfJobRetentionScheme => "job-retention-scheme"
       case JrsJobRetentionScheme => "job-retention-scheme"
@@ -80,7 +80,7 @@ package object model {
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther | PfChildBenefitRepayments => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa                                      => "MTD-PTA"
-      case Amls | BcPngr | CapitalGainsTax | Mib | Ni | Parcels
+      case Amls | BcPngr | CapitalGainsTax | Mib | NiEuVatOss | PfNiEuVatOss | Parcels
         | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
     }
   }
