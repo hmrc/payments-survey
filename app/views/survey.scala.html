@@ -22,6 +22,8 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichFormErrors
 @import model.JourneyExt
 @import model.content.BannerTitle
+@import requests.SurveyRequest
+
 
 @this(
         main: views.html.main,
@@ -34,11 +36,11 @@
         appConfig: AppConfig
 )
 
-@(form: Form[model.SurveyForm])(implicit request: MaybeJourneyRequest[_], m: Messages)
+@(form: Form[model.SurveyForm])(implicit request: SurveyRequest[_], m: Messages)
 
 @main(
-    pageTitle = Some(titleMaker("survey.heading", request.journey, Some(form))),
-    navTitle = request.journey.flatMap(_.contentOptions.title.forCurrentLanguage).orElse(BannerTitle.default.forCurrentLanguage),
+    pageTitle = Some(titleMaker("survey.heading", request.content.title, Some(form))),
+    navTitle = request.content.title.forCurrentLanguage.orElse(BannerTitle.default.forCurrentLanguage),
     backUrl = None
 ) {
     <h1 class="govuk-heading-xl">@Messages("survey.heading")</h1>
@@ -55,7 +57,7 @@
     }
     <div class="sign-out-survey">
     @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey) {
-        <input type="hidden" name="journey" value = "@request.journey.map(_.status.toString).getOrElse("Unknown")"/>
+@*        <input type="hidden" name="journey" value = "@request.journey.map(_.status.toString).getOrElse("Unknown")"/>*@
             <!-- 1. Were you able to do what you needed to do today? -->
         <div class="form-group payments">
             <h2 id="were-you-able-label" class="govuk-heading-m">@Messages("survey.wereYouAble.question")</h2>

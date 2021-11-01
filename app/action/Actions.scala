@@ -18,7 +18,7 @@ package action
 
 import com.google.inject.Inject
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
-import requests.MaybeJourneyRequest
+import requests.{MaybeJourneyRequest, SurveyRequest}
 
 final class Actions @Inject() (
     getJourneyActionFactory: GetJourneyActionFactory,
@@ -28,4 +28,7 @@ final class Actions @Inject() (
 
   def maybeJourneyAction: ActionBuilder[MaybeJourneyRequest, AnyContent] =
     actionBuilder andThen maybeJourneyActionRefiner
+
+  def maybeSurveyAction: ActionBuilder[SurveyRequest, AnyContent] =
+    actionBuilder andThen maybeSurveyActionRefiner
 }

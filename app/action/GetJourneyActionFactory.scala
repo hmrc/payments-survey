@@ -16,18 +16,26 @@
 
 package action
 
+import cats.data.OptionT
 import com.google.inject.Inject
 import config.AppConfig
+import model.content.{ContentOptions, JsdToContentOptions}
 import payapi.cardpaymentjourney.PayApiConnector
+import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
+import paysurvey.audit.AuditOptions
+import paysurvey.journey.ssj.SsjService
+import paysurvey.journey.{JourneyService, SessionId, SurveyJourney}
+import paysurvey.origin.SurveyOrigin
 import play.api.mvc._
-import requests.{MaybeJourneyRequest, RequestSupport}
+import requests.RequestSupport.sessionId
+import requests.{MaybeJourneyRequest, RequestSupport, SurveyRequest}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.DefaultViews
 
 import scala.concurrent.{ExecutionContext, Future}
 
 final class GetJourneyActionFactory @Inject() (
-    paymentApi: PayApiConnector
+    journeyService: JourneyService,
+    paymentApi:     PayApiConnector
 )(implicit ec: ExecutionContext, config: AppConfig) {
 
   import RequestSupport._
@@ -43,6 +51,44 @@ final class GetJourneyActionFactory @Inject() (
         } yield maybeJourney match {
           case Some(journey) => Right(new MaybeJourneyRequest(Some(journey), request))
           case None          => Right(new MaybeJourneyRequest(None, request))
+        }
+      }
+
+      override protected def executionContext: ExecutionContext = ec
+    }
+
+  def maybeSurveyActionRefiner: ActionRefiner[Request, SurveyRequest] =
+    new ActionRefiner[Request, SurveyRequest] {
+
+      override protected def refine[A](request: Request[A]): Future[Either[Result, SurveyRequest[A]]] = {
+        implicit val r: Request[A] = request
+        val maybeSessionId = implicitly[HeaderCarrier].sessionId
+
+          def fromPayApi(j: Journey[JourneySpecificData]) = {
+            SurveyRequest(
+              JsdToContentOptions.toContentOptions(j.journeySpecificData),
+              AuditOptions.fromPayApi(j),
+              Option(SurveyOrigin.PayApi(j.origin)),
+              r
+            )
+          }
+
+        for {
+          maybeJourney <- maybeSessionId match {
+            case Some(sessionId) => journeyService.findLatestBySessionId(sessionId)
+            case None            => Future.successful(None)
+          }
+
+          maybeSurveyRequest <- maybeJourney match {
+            case Some(j) => Future.successful {
+              Option(SurveyRequest(j.content, j.audit, Option(j.origin), r))
+            }
+            case None => paymentApi.findLatestJourneyBySessionId()
+              .map(_.map(fromPayApi))
+          }
+        } yield maybeSurveyRequest match {
+          case Some(request) => Right(request)
+          case None          => Right(SurveyRequest.default)
         }
       }
 

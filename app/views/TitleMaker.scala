@@ -16,14 +16,13 @@
 
 package views
 
-import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
+import model.content.{BannerTitle, ContentOptions}
 import play.api.data.Form
 import play.api.i18n.Messages
-import model.JourneyExt
 
 object TitleMaker {
-  def titleMaker(h1Key: String, maybeJourney: Option[Journey[JourneySpecificData]], maybeForm: Option[Form[_]] = None)(implicit messages: Messages): String =
-    makeTitle(h1Key, maybeJourney.flatMap(_.contentOptions.title.forCurrentLanguage), maybeForm.exists(_.hasErrors))
+  def titleMaker(h1Key: String, bannerTitle: BannerTitle, maybeForm: Option[Form[_]] = None)(implicit messages: Messages): String =
+    makeTitle(h1Key, bannerTitle.forCurrentLanguage, maybeForm.exists(_.hasErrors))
 
   private def makeTitle(h1Key: String, serviceName: Option[String], error: Boolean)(implicit messages: Messages): String = {
     val title = s"""${Messages(h1Key)} - ${serviceName.getOrElse(Messages("global.service-name"))} - ${Messages("global.title-suffix")}"""
