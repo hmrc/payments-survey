@@ -83,8 +83,11 @@ final class GetJourneyActionFactory @Inject() (
             case Some(j) => Future.successful {
               Option(SurveyRequest(j.content, j.audit, Option(j.origin), r))
             }
-            case None => paymentApi.findLatestJourneyBySessionId()
+            case None if maybeSessionId.isDefined => paymentApi.findLatestJourneyBySessionId()
               .map(_.map(fromPayApi))
+            case _ => Future.successful{
+              None
+            }
           }
         } yield maybeSurveyRequest match {
           case Some(request) => Right(request)

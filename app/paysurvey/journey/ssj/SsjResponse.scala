@@ -2,7 +2,7 @@ package paysurvey.journey.ssj
 
 import payapi.cardpaymentjourney.model.journey.Url
 import paysurvey.journey.JourneyId
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Format, Json}
 
 final case class SsjResponse
   (
@@ -11,5 +11,5 @@ final case class SsjResponse
 )
 
 object SsjResponse {
-  implicit val writes: Writes[SsjResponse] = Json.writes
+  implicit val format: Format[SsjResponse] = Json.format
 }

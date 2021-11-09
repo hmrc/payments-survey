@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package paysurvey.journey.ssj
 
 import action.Actions
 import config.AppConfig
-import paysurvey.journey.JourneyService
-import paysurvey.journey.ssj.{SsjRequest, SsjService}
 import paysurvey.origin.SurveyOrigin
 import play.api.Logger
 import play.api.libs.json.Json
@@ -31,9 +29,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-final class JourneyController @Inject() (
+final class SsjController @Inject() (
     actions:        Actions,
-    journeyService: JourneyService,
     ssjService:     SsjService,
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,

@@ -30,6 +30,8 @@ class AppConfig @Inject() (config: ServicesConfig) {
 
   lazy val optimizelyProjectId: Option[String] = Try(config.getString(s"optimizely.projectId")).toOption
 
+  lazy val frontendBaseUrl: String = s"${config.getString("frontendBaseUrl")}/payments-survey"
+
   lazy val payFrontendBaseUrl: String = s"${config.getString("payFrontendBaseUrl")}/pay"
 
   val ggBaseUrl: String = loadConfig("ggBaseUrl") + "/gg"

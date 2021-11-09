@@ -5,7 +5,7 @@ GET         /assets/*file                 controllers.Assets.versioned(path = "/
 
 GET         /survey                       controllers.SurveyController.survey
 
-POST        /:origin/journey/start        controllers.JourneyController.start(origin: SurveyOrigin)
+POST        /:origin/journey/start        paysurvey.journey.ssj.SsjController.start(origin: SurveyOrigin)
 
 POST        /survey                       controllers.SurveyController.submitSurvey
 GET         /survey-thanks                controllers.SurveyController.showSurveyThanks

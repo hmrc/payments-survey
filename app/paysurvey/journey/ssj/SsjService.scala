@@ -1,5 +1,6 @@
 package paysurvey.journey.ssj
 
+import config.AppConfig
 import payapi.cardpaymentjourney.PayApiConnector
 import payapi.cardpaymentjourney.model.journey.Url
 import paysurvey.journey.{JourneyIdGenerator, JourneyService}
@@ -16,8 +17,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class SsjService @Inject() (
     journeyService:     JourneyService,
     journeyIdGenerator: JourneyIdGenerator,
-    clock:              Clock
+    clock:              Clock,
+    appConfig:          AppConfig
 )(implicit ec: ExecutionContext) {
+
+  import appConfig.frontendBaseUrl
 
   private lazy val logger: Logger = Logger(getClass)
 
@@ -25,10 +29,6 @@ class SsjService @Inject() (
     val sessionId = hc.sessionId.getOrElse {
       throw new Exception(s"The sessionId has to be provided [$origin] [${ssjRequest.audit.toMap}]")
     }
-
-    //    require(
-    //      hc.sessionId.isDefined,
-    //    )
 
     val journey = ssjRequest.toJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
@@ -51,7 +51,7 @@ class SsjService @Inject() (
         s"[trueClientIp: ${hc.trueClientIp}] ")
     } yield SsjResponse(
       journey._id,
-      Url(s"${""}/pay/initiate-journey")
+      Url(s"$frontendBaseUrl/survey")
     )
   }
 

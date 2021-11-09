@@ -17,24 +17,31 @@
 package support
 
 import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
-
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.scalatest.OptionValues
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import org.scalatest.{AppendedClues, OptionValues}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatestplus.play.guice.{GuiceOneAppPerSuite, GuiceOneServerPerSuite}
 import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 
 trait AppSpec
   extends UnitSpec
-  with GuiceOneAppPerSuite
+  with GuiceOneServerPerSuite
   with WireMockSupport
+  with ScalaFutures
+  with AppendedClues
+  with MongoSupport
   with OptionValues {
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
-  override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Map[String, Any](
-      "microservice.services.pay-api.port" -> WireMockSupport.port
-    ))
+  protected def configMap: Map[String, Any] =
+    Map[String, Any](
+      "microservice.services.pay-api.port" -> WireMockSupport.port,
+      "mongodb.uri" -> mongoUri
+    )
+
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .configure(configMap)
     .build()
 
   def frozenTimeString: String = "2027-11-02T16:33:51.880"
