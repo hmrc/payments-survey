@@ -37,22 +37,22 @@ class SurveyPageSpec extends PageSpec {
     pageTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
 
     id("were-you-able-label").element.text shouldBe "1. Were you able to do what you needed to do today?"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(3) > div > fieldset > div > div:nth-child(1) > label")
+    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(1) > label")
       .element.text shouldBe "Yes"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(3) > div > fieldset > div > div:nth-child(2) > label")
+    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(2) > label")
       .element.text shouldBe "No"
 
     id("how-easy-label")
       .element.text shouldBe "2. How easy was it for you to do what you needed to do today?"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(1) > label")
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(1) > label")
       .element.text shouldBe "Very easy"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(2) > label")
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(2) > label")
       .element.text shouldBe "Easy"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(3) > label")
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(3) > label")
       .element.text shouldBe "Neither easy or difficult"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(4) > label")
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(4) > label")
       .element.text shouldBe "Difficult"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(4) > div > fieldset > div > div:nth-child(5) > label")
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(5) > label")
       .element.text shouldBe "Very difficult"
 
     id("why-score-label").element.text shouldBe "2b. Why did you give this score?"
@@ -60,15 +60,15 @@ class SurveyPageSpec extends PageSpec {
 
     id("overall-label")
       .element.text shouldBe "3. Overall, how did you feel about the service you received today?"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(1) > label")
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(1) > label")
       .element.text shouldBe "Very satisfied"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(2) > label")
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(2) > label")
       .element.text shouldBe "Satisfied"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(3) > label")
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(3) > label")
       .element.text shouldBe "Neither satisfied or dissatisfied"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(4) > label")
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(4) > label")
       .element.text shouldBe "Dissatisfied"
-    cssSelector("#main-content > div > div > div.sign-out-survey > form > div:nth-child(6) > div > fieldset > div > div:nth-child(5) > label")
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(5) > label")
       .element.text shouldBe "Very dissatisfied"
 
     id("thank-you-header").element.text shouldBe "Thank you for your feedback"

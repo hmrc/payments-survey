@@ -16,7 +16,6 @@ final case class SurveyJourney
     origin:    SurveyOrigin,
     content:   ContentOptions,
     audit:     AuditOptions,
-    //  meta: JourneyMeta,
     createdOn: LocalDateTime
 )
 
@@ -37,7 +36,6 @@ object SurveyJourney {
       JourneyId(journey._id.value),
       sessionId,
       SurveyOrigin.PayApi(journey.origin),
-      //      req,
       opts,
       audit,
       createdOn

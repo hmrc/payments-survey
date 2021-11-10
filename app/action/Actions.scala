@@ -26,9 +26,6 @@ final class Actions @Inject() (
 ) {
   import getJourneyActionFactory._
 
-  def maybeJourneyAction: ActionBuilder[MaybeJourneyRequest, AnyContent] =
-    actionBuilder andThen maybeJourneyActionRefiner
-
   def maybeSurveyAction: ActionBuilder[SurveyRequest, AnyContent] =
     actionBuilder andThen maybeSurveyActionRefiner
 }

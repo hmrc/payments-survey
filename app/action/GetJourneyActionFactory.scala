@@ -40,23 +40,6 @@ final class GetJourneyActionFactory @Inject() (
 
   import RequestSupport._
 
-  def maybeJourneyActionRefiner: ActionRefiner[Request, MaybeJourneyRequest] =
-    new ActionRefiner[Request, MaybeJourneyRequest] {
-
-      override protected def refine[A](request: Request[A]): Future[Either[Result, MaybeJourneyRequest[A]]] = {
-        implicit val r: Request[A] = request
-        for {
-          isDefinedSessionId <- Future(implicitly[HeaderCarrier].sessionId.isDefined)
-          maybeJourney <- if (isDefinedSessionId) paymentApi.findLatestJourneyBySessionId() else Future(None)
-        } yield maybeJourney match {
-          case Some(journey) => Right(new MaybeJourneyRequest(Some(journey), request))
-          case None          => Right(new MaybeJourneyRequest(None, request))
-        }
-      }
-
-      override protected def executionContext: ExecutionContext = ec
-    }
-
   def maybeSurveyActionRefiner: ActionRefiner[Request, SurveyRequest] =
     new ActionRefiner[Request, SurveyRequest] {
 
@@ -85,7 +68,7 @@ final class GetJourneyActionFactory @Inject() (
             }
             case None if maybeSessionId.isDefined => paymentApi.findLatestJourneyBySessionId()
               .map(_.map(fromPayApi))
-            case _ => Future.successful{
+            case _ => Future.successful {
               None
             }
           }
