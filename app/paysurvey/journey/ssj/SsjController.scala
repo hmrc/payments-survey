@@ -49,7 +49,6 @@ final class SsjController @Inject() (
 
       for {
         ssjResponse <- ssjService.start(origin, ssjRequest)
-        //          s" Routing to: ${spjResponse.nextUrl}", journey._id)
       } yield Created(Json.toJson(ssjResponse))
   }
 

@@ -42,7 +42,7 @@ class SsjService @Inject() (
       //track who really started journey
       _ = logger.info(s"Started payment journey for origin: $origin " +
         s"[JourneyOrigin: ${journey.origin}] " +
-        //          s"[Reference: ${journey.referenceValue}] " +
+        s"[Reference: ${journey.audit.journey}] " +
         s"[IsUserLoggedIn: ${hc.authorization.isDefined}] " +
         s"[${hc.requestId}] " +
         s"[${hc.sessionId}] " +
