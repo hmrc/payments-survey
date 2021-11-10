@@ -27,12 +27,15 @@ class ErrorHandler @Inject() (
     override val messagesApi: MessagesApi,
     errorTemplate:            views.html.error.error_template,
     error404:                 views.html.error.error_404,
-    error5xx:                 views.html.error.error_5xx
+    error5xx:                 views.html.error.error_5xx,
+    fallbackClientError:      views.html.error.error_fallback
 ) extends FrontendErrorHandler {
 
   override def notFoundTemplate(implicit request: Request[_]): HtmlFormat.Appendable = error404()
 
   override def internalServerErrorTemplate(implicit request: Request[_]): Html = error5xx()
+
+  override def fallbackClientErrorTemplate(implicit request: Request[_]): Html = fallbackClientError()
 
   override def standardErrorTemplate(
       pageTitle: String,

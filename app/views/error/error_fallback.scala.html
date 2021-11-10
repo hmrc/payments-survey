@@ -16,7 +16,6 @@
 
 @import model.content.IsWelshSupported
 
-
 @this(
         main: views.html.main
 )
@@ -28,11 +27,11 @@
 )
 
 @main(
-    pageTitle = Some(Messages("error.pageNotFound.title")),
+    pageTitle = Some(Messages("error.fallback.heading")),
     navTitle = Some(Messages("header.default")),
-    backUrl = None
+    backUrl = None,
 ) {
-    <h1 class="govuk-heading-xl" id="not_found_heading">@Messages("error.pageNotFound.heading")</h1>
+    <h1 class="govuk-heading-xl">@Messages("error.fallback.heading")</h1>
 
-    <p class="govuk-body">@Messages("error.pageNotFound.message")</p>
+    <p class="govuk-body">@Messages("error.InternalServerError.message")</p>
 }
