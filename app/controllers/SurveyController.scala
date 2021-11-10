@@ -44,11 +44,11 @@ final class SurveyController @Inject() (
 
   import requestSupport._
 
-  def survey: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
+  def survey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
     Ok(survey(surveyForm))
   }
 
-  def submitSurvey: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
+  def submitSurvey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
     surveyForm.bindFromRequest().fold(
       formWithErrors => { BadRequest(survey(formWithErrors)) },
       data => {
@@ -56,16 +56,10 @@ final class SurveyController @Inject() (
           "wereYouAble" -> data.wereYouAble,
           "overallRate" -> data.overallRate,
           "howEasy" -> data.howEasy,
-          "comments" -> data.comments.getOrElse("None given"),
-          "journey" -> data.journey
+          "comments" -> data.comments.getOrElse("None given")
         )
 
-        val userType: String = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
-
-        val referenceString = request.journey.flatMap(_.reference.map(_.value)).getOrElse("Unknown")
-        val details: Map[String, String] = Map("orderId" -> referenceString, "userType" -> userType) ++
-          surveyMap ++
-          Map("liability" -> request.journey.map(_.origin.auditName).getOrElse("Unknown"))
+        val details = surveyMap ++ request.audit.toMap
 
         auditConnector.sendEvent(
           DataEvent(
@@ -81,7 +75,7 @@ final class SurveyController @Inject() (
     )
   }
 
-  def showSurveyThanks: Action[AnyContent] = actions.maybeJourneyAction { implicit request =>
+  def showSurveyThanks: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
     Ok(surveyThanks())
   }
 }

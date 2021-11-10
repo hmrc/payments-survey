@@ -16,26 +16,57 @@
 
 package support
 
-import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
+import akka.actor.ActorSystem
+import com.typesafe.config.Config
 
+import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.scalatest.OptionValues
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import org.scalatest.{AppendedClues, OptionValues}
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatestplus.play.guice.{GuiceOneAppPerSuite, GuiceOneServerPerSuite}
 import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
+import play.api.libs.ws.WSClient
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.hooks.HttpHook
+import uk.gov.hmrc.play.http.ws.WSHttp
+
+import scala.concurrent.ExecutionContext
 
 trait AppSpec
   extends UnitSpec
-  with GuiceOneAppPerSuite
+  with GuiceOneServerPerSuite
   with WireMockSupport
+  with ScalaFutures
+  with AppendedClues
+  with MongoSupport
   with OptionValues {
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
-  override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Map[String, Any](
-      "microservice.services.pay-api.port" -> WireMockSupport.port
-    ))
+  protected def configMap: Map[String, Any] =
+    Map[String, Any](
+      "microservice.services.pay-api.port" -> WireMockSupport.port,
+      "mongodb.uri" -> mongoUri
+    )
+
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
+    .configure(configMap)
     .build()
+
+  implicit lazy val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+
+  lazy val testHttpClient: HttpClient = new HttpClient with WSHttp {
+    override def wsClient: WSClient = app.injector.instanceOf[WSClient]
+    override val hooks: Seq[HttpHook] = Nil
+    override val configuration: Config = app.configuration.underlying
+    override protected def actorSystem = app.injector.instanceOf(classOf[ActorSystem])
+  }
+
+  override implicit val patienceConfig = PatienceConfig(
+    timeout  = scaled(Span(3, Seconds)),
+    interval = scaled(Span(300, Millis))
+  )
 
   def frozenTimeString: String = "2027-11-02T16:33:51.880"
   implicit val testClock: Clock = {

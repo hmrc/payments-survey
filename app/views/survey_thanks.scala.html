@@ -15,20 +15,21 @@
  *@
 
 @import config.AppConfig
-@import requests.MaybeJourneyRequest
+@import requests.SurveyRequest
 @import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
+@import model.content.BannerTitle
 
 @this(main: views.html.main, button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton)
 
-@()(implicit request: MaybeJourneyRequest[_], m: Messages, appConfig: AppConfig)
+@()(implicit request: SurveyRequest[_], m: Messages, appConfig: AppConfig)
 
 @header = {
     <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
 }
 
 @main(
-    pageTitle = Some(titleMaker("thanks.heading", request.journey)),
+    pageTitle = Some(titleMaker("thanks.heading", request.content.title)),
     navTitle = Some(Messages("header.default")),
     backUrl = None
 ) {
@@ -36,7 +37,7 @@
     <h1 class="govuk-heading-xl">@Messages("thanks.heading")</h1>
     <p class="govuk-body">@Messages("thanks.message")</p>
 
-    @request.journey.map(_.origin.toString) match {
+    @request.origin.map(_.toString) match {
         case Some(bta) if bta.contains("Bta") => {
             @button(Button(
                 content = Text(Messages("thanks.return-to-bta")),

@@ -14,12 +14,14 @@
  * limitations under the License.
  *@
 
-@import requests.MaybeJourneyRequest
 @import model._
+@import requests.SurveyRequest
 
-@()(implicit request: MaybeJourneyRequest[_], m: Messages)
+@import paysurvey.origin.OriginMeta
 
-    @request.journey.map(_.origin.presentationMode).getOrElse("") match {
+@()(implicit request: SurveyRequest[_], m: Messages)
+
+    @request.origin.map(o => OriginMeta.presentationMode(o)).getOrElse("") match {
         case "BTA" | "MTD-BTA"=> {
             <a id="back-to-bta" class="govuk-link" href="/business-account">@Messages("survey.nothanks.return-to-bta")</a>
         }

@@ -22,6 +22,8 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichFormErrors
 @import model.JourneyExt
 @import model.content.BannerTitle
+@import requests.SurveyRequest
+
 
 @this(
         main: views.html.main,
@@ -34,11 +36,11 @@
         appConfig: AppConfig
 )
 
-@(form: Form[model.SurveyForm])(implicit request: MaybeJourneyRequest[_], m: Messages)
+@(form: Form[model.SurveyForm])(implicit request: SurveyRequest[_], m: Messages)
 
 @main(
-    pageTitle = Some(titleMaker("survey.heading", request.journey, Some(form))),
-    navTitle = request.journey.flatMap(_.contentOptions.title.forCurrentLanguage).orElse(BannerTitle.default.forCurrentLanguage),
+    pageTitle = Some(titleMaker("survey.heading", request.content.title, Some(form))),
+    navTitle = request.content.title.forCurrentLanguage.orElse(BannerTitle.default.forCurrentLanguage),
     backUrl = None
 ) {
     <h1 class="govuk-heading-xl">@Messages("survey.heading")</h1>
@@ -55,9 +57,9 @@
     }
     <div class="sign-out-survey">
     @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey) {
-        <input type="hidden" name="journey" value = "@request.journey.map(_.status.toString).getOrElse("Unknown")"/>
+        <input type="hidden" name="journey" value="@request.audit.journey.map(_.toString).getOrElse("Unknown")" />
             <!-- 1. Were you able to do what you needed to do today? -->
-        <div class="form-group payments">
+        <div id="were-you-able-q" class="form-group payments">
             <h2 id="were-you-able-label" class="govuk-heading-m">@Messages("survey.wereYouAble.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
@@ -73,7 +75,7 @@
             ))
         </div>
             <!-- 2. How easy was it for you to do what you needed to do today? -->
-        <div class="form-group payments">
+        <div id="how-easy-q" class="form-group payments">
             <h2 id="how-easy-label" class="govuk-heading-m">@Messages("survey.howEasy.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
@@ -89,7 +91,7 @@
             ))
         </div>
             <!-- 2b. Why did you give this score? -->
-        <div class="form-group payments">
+        <div id="why-score-q" class="form-group payments">
             <h2 id="why-score-label" class="govuk-heading-m">@Messages("survey.comment.question")</h2>
             @textArea(
                 Textarea(
@@ -104,7 +106,7 @@
             )
         </div>
             <!-- 3. Overall, how did you feel about the service you received today? -->
-        <div class="form-group payments">
+        <div id="overall-q" class="form-group payments">
             <h2 id="overall-label" class="govuk-heading-m">@Messages("survey.overallRate.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),

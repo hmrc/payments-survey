@@ -28,6 +28,11 @@ final case class ContentOptions(
 
 object ContentOptions {
   implicit val format: OFormat[ContentOptions] = Json.format[ContentOptions]
+
+  val default: ContentOptions = ContentOptions(
+    isWelshSupported = IsWelshSupported.default,
+    title            = BannerTitle.default
+  )
 }
 
 final case class IsWelshSupported(value: Boolean)
