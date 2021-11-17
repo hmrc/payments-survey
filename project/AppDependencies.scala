@@ -5,9 +5,9 @@ object AppDependencies {
   private val payApiVersion = "[1.43.1,)"
 
   val compile = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % "5.4.0",
-    "uk.gov.hmrc"             %% "play-frontend-govuk"              % "0.74.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "0.69.0-play-28",
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % "5.16.0",
+//    "uk.gov.hmrc"             %% "play-frontend-govuk"              % "0.74.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "1.26.0-play-28",
     "uk.gov.hmrc"              %% "simple-reactivemongo"        % "8.0.0-play-28",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
     "com.beachape"            %% "enumeratum"                       % "1.6.1"
