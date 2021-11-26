@@ -19,6 +19,7 @@
 @import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import model.content.BannerTitle
+@import paysurvey.origin.OriginMeta
 
 @this(main: views.html.main, button: uk.gov.hmrc.govukfrontend.views.html.components.govukButton)
 
@@ -31,33 +32,15 @@
 @main(
     pageTitle = Some(titleMaker("thanks.heading", request.content.title)),
     navTitle = Some(Messages("header.default")),
-    backUrl = request.backUrl
+    backUrl = None
 ) {
 
     <h1 class="govuk-heading-xl">@Messages("thanks.heading")</h1>
     <p class="govuk-body">@Messages("thanks.message")</p>
 
-    @request.origin.map(_.toString) match {
-        case Some(bta) if bta.contains("Bta") => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-bta")),
-                href = Some("/business-account"),
-                inputType = Some("button")
-            ))
-        }
-        case Some(pta) if pta.contains("Pta") => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-pta")),
-                href = Some("/personal-account"),
-                inputType = Some("button")
-            ))
-        }
-        case _ => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-govuk")),
-                href = Some("https://www.gov.uk"),
-                inputType = Some("button")
-            ))
-        }
-    }
+    @button(Button(
+        content = Text(request.returnMsg),
+        href = request.returnHref,
+        inputType = Some("button")
+    ))
 }
