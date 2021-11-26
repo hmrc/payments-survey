@@ -31,7 +31,7 @@
 @main(
     pageTitle = Some(titleMaker("thanks.heading", request.content.title)),
     navTitle = Some(Messages("header.default")),
-    backUrl = None
+    backUrl = request.backUrl
 ) {
 
     <h1 class="govuk-heading-xl">@Messages("thanks.heading")</h1>
