@@ -15,7 +15,7 @@ final case class SurveyRequest[A]
 ) extends WrappedRequest[A](request) {
 
   def backUrl(implicit appConfig: AppConfig): Option[String] = {
-    origin.flatMap(OriginMeta.backUrl)
+    origin.flatMap(OriginMeta.returnMsg)
   }
 
 }
