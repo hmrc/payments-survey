@@ -32,7 +32,7 @@
 @main(
     pageTitle = Some(titleMaker("thanks.heading", request.content.title)),
     navTitle = Some(Messages("header.default")),
-    backUrl = request.returnHref
+    backUrl = None
 ) {
 
     <h1 class="govuk-heading-xl">@Messages("thanks.heading")</h1>
@@ -43,28 +43,4 @@
         href = request.returnHref,
         inputType = Some("button")
     ))
-
-    @request.origin.map(_.toString) match {
-        case Some(bta) if bta.contains("Bta") => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-bta")),
-                href = Some("/business-account"),
-                inputType = Some("button")
-            ))
-        }
-        case Some(pta) if pta.contains("Pta") => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-pta")),
-                href = Some("/personal-account"),
-                inputType = Some("button")
-            ))
-        }
-        case _ => {
-            @button(Button(
-                content = Text(Messages("thanks.return-to-govuk")),
-                href = Some("https://www.gov.uk"),
-                inputType = Some("button")
-            ))
-        }
-    }
 }
