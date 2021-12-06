@@ -55,5 +55,5 @@ final case class BannerTitle(englishValue: String, welshValue: Option[String] = 
 
 object BannerTitle {
   implicit val format: OFormat[BannerTitle] = Json.format[BannerTitle]
-  val default: BannerTitle = BannerTitle(englishValue = "Pay tax", welshValue = Option("Talu treth"))
+  val default: BannerTitle = BannerTitle(englishValue = "Pay your tax", welshValue = Option("Talu treth"))
 }

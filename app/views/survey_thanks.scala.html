@@ -31,7 +31,7 @@
 
 @main(
     pageTitle = Some(titleMaker("thanks.heading", request.content.title)),
-    navTitle = Some(Messages("header.default")),
+    navTitle = request.content.title.forCurrentLanguage.orElse(BannerTitle.default.forCurrentLanguage),
     backUrl = None
 ) {
 
