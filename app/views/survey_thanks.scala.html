@@ -39,8 +39,8 @@
     <p class="govuk-body">@Messages("thanks.message")</p>
 
     @button(Button(
-        content = Text(request.returnMsg),
-        href = request.returnHref,
+        content = Text(Messages("thanks.return-to-govuk")),
+        href = Some("https://www.gov.uk"),
         inputType = Some("button")
     ))
 }
