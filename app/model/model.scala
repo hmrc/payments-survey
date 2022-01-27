@@ -58,7 +58,7 @@ package object model {
       case PfAggregatesLevy => "aggregates-levy"
       case PfClimateChangeLevy => "climate-change-levy"
       case PfOther => "other-taxes"
-      case Amls => "anti-money-laundering"
+      case Amls | PfAmls => "anti-money-laundering"
       case BcPngr => "passengers"
       case CapitalGainsTax => "capital-gains-tax"
       case Mib => "merchandise-in-baggage"
@@ -80,7 +80,7 @@ package object model {
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther | PfChildBenefitRepayments => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa                                      => "MTD-PTA"
-      case Amls | BcPngr | CapitalGainsTax | Mib | NiEuVatOss | PfNiEuVatOss | Parcels
+      case Amls | PfAmls | BcPngr | CapitalGainsTax | Mib | NiEuVatOss | PfNiEuVatOss | Parcels
         | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
     }
   }

@@ -194,6 +194,11 @@ object JsdToContentOptions {
       title            = BannerTitle(englishValue = "AMLS Payment")
     )
 
+    case _: JsdPfAmls => ContentOptions(
+      isWelshSupported = IsWelshSupported.no,
+      title            = BannerTitle(englishValue = "AMLS Payment")
+    )
+
     case _: JsdBtaSa => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
       title            = BannerTitle(englishValue = "Pay your Self Assessment", welshValue = Option("Talu eich Hunanasesiad"))
