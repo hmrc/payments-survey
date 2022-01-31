@@ -190,13 +190,13 @@ object JsdToContentOptions {
     )
 
     case _: JsdAmls => ContentOptions(
-      isWelshSupported = IsWelshSupported.no,
-      title            = BannerTitle(englishValue = "AMLS Payment")
+      isWelshSupported = IsWelshSupported.yes,
+      title            = BannerTitle(englishValue = "Pay Money Laundering Regulations fees", welshValue = Some("Talu Ffioedd Rheoliadau Gwyngalchu Arian"))
     )
 
     case _: JsdPfAmls => ContentOptions(
-      isWelshSupported = IsWelshSupported.no,
-      title            = BannerTitle(englishValue = "AMLS Payment")
+      isWelshSupported = IsWelshSupported.yes,
+      title            = BannerTitle(englishValue = "Pay Money Laundering Regulations fees", welshValue = Some("Talu Ffioedd Rheoliadau Gwyngalchu Arian"))
     )
 
     case _: JsdBtaSa => ContentOptions(
