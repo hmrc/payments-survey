@@ -52,4 +52,13 @@ final class SsjController @Inject() (
       } yield Created(Json.toJson(ssjResponse))
   }
 
+  def startJourney(): Action[SsjJourneyRequest] = Action.async(parse.json[SsjRequest]) {
+    implicit request =>
+      val ssjRequest = request.body
+      //todo what do I need to make this entry in survey
+      for {
+        ssjResponse <- ssjService.startJourney(ssjRequest)
+      } yield Created(Json.toJson(ssjResponse))
+  }
+
 }

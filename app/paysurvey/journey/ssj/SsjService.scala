@@ -1,7 +1,7 @@
 package paysurvey.journey.ssj
 
+import akka.http.scaladsl.model.headers.Origin
 import config.AppConfig
-import payapi.cardpaymentjourney.PayApiConnector
 import payapi.cardpaymentjourney.model.journey.Url
 import paysurvey.journey.{JourneyIdGenerator, JourneyService}
 import paysurvey.origin.SurveyOrigin
@@ -52,6 +52,37 @@ class SsjService @Inject() (
     } yield SsjResponse(
       journey._id,
       Url(s"$frontendBaseUrl/survey")
+    )
+  }
+
+  def startJourney(ssjRequest: SsjRequest)(implicit r: Request[_]): Future[SsjResponse] = {
+    val sessionId = hc.sessionId.getOrElse {
+      throw new Exception(s"The sessionId has to be provided [$ssjRequest.origin] [${ssjRequest.audit.toMap}]")
+    }
+
+    val journey = ssjRequest.toSurveyJourney(
+      journeyId = journeyIdGenerator.nextJourneyId(),
+      //todo hard code for now
+      SurveyOrigin.Itsa,
+      createdOn = LocalDateTime.now(clock),
+      sessionId
+    )
+
+    for {
+      _ <- journeyService.insert(journey)
+      //track who really started journey
+      _ = logger.info(s"Started payment journey for origin: $ssjRequest.origin " +
+        s"[JourneyOrigin: ${journey.origin}] " +
+        s"[Reference: ${journey.audit.journey}] " +
+        s"[IsUserLoggedIn: ${hc.authorization.isDefined}] " +
+        s"[${hc.requestId}] " +
+        s"[${hc.sessionId}] " +
+        s"[${hc.requestChain}] " +
+        s"[${hc.forwarded}] " +
+        s"[trueClientIp: ${hc.trueClientIp}] ")
+    } yield SsjResponse(
+      journey._id,
+      Url(s"$frontendBaseUrl/journey/survey")
     )
   }
 

@@ -66,6 +66,7 @@ final class GetJourneyActionFactory @Inject() (
             case Some(j) => Future.successful {
               Option(SurveyRequest(j.content, j.audit, Option(j.origin), r))
             }
+            //todo we wont need this bit for the new ones remove it?
             case None if maybeSessionId.isDefined => paymentApi.findLatestJourneyBySessionId()
               .map(_.map(fromPayApi))
             case _ => Future.successful {

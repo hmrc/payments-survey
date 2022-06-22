@@ -20,6 +20,7 @@ final case class SsjRequest
       createdOn: LocalDateTime,
       sessionId: SessionId
   ): SurveyJourney = {
+    //todo this is for one tax regime
     val content: ContentOptions = OriginToContentOptions.toContentOptions(origin).getOrElse {
       throw new Exception(s"Couldn't resolve content for $origin")
     }
@@ -33,9 +34,40 @@ final case class SsjRequest
       createdOn
     )
   }
+  def toSurveyJourney(
+                       journeyId: JourneyId,
+                       origin:    SurveyOrigin,
+                       createdOn: LocalDateTime,
+                       contentOptions:ContentOptions,
+                       sessionId: SessionId
+                     ): SurveyJourney = {
 
+    SurveyJourney(
+      journeyId,
+      sessionId,
+      origin,
+      contentOptions,
+      audit,
+      createdOn
+    )
+  }
 }
 
 object SsjRequest {
   implicit val format = Json.format[SsjRequest]
 }
+
+final case class SsjJourneyRequest
+  (
+    origin:         String,
+    audit:          AuditOptions,
+    contentOptions: ContentOptions
+) {
+
+
+}
+
+object SsjJourneyRequest {
+  implicit val format = Json.format[SsjJourneyRequest]
+}
+

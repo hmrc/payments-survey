@@ -31,4 +31,21 @@ class SsjControllerSpec extends AppSpec {
     j.sessionId shouldBe sessionId
   }
 
+  "start survey journey v2 should " in {
+    val result = controller.startJourney()(surveyRequest)
+    status(result) shouldBe Status.CREATED
+
+    val responseBody = Json.parse(contentAsString(result)).as[SsjResponse]
+    responseBody.nextUrl.value shouldBe "http://localhost:9966/payments-survey/survey"
+
+    val j = {
+      val maybeJ = journeyService.findLatestBySessionId(sessionId).futureValue
+      maybeJ.isDefined shouldBe true
+      maybeJ.get
+    }
+
+    j._id shouldBe responseBody.journeyId
+    j.sessionId shouldBe sessionId
+  }
+
 }

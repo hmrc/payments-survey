@@ -41,5 +41,4 @@ object SurveyJourney {
       createdOn
     )
   }
-
 }

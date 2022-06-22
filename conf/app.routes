@@ -7,6 +7,8 @@ GET         /survey                       controllers.SurveyController.survey
 
 POST        /:origin/journey/start        paysurvey.journey.ssj.SsjController.start(origin: SurveyOrigin)
 
+POST         /journey/start              paysurvey.journey.ssj.SsjController.startJourney()
+
 POST        /survey                       controllers.SurveyController.submitSurvey
 GET         /survey-thanks                controllers.SurveyController.showSurveyThanks
 
