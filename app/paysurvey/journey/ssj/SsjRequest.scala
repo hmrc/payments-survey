@@ -2,7 +2,7 @@ package paysurvey.journey.ssj
 
 import model.content.{ContentOptions, OriginToContentOptions}
 import paysurvey.audit.AuditOptions
-import paysurvey.journey.{JourneyId, SurveyJourney}
+import paysurvey.journey.{SurveyJourneyId, SurveyJourney}
 import paysurvey.origin.SurveyOrigin
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.SessionId
@@ -15,7 +15,7 @@ final case class SsjRequest
 ) {
 
   def toJourney(
-      journeyId: JourneyId,
+      journeyId: SurveyJourneyId,
       origin:    SurveyOrigin,
       createdOn: LocalDateTime,
       sessionId: SessionId
@@ -34,13 +34,28 @@ final case class SsjRequest
       createdOn
     )
   }
+}
+
+object SsjRequest {
+  implicit val format = Json.format[SsjRequest]
+}
+
+final case class SsjJourneyRequest
+  (
+    origin:         String,
+    returnMsg:      String,
+    returnHref:     String,
+    auditName:      String,
+    audit:          AuditOptions,
+    contentOptions: ContentOptions
+) {
   def toSurveyJourney(
-                       journeyId: JourneyId,
-                       origin:    SurveyOrigin,
-                       createdOn: LocalDateTime,
-                       contentOptions:ContentOptions,
-                       sessionId: SessionId
-                     ): SurveyJourney = {
+      journeyId:      SurveyJourneyId,
+      origin:         SurveyOrigin,
+      createdOn:      LocalDateTime,
+      contentOptions: ContentOptions,
+      sessionId:      SessionId
+  ): SurveyJourney = {
 
     SurveyJourney(
       journeyId,
@@ -51,19 +66,6 @@ final case class SsjRequest
       createdOn
     )
   }
-}
-
-object SsjRequest {
-  implicit val format = Json.format[SsjRequest]
-}
-
-final case class SsjJourneyRequest
-  (
-    origin:         String,
-    audit:          AuditOptions,
-    contentOptions: ContentOptions
-) {
-
 
 }
 

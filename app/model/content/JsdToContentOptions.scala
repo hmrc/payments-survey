@@ -261,11 +261,6 @@ object JsdToContentOptions {
     case j: JsdPfGbPbRgDuty =>
       val referenceToDisplay = j.prn.map(_.value).getOrElse("").toUpperCase()
 
-      val line0 = InternationalisedLine(
-        english = Line("Reference number", referenceToDisplay),
-        welsh   = Some(Line("Cyfeirnod", referenceToDisplay))
-      )
-
       ContentOptions(
         isWelshSupported = IsWelshSupported.yes,
         title            = BannerTitle(englishValue = "Pay General Betting, Pool Betting or Remote Gaming Duty", welshValue = Some("Talu Toll Betio Cyffredinol, Toll Cronfa Fetio neu Doll Hapchwarae o Bell"))

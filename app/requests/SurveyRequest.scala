@@ -3,7 +3,7 @@ package requests
 import config.AppConfig
 import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
-import paysurvey.origin.{OriginMeta, SurveyOrigin}
+import paysurvey.origin.{SurveyOrigin}
 import play.api.i18n.Messages
 import play.api.mvc.{Request, WrappedRequest}
 
@@ -13,17 +13,7 @@ final case class SurveyRequest[A]
     audit:   AuditOptions,
     origin:  Option[SurveyOrigin],
     request: Request[A]
-) extends WrappedRequest[A](request) {
-
-  def returnMsg(implicit msg: Messages): String = {
-    OriginMeta.returnMsg(origin)
-  }
-
-  def returnHref(implicit appConfig: AppConfig): Option[String] = {
-    origin.map(OriginMeta.returnHref)
-  }
-
-}
+) extends WrappedRequest[A](request)
 
 object SurveyRequest {
 

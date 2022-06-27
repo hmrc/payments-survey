@@ -20,6 +20,7 @@ import action.Actions
 import config.AppConfig
 import model.SurveyForm.surveyForm
 import model._
+import paysurvey.journey.{JourneyService, SurveyJourneyId}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -36,6 +37,7 @@ final class SurveyController @Inject() (
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,
     survey:         views.html.survey,
+    surveyJourney:  views.html.survey_journey,
     surveyThanks:   views.html.survey_thanks
 )(implicit
     ec: ExecutionContext,
@@ -46,6 +48,11 @@ final class SurveyController @Inject() (
 
   def survey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
     Ok(survey(surveyForm))
+  }
+
+  def surveyJourney(id: SurveyJourneyId): Action[AnyContent] = actions.maybeSurveyJourneyAction(id) { implicit request =>
+
+    Ok(surveyJourney(surveyForm, "backLinkHref", "backLinkMessage"))
   }
 
   def submitSurvey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>

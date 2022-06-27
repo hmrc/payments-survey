@@ -32,7 +32,7 @@ class JourneyServiceSpec extends AppSpec {
       maybeJ.get
     }
 
-    j._id shouldBe ssjResponse.journeyId
+    j.journeyId shouldBe ssjResponse.journeyId
     j.sessionId shouldBe sessionId
   }
 
@@ -46,7 +46,7 @@ class JourneyServiceSpec extends AppSpec {
       maybeJ.get
     }
 
-    j._id shouldBe ssjResponse2.journeyId
+    j.journeyId shouldBe ssjResponse2.journeyId
     j.sessionId shouldBe sessionId
   }
 

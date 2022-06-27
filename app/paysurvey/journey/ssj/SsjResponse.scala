@@ -1,12 +1,12 @@
 package paysurvey.journey.ssj
 
 import payapi.cardpaymentjourney.model.journey.Url
-import paysurvey.journey.JourneyId
+import paysurvey.journey.SurveyJourneyId
 import play.api.libs.json.{Format, Json}
 
 final case class SsjResponse
   (
-    journeyId: JourneyId,
+    journeyId: SurveyJourneyId,
     nextUrl:   Url
 )
 

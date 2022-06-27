@@ -13,9 +13,12 @@ class JourneyService @Inject() (
 )(implicit ec: ExecutionContext) {
 
   def insert(j: SurveyJourney): Future[Unit] = journeyRepo.insert(j).checkResult
-
+  //todo remove
   def findLatestBySessionId(sessionId: SessionId): Future[Option[SurveyJourney]] = {
-    journeyRepo.findLatestJourney(sessionId)
+    journeyRepo.findLatestJourneyBySessionId(sessionId)
+  }
+  def findLatestByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
+    journeyRepo.findLatestJourneyByJourneyId(journeyId)
   }
 
 }

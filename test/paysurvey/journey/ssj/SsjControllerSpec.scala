@@ -1,6 +1,6 @@
 package paysurvey.journey.ssj
 
-import paysurvey.journey.JourneyService
+import paysurvey.journey.{JourneyService, SurveyJourney}
 import paysurvey.origin.SurveyOrigin.Itsa
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -27,24 +27,23 @@ class SsjControllerSpec extends AppSpec {
       maybeJ.get
     }
 
-    j._id shouldBe responseBody.journeyId
+    j.journeyId shouldBe responseBody.journeyId
     j.sessionId shouldBe sessionId
   }
 
   "start survey journey v2 should " in {
-    val result = controller.startJourney()(surveyRequest)
-    status(result) shouldBe Status.CREATED
+    val result = controller.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
 
     val responseBody = Json.parse(contentAsString(result)).as[SsjResponse]
-    responseBody.nextUrl.value shouldBe "http://localhost:9966/payments-survey/survey"
+    responseBody.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/v2/survey/${responseBody.journeyId.value}"
 
-    val j = {
+    val j: SurveyJourney = {
       val maybeJ = journeyService.findLatestBySessionId(sessionId).futureValue
       maybeJ.isDefined shouldBe true
       maybeJ.get
     }
 
-    j._id shouldBe responseBody.journeyId
+    j.journeyId shouldBe responseBody.journeyId
     j.sessionId shouldBe sessionId
   }
 

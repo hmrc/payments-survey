@@ -3,7 +3,7 @@ package paysurvey.journey.ssj
 import akka.http.scaladsl.model.headers.Origin
 import config.AppConfig
 import payapi.cardpaymentjourney.model.journey.Url
-import paysurvey.journey.{JourneyIdGenerator, JourneyService}
+import paysurvey.journey.{JourneyIdGenerator, JourneyService, SurveyJourney}
 import paysurvey.origin.SurveyOrigin
 import play.api.Logger
 import play.api.mvc.Request
@@ -30,7 +30,7 @@ class SsjService @Inject() (
       throw new Exception(s"The sessionId has to be provided [$origin] [${ssjRequest.audit.toMap}]")
     }
 
-    val journey = ssjRequest.toJourney(
+    val journey: SurveyJourney = ssjRequest.toJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
       origin,
       createdOn = LocalDateTime.now(clock),
@@ -50,21 +50,22 @@ class SsjService @Inject() (
         s"[${hc.forwarded}] " +
         s"[trueClientIp: ${hc.trueClientIp}] ")
     } yield SsjResponse(
-      journey._id,
+      journey.journeyId,
       Url(s"$frontendBaseUrl/survey")
     )
   }
 
-  def startJourney(ssjRequest: SsjRequest)(implicit r: Request[_]): Future[SsjResponse] = {
+  def startJourney(ssjRequest: SsjJourneyRequest)(implicit r: Request[_]): Future[SsjResponse] = {
     val sessionId = hc.sessionId.getOrElse {
       throw new Exception(s"The sessionId has to be provided [$ssjRequest.origin] [${ssjRequest.audit.toMap}]")
     }
 
     val journey = ssjRequest.toSurveyJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
-      //todo hard code for now
+      //todo hard code for now will remove when we remove pay-api stuff
       SurveyOrigin.Itsa,
       createdOn = LocalDateTime.now(clock),
+      ssjRequest.contentOptions,
       sessionId
     )
 
@@ -80,10 +81,13 @@ class SsjService @Inject() (
         s"[${hc.requestChain}] " +
         s"[${hc.forwarded}] " +
         s"[trueClientIp: ${hc.trueClientIp}] ")
-    } yield SsjResponse(
-      journey._id,
-      Url(s"$frontendBaseUrl/journey/survey")
-    )
+    } yield {
+      val id = journey.journeyId
+      SsjResponse(
+        id,
+        Url(s"$frontendBaseUrl/v2/survey/${id.value}")
+      )
+    }
   }
 
 }

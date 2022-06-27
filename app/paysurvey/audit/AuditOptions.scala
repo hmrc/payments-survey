@@ -31,7 +31,7 @@ object AuditOptions {
   def default(implicit r: Request[_]) = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
   )
-
+  //todo move to pay-frontend
   def fromPayApi(journey: Journey[JourneySpecificData])(implicit r: Request[_]): AuditOptions = {
     AuditOptions(
       userType  = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut",

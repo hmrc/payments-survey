@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 final case class SurveyJourney
   (
-    _id:       JourneyId,
+    journeyId: SurveyJourneyId,
     sessionId: SessionId,
     origin:    SurveyOrigin,
     content:   ContentOptions,
@@ -21,7 +21,7 @@ final case class SurveyJourney
 
 object SurveyJourney {
   implicit val format: OFormat[SurveyJourney] = Json.format[SurveyJourney]
-
+  //todo remove
   def fromPayApi(
       createdOn: LocalDateTime,
       sessionId: SessionId
@@ -33,7 +33,7 @@ object SurveyJourney {
     val audit = AuditOptions.fromPayApi(journey)
 
     SurveyJourney(
-      JourneyId(journey._id.value),
+      SurveyJourneyId(journey._id.value),
       sessionId,
       SurveyOrigin.PayApi(journey.origin),
       opts,

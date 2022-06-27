@@ -21,6 +21,14 @@ trait TdSsjRequest extends TdBase {
   val ssjRequest: SsjRequest = SsjRequest(
     auditOptions
   )
+  val ssjJourneyRequest: SsjJourneyRequest = SsjJourneyRequest(
+    "lala",
+    "returnMsg",
+    "returnHref",
+    "auditname",
+    auditOptions,
+    ContentOptions.default
+  )
 
   val surveyRequest: SurveyRequest[SsjRequest] = SurveyRequest(
     ContentOptions.default,
@@ -29,6 +37,5 @@ trait TdSsjRequest extends TdBase {
     r
       .withBody(ssjRequest)
   )
-
 
 }
