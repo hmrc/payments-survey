@@ -19,7 +19,7 @@ package model.content
 import payapi.cardpaymentjourney.model.journey._
 
 object JsdToContentOptions {
-
+  //todo move into pay-frontend when you move code over
   def toContentOptions(jsd: JourneySpecificData): ContentOptions = jsd match {
     case _: JsdItSa => ContentOptions(
       isWelshSupported = IsWelshSupported.yes,
@@ -261,11 +261,6 @@ object JsdToContentOptions {
     case j: JsdPfGbPbRgDuty =>
       val referenceToDisplay = j.prn.map(_.value).getOrElse("").toUpperCase()
 
-      val line0 = InternationalisedLine(
-        english = Line("Reference number", referenceToDisplay),
-        welsh   = Some(Line("Cyfeirnod", referenceToDisplay))
-      )
-
       ContentOptions(
         isWelshSupported = IsWelshSupported.yes,
         title            = BannerTitle(englishValue = "Pay General Betting, Pool Betting or Remote Gaming Duty", welshValue = Some("Talu Toll Betio Cyffredinol, Toll Cronfa Fetio neu Doll Hapchwarae o Bell"))
@@ -344,6 +339,14 @@ object JsdToContentOptions {
       title            = BannerTitle(
         englishValue = "Pay Coronavirus Job Retention Scheme grants back",
         welshValue   = Some("Talu grantiau’r Cynllun Cadw Swyddi yn sgil Coronafeirws yn ôl")
+      )
+    )
+    //todo update and change when we move it over
+    case _ => ContentOptions(
+      isWelshSupported = IsWelshSupported.no,
+      title            = BannerTitle(
+        englishValue = "Pay",
+        welshValue   = None
       )
     )
   }

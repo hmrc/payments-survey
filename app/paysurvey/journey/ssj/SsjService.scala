@@ -1,9 +1,9 @@
 package paysurvey.journey.ssj
 
+import akka.http.scaladsl.model.headers.Origin
 import config.AppConfig
-import payapi.cardpaymentjourney.PayApiConnector
 import payapi.cardpaymentjourney.model.journey.Url
-import paysurvey.journey.{JourneyIdGenerator, JourneyService}
+import paysurvey.journey.{JourneyIdGenerator, JourneyService, SessionId, SurveyJourney}
 import paysurvey.origin.SurveyOrigin
 import play.api.Logger
 import play.api.mvc.Request
@@ -30,7 +30,7 @@ class SsjService @Inject() (
       throw new Exception(s"The sessionId has to be provided [$origin] [${ssjRequest.audit.toMap}]")
     }
 
-    val journey = ssjRequest.toJourney(
+    val journey: SurveyJourney = ssjRequest.toJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
       origin,
       createdOn = LocalDateTime.now(clock),
@@ -50,9 +50,42 @@ class SsjService @Inject() (
         s"[${hc.forwarded}] " +
         s"[trueClientIp: ${hc.trueClientIp}] ")
     } yield SsjResponse(
-      journey._id,
+      journey.journeyId,
       Url(s"$frontendBaseUrl/survey")
     )
+  }
+
+  def startJourney(ssjRequest: SsjJourneyRequest)(implicit r: Request[_]): Future[SsjResponse] = {
+
+    val journey = ssjRequest.toSurveyJourney(
+      journeyId = journeyIdGenerator.nextJourneyId(),
+      //todo hard code for now will remove when we remove pay-api stuff
+      SurveyOrigin.Itsa,
+      createdOn = LocalDateTime.now(clock),
+      ssjRequest.contentOptions,
+      //todo remove when I remove the pay-api
+      SessionId("sessionId")
+    )
+
+    for {
+      _ <- journeyService.insert(journey)
+      //track who really started journey
+      _ = logger.info(s"Started payment journey for origin: $ssjRequest.origin " +
+        s"[JourneyOrigin: ${journey.origin}] " +
+        s"[Reference: ${journey.audit.journey}] " +
+        s"[IsUserLoggedIn: ${hc.authorization.isDefined}] " +
+        s"[${hc.requestId}] " +
+        s"[${hc.sessionId}] " +
+        s"[${hc.requestChain}] " +
+        s"[${hc.forwarded}] " +
+        s"[trueClientIp: ${hc.trueClientIp}] ")
+    } yield {
+      val id = journey.journeyId
+      SsjResponse(
+        id,
+        Url(s"$frontendBaseUrl/v2/survey/${id.value}")
+      )
+    }
   }
 
 }

@@ -4,8 +4,11 @@
 GET         /assets/*file                 controllers.Assets.versioned(path = "/public", file: Asset)
 
 GET         /survey                       controllers.SurveyController.survey
+GET         /v2/survey/:surveyId          controllers.SurveyController.surveyJourney(surveyId:SurveyJourneyId)
 
 POST        /:origin/journey/start        paysurvey.journey.ssj.SsjController.start(origin: SurveyOrigin)
+
+POST         /journey/start              paysurvey.journey.ssj.SsjController.startJourney()
 
 POST        /survey                       controllers.SurveyController.submitSurvey
 GET         /survey-thanks                controllers.SurveyController.showSurveyThanks

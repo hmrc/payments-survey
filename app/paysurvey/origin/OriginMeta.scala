@@ -6,12 +6,12 @@ import paysurvey.origin.SurveyOrigin.{Itsa, PayApi}
 import play.api.i18n.Messages
 
 object OriginMeta {
-
+  //Move this to  request
   def auditName(origin: SurveyOrigin): String = origin match {
     case Itsa           => "income-tax-repayments"
     case PayApi(origin) => origin.auditName
   }
-
+  //todo see what this is used for
   def presentationMode(origin: SurveyOrigin): String = origin match {
     case Itsa           => "income-tax-repayments"
     case PayApi(origin) => origin.presentationMode

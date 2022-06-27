@@ -18,16 +18,22 @@ package controllers
 
 import model._
 import payapi.cardpaymentjourney.model.journey.JsdPfSa
+import paysurvey.journey.SurveyJourney
+import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
 import play.api.http.Status
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.test.Helpers.fakeRequest
 import stubs.PayApiStubFindJourneyBySessionId
 import support.AppSpec
+import testdata.paysurvey.TdAll.{r, sessionId, ssjJourneyRequest}
 import testdata.{TdAll, TdJourney}
 import uk.gov.hmrc.http.SessionKeys
 
 final class SurveyControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SurveyController]
+  private val startJourneyController = app.injector.instanceOf[SsjController]
 
   "survey should render the survey page if pay-api is responsive" in {
     val tdJourney = TdAll.lifecyclePfSa.afterSucceedWebPayment.credit
@@ -44,6 +50,17 @@ final class SurveyControllerSpec extends AppSpec {
     contentAsString(result).contains(journey.contentOptions.title.englishValue) shouldBe true
 
     PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
+  }
+  "survey should render the survey page if the survey journey is in the db" in {
+
+    val putInDb = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
+    val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
+    val fakeRequest = FakeRequest("GET", "/")
+    val result = controller.surveyJourney(ssjResponse.journeyId)(fakeRequest)
+    status(result) shouldBe Status.OK
+    contentAsString(result).contains("How was our payment service?") shouldBe true
+    contentAsString(result).contains("backLinkHref") shouldBe true
+    contentAsString(result).contains("backLinkMessage") shouldBe true
   }
 
   "surveyThanks should render the survey thanks page if pay-api is responsive" in {

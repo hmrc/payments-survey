@@ -2,7 +2,7 @@ package testdata.paysurvey
 
 import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
-import paysurvey.journey.ssj.SsjRequest
+import paysurvey.journey.ssj.{SsjJourneyRequest, SsjRequest}
 import paysurvey.origin.SurveyOrigin.Itsa
 import play.api.mvc.Request
 import play.api.test.FakeRequest
@@ -20,6 +20,14 @@ trait TdSsjRequest extends TdBase {
 
   val ssjRequest: SsjRequest = SsjRequest(
     auditOptions
+  )
+  val ssjJourneyRequest: SsjJourneyRequest = SsjJourneyRequest(
+    "lala",
+    "returnMsg",
+    "returnHref",
+    "auditname",
+    auditOptions,
+    ContentOptions.default
   )
 
   val surveyRequest: SurveyRequest[SsjRequest] = SurveyRequest(

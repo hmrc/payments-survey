@@ -19,6 +19,7 @@ lazy val microservice = Project(appName, file("."))
     routesImport ++= Seq(
       "controllers.Assets.Asset",
       "paysurvey.origin._",
+      "paysurvey.journey._",
       "payapi.corcommon.model._",
       "langswitch.Language"
     ))

@@ -67,6 +67,8 @@ package object model {
       case PfJobRetentionScheme => "job-retention-scheme"
       case JrsJobRetentionScheme => "job-retention-scheme"
       case PfChildBenefitRepayments => "child-benefit-repayments"
+      //todo fill in may not need to when we migrate
+      case _ => "child-benefit-repayments"
     }
 
     //TODO: is it used anywhere?
@@ -80,8 +82,7 @@ package object model {
         | PfAggregatesLevy | PfClimateChangeLevy | PfOther | PfChildBenefitRepayments => "PF-GOVUK"
       case VcVatReturn | VcVatOther | DdVat | DdSdil => "MTD-BTA"
       case ItSa                                      => "MTD-PTA"
-      case Amls | PfAmls | BcPngr | CapitalGainsTax | Mib | NiEuVatOss | PfNiEuVatOss | Parcels
-        | PfJobRetentionScheme | JrsJobRetentionScheme => "Other"
+      case _                                         => "Other"
     }
   }
 }
