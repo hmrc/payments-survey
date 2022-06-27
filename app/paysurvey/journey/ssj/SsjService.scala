@@ -3,7 +3,7 @@ package paysurvey.journey.ssj
 import akka.http.scaladsl.model.headers.Origin
 import config.AppConfig
 import payapi.cardpaymentjourney.model.journey.Url
-import paysurvey.journey.{JourneyIdGenerator, JourneyService, SurveyJourney}
+import paysurvey.journey.{JourneyIdGenerator, JourneyService, SessionId, SurveyJourney}
 import paysurvey.origin.SurveyOrigin
 import play.api.Logger
 import play.api.mvc.Request
@@ -56,9 +56,6 @@ class SsjService @Inject() (
   }
 
   def startJourney(ssjRequest: SsjJourneyRequest)(implicit r: Request[_]): Future[SsjResponse] = {
-    val sessionId = hc.sessionId.getOrElse {
-      throw new Exception(s"The sessionId has to be provided [$ssjRequest.origin] [${ssjRequest.audit.toMap}]")
-    }
 
     val journey = ssjRequest.toSurveyJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
@@ -66,7 +63,8 @@ class SsjService @Inject() (
       SurveyOrigin.Itsa,
       createdOn = LocalDateTime.now(clock),
       ssjRequest.contentOptions,
-      sessionId
+      //todo remove when I remove the pay-api
+      SessionId("sessionId")
     )
 
     for {
