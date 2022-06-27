@@ -52,7 +52,7 @@ final class SurveyControllerSpec extends AppSpec {
     PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
   }
   "survey should render the survey page if the survey journey is in the db" in {
-    println("result json " + r.withBody[SsjJourneyRequest](ssjJourneyRequest).toString())
+
     val putInDb = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
     val fakeRequest = FakeRequest("GET", "/")
