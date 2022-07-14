@@ -31,6 +31,8 @@ final case class SsjRequest
       origin,
       content,
       audit,
+      None,
+      None,
       createdOn
     )
   }
@@ -63,6 +65,8 @@ final case class SsjJourneyRequest
       origin,
       contentOptions,
       audit,
+      Some(returnMsg),
+      Some(returnHref),
       createdOn
     )
   }

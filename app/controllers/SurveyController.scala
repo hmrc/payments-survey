@@ -52,7 +52,11 @@ final class SurveyController @Inject() (
 
   def surveyJourney(id: SurveyJourneyId): Action[AnyContent] = actions.maybeSurveyJourneyAction(id) { implicit request =>
 
-    Ok(surveyJourney(surveyForm, "backLinkHref", "backLinkMessage"))
+    Ok(surveyJourney(
+      surveyForm,
+      request.returnHref.getOrElse("https://www.gov.uk/government/organisations/hm-revenue-customs"),
+      request.returnMsg.getOrElse("Skip survey")
+    ))
   }
 
   def submitSurvey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>

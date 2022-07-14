@@ -52,6 +52,8 @@ final class GetJourneyActionFactory @Inject() (
               JsdToContentOptions.toContentOptions(j.journeySpecificData),
               AuditOptions.fromPayApi(j),
               Option(SurveyOrigin.PayApi(j.origin)),
+              None,
+              None,
               r
             )
           }
@@ -64,7 +66,7 @@ final class GetJourneyActionFactory @Inject() (
 
           maybeSurveyRequest <- maybeJourney match {
             case Some(j) => Future.successful {
-              Option(SurveyRequest(j.content, j.audit, Option(j.origin), r))
+              Option(SurveyRequest(j.content, j.audit, Option(j.origin), j.returnMsg, j.returnHref, r))
             }
             //todo we wont need this bit for the new ones remove it?
             case None if maybeSessionId.isDefined => paymentApi.findLatestJourneyBySessionId()
@@ -91,7 +93,7 @@ final class GetJourneyActionFactory @Inject() (
           maybeJourney <- journeyService.findLatestByJourneyId(id)
           maybeSurveyRequest <- maybeJourney match {
             case Some(j) => Future.successful {
-              Option(SurveyRequest(j.content, j.audit, Option(j.origin), r))
+              Option(SurveyRequest(j.content, j.audit, Option(j.origin), j.returnMsg, j.returnHref, r))
             }
             case _ => Future.successful {
               None
