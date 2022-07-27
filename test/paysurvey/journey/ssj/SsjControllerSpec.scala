@@ -38,13 +38,12 @@ class SsjControllerSpec extends AppSpec {
     responseBody.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/v2/survey/${responseBody.journeyId.value}"
 
     val j: SurveyJourney = {
-      val maybeJ = journeyService.findLatestBySessionId(sessionId).futureValue
+      val maybeJ = journeyService.findLatestByJourneyId(responseBody.journeyId).futureValue
       maybeJ.isDefined shouldBe true
       maybeJ.get
     }
 
     j.journeyId shouldBe responseBody.journeyId
-    j.sessionId shouldBe sessionId
   }
 
 }

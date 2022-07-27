@@ -16,7 +16,10 @@ final case class SurveyJourney
     origin:    SurveyOrigin,
     content:   ContentOptions,
     audit:     AuditOptions,
-    createdOn: LocalDateTime
+    //todo remove Option when we mirgrate over
+    returnMsg:  Option[String] = None,
+    returnHref: Option[String] = None,
+    createdOn:  LocalDateTime
 )
 
 object SurveyJourney {
@@ -38,6 +41,8 @@ object SurveyJourney {
       SurveyOrigin.PayApi(journey.origin),
       opts,
       audit,
+      None,
+      None,
       createdOn
     )
   }

@@ -59,8 +59,8 @@ final class SurveyControllerSpec extends AppSpec {
     val result = controller.surveyJourney(ssjResponse.journeyId)(fakeRequest)
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
-    contentAsString(result).contains("backLinkHref") shouldBe true
-    contentAsString(result).contains("backLinkMessage") shouldBe true
+    contentAsString(result).contains("returnHref") shouldBe true
+    contentAsString(result).contains("returnMsg") shouldBe true
   }
 
   "surveyThanks should render the survey thanks page if pay-api is responsive" in {

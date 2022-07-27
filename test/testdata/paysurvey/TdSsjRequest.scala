@@ -34,6 +34,8 @@ trait TdSsjRequest extends TdBase {
     ContentOptions.default,
     AuditOptions.default,
     Option(Itsa),
+    Option("backLinkMessage"),
+    Option("backLinkHref"),
     r
       .withBody(ssjRequest)
   )
