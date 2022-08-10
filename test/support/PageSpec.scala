@@ -29,8 +29,11 @@ import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
 import payapi.corcommon.model.JourneyId
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.ws.WSClient
 import testdata.{TdAll, TdJourney}
-import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.http.{HttpClient, SessionKeys}
+import uk.gov.hmrc.http.hooks.HttpHook
+import uk.gov.hmrc.play.http.ws.WSHttp
 
 class PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with WireMockSupport with OptionValues with IntegrationPatience {
 
@@ -38,8 +41,7 @@ class PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with 
 
   override def newAppForTest(testData: TestData): Application = new GuiceApplicationBuilder()
     .configure(Map[String, Any](
-      "application.router" -> "testOnlyDoNotUseInProd.Routes",
-      "microservice.services.pay-api.port" -> WireMockSupport.port
+      "application.router" -> "testOnlyDoNotUseInProd.Routes"
     ))
     .build()
 
@@ -52,7 +54,7 @@ class PageSpec extends UnitSpec with WebBrowser with GuiceOneServerPerTest with 
     Clock.fixed(fixedInstant, ZoneId.systemDefault)
   }
 
-  protected trait TestWithSession {
+  protected trait TestWithJourney {
     val tdJourney: TdJourney[JsdPfSa] = TdAll.lifecyclePfSa.afterSucceedWebPayment.credit
     val journey: Journey[JsdPfSa] = tdJourney.journey
     val journeyId: JourneyId = tdJourney.journey._id

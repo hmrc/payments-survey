@@ -18,7 +18,6 @@ package views
 
 import config.AppConfig
 import javax.inject.Inject
-import payapi.corcommon.model.TraceId
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import play.twirl.api.HtmlFormat

@@ -16,25 +16,37 @@
 
 package pagespec
 
-import model._
-import org.openqa.selenium.By
-import org.scalatest.concurrent.Eventually.eventually
-import stubs.PayApiStubFindJourneyBySessionId
-import support.PageSpec
+import org.scalatestplus.selenium.WebBrowser
+import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
+import payapi.corcommon.model.JourneyId
+import paysurvey.journey.ssj.{SsjJourneyRequest, SsjResponse, SsjService}
+import play.api.test.FakeRequest
+import support.{AppSpec, PageSpec}
+import testdata.{TdAll, TdJourney}
+import testdata.paysurvey.TdAll.ssjJourneyRequest
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, SessionKeys}
 
-class SurveyPageSpec extends PageSpec {
-  val pagePath = s"/payments-survey/survey"
-  val surveyThanksPath = s"/payments-survey/survey-thanks"
-  "should render correctly" in new TestWithSession {
+class SurveyPageSpec extends AppSpec with WebBrowser {
+  def baseUrl = s"http://localhost:$port"
+  def pagePath(id: String) = baseUrl + s"/payments-survey/v2/survey/$id"
+  def surveyThanksPath(id: String) = s"/payments-survey/survey-thanks/$id"
+  protected trait TestWithJourney {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val ssjUrl = s"http://localhost:${port}/payments-survey/journey/start"
 
-    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
+    val response: HttpResponse = testHttpClient.POST[SsjJourneyRequest, HttpResponse](ssjUrl, ssjJourneyRequest).futureValue
+    val ssjResponse = response.json.as[SsjResponse]
 
-    goTo(baseUrl + pagePath)
+  }
+  "should render correctly" in new TestWithJourney {
+
+    goTo(pagePath(ssjResponse.journeyId.value))
 
     cssSelector(".govuk-header__link--service-name")
-      .element.text shouldEqual journey.contentOptions.title.englishValue
+      .element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
 
-    pageTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
+    pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
 
     id("were-you-able-label").element.text shouldBe "1. Were you able to do what you needed to do today?"
     cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(1) > label")
@@ -75,46 +87,43 @@ class SurveyPageSpec extends PageSpec {
     id("thank-you-message").element.text shouldBe "We will use your feedback to make our services better."
     id("continue-button").element.text shouldBe "Send feedback"
 
-    PayApiStubFindJourneyBySessionId.findBySessionIdVerify()
   }
 
-  "should show no errors if the user hasn't clicked submit" in new TestWithSession {
-    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-    goTo(baseUrl + pagePath)
+  "should show no errors if the user hasn't clicked submit" in new TestWithJourney {
+
+    goTo(pagePath(ssjResponse.journeyId.value))
     webDriver.findElementsById("error-summary-title").isEmpty shouldBe true
     webDriver.findElementsById("wereYouAble-error").isEmpty shouldBe true
     webDriver.findElementsById("howEasy-error").isEmpty shouldBe true
     webDriver.findElementsById("overallRate-error").isEmpty shouldBe true
   }
 
-  "should show an error if the user tries to submit without filling in any fields" in new TestWithSession {
-    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-    goTo(baseUrl + pagePath)
+  "should show an error if the user tries to submit without filling in any fields" in new TestWithJourney {
+    goTo(pagePath(ssjResponse.journeyId.value))
     click.on("continue-button")
-    currentUrl shouldBe (baseUrl + pagePath)
+    currentUrl shouldBe pagePath(ssjResponse.journeyId.value)
     id("error-summary-title").element.text shouldBe "There's a problem"
     id("wereYouAble-error").element.text shouldBe "Error: This field is required"
     id("howEasy-error").element.text shouldBe "Error: This field is required"
     id("overallRate-error").element.text shouldBe "Error: This field is required"
   }
 
-  "should proceed to the survey thanks page if the user submits after filling in all necessary fields" in new TestWithSession {
-    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-    goTo(baseUrl + pagePath)
+  "should proceed to the survey thanks page if the user submits after filling in all necessary fields" in new TestWithJourney {
+
+    goTo(pagePath(ssjResponse.journeyId.value))
     click.on("wereYouAble")
     click.on("howEasy")
     click.on("overallRate")
     click.on("continue-button")
-    currentUrl shouldBe (baseUrl + surveyThanksPath)
+    currentUrl shouldBe (baseUrl + surveyThanksPath(ssjResponse.journeyId.value))
   }
 
-  "ensure can switch to Welsh and back" in new TestWithSession {
-    PayApiStubFindJourneyBySessionId.findBySessionId2xx(tdJourney)
-    goTo(baseUrl + pagePath)
+  "ensure can switch to Welsh and back" in new TestWithJourney {
+    goTo(pagePath(ssjResponse.journeyId.value))
     click.on(xpath("/html/body/div/div/nav/ul/li[2]/a/span[2]"))
-    pageTitle shouldBe "Sut oedd eich gwasanaeth talu? - Talu eich Hunanasesiad - GOV.UK"
+    pageTitle shouldBe "Sut oedd eich gwasanaeth talu? - Talu treth - GOV.UK"
     click.on(xpath("/html/body/div/div/nav/ul/li[1]/a/span[2]"))
-    pageTitle shouldBe "How was our payment service? - Pay your Self Assessment - GOV.UK"
+    pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
   }
 
 }
