@@ -8,15 +8,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyService @Inject() (
-    journeyRepo: JourneyRepo,
-    clock:       Clock
+    journeyRepo: JourneyRepo
 )(implicit ec: ExecutionContext) {
 
   def insert(j: SurveyJourney): Future[Unit] = journeyRepo.insert(j).checkResult
-  //todo remove
-  def findLatestBySessionId(sessionId: SessionId): Future[Option[SurveyJourney]] = {
-    journeyRepo.findLatestJourneyBySessionId(sessionId)
-  }
+
   def findLatestByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
     journeyRepo.findLatestJourneyByJourneyId(journeyId)
   }

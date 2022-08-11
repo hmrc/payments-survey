@@ -22,6 +22,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.LanguageSelect
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
+@import paysurvey.journey.SurveyJourneyId
 
 @this(
         govukLayout: uk.gov.hmrc.govukfrontend.views.html.layouts.govukLayout,
@@ -72,7 +73,7 @@
     headerBlock = Some(hmrcHeader(Header(
         homepageUrl = "https://www.gov.uk",
         serviceName = navTitle,
-        serviceUrl = controllers.routes.SurveyController.survey.url,
+        serviceUrl = controllers.routes.SurveyController.surveyDefault.url,
         signOutHref = if(isLoggedIn) Some(appConfig.signOutUrl) else None
     ))),
     scriptsBlock = Some(scripts()),

@@ -1,8 +1,5 @@
 package paysurvey.audit
 
-import cats.implicits.catsSyntaxOptionId
-import model.OriginExt
-import payapi.cardpaymentjourney.model.journey.{Journey, JourneySpecificData}
 import play.api.libs.json.Json
 import play.api.mvc.Request
 import requests.RequestSupport
@@ -31,15 +28,5 @@ object AuditOptions {
   def default(implicit r: Request[_]) = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
   )
-  //todo move to pay-frontend
-  def fromPayApi(journey: Journey[JourneySpecificData])(implicit r: Request[_]): AuditOptions = {
-    AuditOptions(
-      userType  = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut",
-      journey   = Option(journey.status.entryName),
-      orderId   = journey.reference.map(_.value),
-      liability = journey.origin.auditName.some
-    )
-  }
-
 }
 

@@ -1,8 +1,6 @@
 package paysurvey.journey.ssj
 
 import paysurvey.journey.{JourneyService, SurveyJourney}
-import paysurvey.origin.SurveyOrigin.Itsa
-import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import support.AppSpec
@@ -13,23 +11,6 @@ class SsjControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SsjController]
 
   private val journeyService = app.injector.instanceOf[JourneyService]
-
-  "start survey journey should " in {
-    val result = controller.start(Itsa)(surveyRequest)
-    status(result) shouldBe Status.CREATED
-
-    val responseBody = Json.parse(contentAsString(result)).as[SsjResponse]
-    responseBody.nextUrl.value shouldBe "http://localhost:9966/payments-survey/survey"
-
-    val j = {
-      val maybeJ = journeyService.findLatestBySessionId(sessionId).futureValue
-      maybeJ.isDefined shouldBe true
-      maybeJ.get
-    }
-
-    j.journeyId shouldBe responseBody.journeyId
-    j.sessionId shouldBe sessionId
-  }
 
   "start survey journey v2 should " in {
     val result = controller.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
