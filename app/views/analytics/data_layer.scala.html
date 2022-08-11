@@ -14,17 +14,14 @@
  * limitations under the License.
  *@
 
-@import payapi.corcommon.model.Origin
 
 @this()
 
-@(origin: Option[Origin])(implicit request: play.api.mvc.Request[_])
+@()(implicit request: play.api.mvc.Request[_])
 
 <script>
 dataLayer = [{
             'OPS_sessionid': "@requests.RequestSupport.sessionId",
-            'OPS_status':    "@requests.RequestSupport.isLoggedIn",
-            'OPS_origin':    "@origin.map(_.toString).getOrElse("Unavailable")",
-            'OPS_taxtype':   "@origin.map(_.toTaxType).getOrElse("Unavailable")"
+            'OPS_status':    "@requests.RequestSupport.isLoggedIn"
          }];
 </script>

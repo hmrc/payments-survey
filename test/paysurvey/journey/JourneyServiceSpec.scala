@@ -2,7 +2,6 @@ package paysurvey.journey
 
 import cats.implicits.catsSyntaxOptionId
 import paysurvey.journey.ssj.SsjService
-import paysurvey.origin.SurveyOrigin.Itsa
 import support.AppSpec
 import testdata.paysurvey.TdAll._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -13,41 +12,39 @@ class JourneyServiceSpec extends AppSpec {
 
   private val ssjService = app.injector.instanceOf[SsjService]
 
-  def startJourney(sessionId: SessionId) = {
-    implicit val hc: HeaderCarrier = HeaderCarrier(sessionId = sessionId.some)
+  def startJourney() = {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    ssjService.start(Itsa, ssjRequest)
+    ssjService.startJourney(ssjJourneyRequest)
   }
 
-  "return None when no journey for sessionId" in {
-    service.findLatestBySessionId(sessionId).futureValue shouldBe None
+  "return None when no journey for JourneyId" in {
+    service.findLatestByJourneyId(journeyId).futureValue shouldBe None
   }
 
-  "return journey for sessionId if there is a journey" in {
-    val ssjResponse = startJourney(sessionId).futureValue
+  "return journey for JourneyId if there is a journey" in {
+    val ssjResponse = startJourney().futureValue
 
     val j = {
-      val maybeJ = service.findLatestBySessionId(sessionId).futureValue
+      val maybeJ = service.findLatestByJourneyId(ssjResponse.journeyId).futureValue
       maybeJ.isDefined shouldBe true
       maybeJ.get
     }
 
     j.journeyId shouldBe ssjResponse.journeyId
-    j.sessionId shouldBe sessionId
   }
 
   "return latest journey for sessionId if there is multiple journeys" in {
-    val ssjResponse = startJourney(sessionId).futureValue
-    val ssjResponse2 = startJourney(sessionId).futureValue
+    val ssjResponse = startJourney().futureValue
+    val ssjResponse2 = startJourney().futureValue
 
     val j = {
-      val maybeJ = service.findLatestBySessionId(sessionId).futureValue
+      val maybeJ = service.findLatestByJourneyId(ssjResponse2.journeyId).futureValue
       maybeJ.isDefined shouldBe true
       maybeJ.get
     }
 
     j.journeyId shouldBe ssjResponse2.journeyId
-    j.sessionId shouldBe sessionId
   }
 
 }

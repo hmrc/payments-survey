@@ -19,16 +19,13 @@ package action
 import com.google.inject.Inject
 import paysurvey.journey.SurveyJourneyId
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
-import requests.{MaybeJourneyRequest, SurveyRequest}
+import requests.{SurveyRequest}
 
 final class Actions @Inject() (
     getJourneyActionFactory: GetJourneyActionFactory,
     actionBuilder:           DefaultActionBuilder
 ) {
   import getJourneyActionFactory._
-
-  def maybeSurveyAction: ActionBuilder[SurveyRequest, AnyContent] =
-    actionBuilder andThen maybeSurveyActionRefiner
 
   def maybeSurveyJourneyAction(id: SurveyJourneyId): ActionBuilder[SurveyRequest, AnyContent] =
     actionBuilder andThen maybeSurveyJourneyActionRefiner(id)

@@ -16,14 +16,12 @@
 
 @import config.AppConfig
 @import play.api.i18n.Messages
-@import requests.MaybeJourneyRequest
 @import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichFormErrors
-@import model.JourneyExt
 @import model.content.BannerTitle
 @import requests.SurveyRequest
-
+@import paysurvey.journey.SurveyJourneyId
 
 @this(
         main: views.html.main,
@@ -37,7 +35,7 @@
 )
 
 
-@(form: Form[model.SurveyForm],hrefBack:String,backLinkMessage:String)(implicit request: SurveyRequest[_], m: Messages)
+@(form: Form[model.SurveyForm],id: SurveyJourneyId,hrefBack:String,backLinkMessage:String)(implicit request: SurveyRequest[_], m: Messages)
 
 @main(
     pageTitle = Some(titleMaker("survey.heading", request.content.title, Some(form))),
@@ -57,7 +55,7 @@
         @errorSummary(ErrorSummary(errorList = form.errors.asTextErrorLinks, title = Text("There's a problem")))
     }
     <div class="sign-out-survey">
-    @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey) {
+    @formWithCsrf(action = controllers.routes.SurveyController.submitSurvey(id)) {
         <input type="hidden" name="journey" value="@request.audit.journey.map(_.toString).getOrElse("Unknown")" />
             <!-- 1. Were you able to do what you needed to do today? -->
         <div id="were-you-able-q" class="form-group payments">

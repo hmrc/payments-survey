@@ -20,9 +20,9 @@ import action.Actions
 import config.AppConfig
 import model.SurveyForm.surveyForm
 import model._
-import paysurvey.journey.{JourneyService, SurveyJourneyId}
+import paysurvey.journey.SurveyJourneyId
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import requests.RequestSupport
+import requests.{RequestSupport, SurveyRequest}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -36,7 +36,6 @@ final class SurveyController @Inject() (
     auditConnector: AuditConnector,
     cc:             MessagesControllerComponents,
     requestSupport: RequestSupport,
-    survey:         views.html.survey,
     surveyJourney:  views.html.survey_journey,
     surveyThanks:   views.html.survey_thanks
 )(implicit
@@ -46,22 +45,35 @@ final class SurveyController @Inject() (
 
   import requestSupport._
 
-  def survey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
-    Ok(survey(surveyForm))
+  //It will trigger the default SurveyJourney results
+  def surveyDefault: Action[AnyContent] = actions.maybeSurveyJourneyAction(SurveyJourneyId("1")) { implicit request =>
+    Ok(surveyJourney(
+      surveyForm,
+      SurveyJourneyId("1"),
+      request.returnHref,
+      request.returnMsg
+    ))
   }
-
   def surveyJourney(id: SurveyJourneyId): Action[AnyContent] = actions.maybeSurveyJourneyAction(id) { implicit request =>
 
     Ok(surveyJourney(
       surveyForm,
-      request.returnHref.getOrElse("https://www.gov.uk/government/organisations/hm-revenue-customs"),
-      request.returnMsg.getOrElse("Skip survey")
+      id,
+      request.returnHref,
+      request.returnMsg
     ))
   }
 
-  def submitSurvey: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
+  def submitSurvey(id: SurveyJourneyId): Action[AnyContent] = actions.maybeSurveyJourneyAction(id) { implicit request =>
     surveyForm.bindFromRequest().fold(
-      formWithErrors => { BadRequest(survey(formWithErrors)) },
+      formWithErrors => {
+        BadRequest(surveyJourney(
+          formWithErrors,
+          id,
+          request.returnHref,
+          request.returnMsg
+        ))
+      },
       data => {
         val surveyMap: Map[String, String] = Map(
           "wereYouAble" -> data.wereYouAble,
@@ -81,12 +93,12 @@ final class SurveyController @Inject() (
           )
         )
 
-        Redirect(controllers.routes.SurveyController.showSurveyThanks)
+        Redirect(controllers.routes.SurveyController.showSurveyThanks(id))
       }
     )
   }
 
-  def showSurveyThanks: Action[AnyContent] = actions.maybeSurveyAction { implicit request =>
-    Ok(surveyThanks())
+  def showSurveyThanks(id: SurveyJourneyId): Action[AnyContent] = actions.maybeSurveyJourneyAction(id) { implicit request =>
+    Ok(surveyThanks(id))
   }
 }
