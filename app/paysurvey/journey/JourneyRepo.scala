@@ -8,12 +8,14 @@ import repository.Repo
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import org.mongodb.scala.model.{IndexModel, IndexOptions}
+import org.mongodb.scala.model.Indexes.ascending
 
 @Singleton
 final class JourneyRepo @Inject() (reactiveMongoComponent: ReactiveMongoComponent)(implicit ec: ExecutionContext)
-  extends Repo[SurveyJourney, SurveyJourneyId]("journey", reactiveMongoComponent) {
+  extends Repo[SurveyJourney, SurveyJourneyId]("journey", reactiveMongoComponent, Seq(IndexModel(ascending("value"),IndexOptions().unique(true))) {
 
-  override def indexes: Seq[Index] = JourneyRepo.journeyIdIndexes
+  //override def indexes: Seq[Index] = JourneyRepo.journeyIdIndexes
 
   /**
    * Find the latest journey for given sessionId.

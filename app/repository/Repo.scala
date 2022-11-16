@@ -1,27 +1,35 @@
 package repository
 
 import play.api.libs.json.{Format, JsObject, Json, OFormat, OWrites}
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.api.commands.WriteResult
-import uk.gov.hmrc.mongo.ReactiveRepository
+import uk.gov.hmrc.mongo.MongoComponent
+import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+//import play.modules.reactivemongo.ReactiveMongoComponent
+//import reactivemongo.api.commands.WriteResult
+//import uk.gov.hmrc.mongo.ReactiveRepository
 import uk.gov.hmrc.play.http.logging.Mdc
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global // Somewhat doubtful about this
+import org.mongodb.scala.model.IndexModel
 
 abstract class Repo[A, ID](
-    collectionName:         String,
-    reactiveMongoComponent: ReactiveMongoComponent
+                            collectionName: String,
+                            mongo: MongoComponent,
+                            indexes: Seq[IndexModel]
 )(implicit
-    manifest: Manifest[A],
+  manifest: Manifest[A],
   mid:          Manifest[ID],
   domainFormat: OFormat[A],
   idFormat:     Format[ID]
 )
-  extends ReactiveRepository[A, ID](
-    collectionName,
-    reactiveMongoComponent.mongoConnector.db,
-    domainFormat,
-    idFormat
+  extends PlayMongoRepository[A](
+    mongoComponent = mongo,
+    collectionName = collectionName,
+    //mongo.mongoConnector.db,
+    domainFormat = domainFormat,
+    indexes = indexes,
+    replaceIndexes = false
+    //idFormat
   ) {
 
   private def idSelector(id: ID): JsObject = Json.obj("_id" -> id)
