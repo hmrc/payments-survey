@@ -10,10 +10,11 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import org.mongodb.scala.model.{IndexModel, IndexOptions}
 import org.mongodb.scala.model.Indexes.ascending
+import uk.gov.hmrc.mongo.MongoComponent
 
 @Singleton
-final class JourneyRepo @Inject() (reactiveMongoComponent: ReactiveMongoComponent)(implicit ec: ExecutionContext)
-  extends Repo[SurveyJourney, SurveyJourneyId]("journey", reactiveMongoComponent, Seq(IndexModel(ascending("value"),IndexOptions().unique(true))) {
+final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+  extends Repo("journey", mongo, Seq(IndexModel(ascending("journeyId"), IndexOptions().unique(true)))) {
 
   //override def indexes: Seq[Index] = JourneyRepo.journeyIdIndexes
 
@@ -21,20 +22,24 @@ final class JourneyRepo @Inject() (reactiveMongoComponent: ReactiveMongoComponen
    * Find the latest journey for given sessionId.
    */
 
-  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
-    collection
-      .find(Json.obj("journeyId" -> journeyId), None)
-      .sort(Json.obj("createdOn" -> -1))
-      .one(ReadPreference.primaryPreferred)(domainFormatImplicit, implicitly)
-  }
+  //  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
+  //    collection
+  //      .find(Json.obj("journeyId" -> journeyId), None)
+  //      .sort(Json.obj("createdOn" -> -1))
+  //      .one(ReadPreference.primaryPreferred)(domainFormatImplicit, implicitly)
+  //  }
+
+  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = ???
+
+  def insert(surveyJourney: SurveyJourney): Future[Unit] = ??? //Throw a new RuntimeException(writeResult.toString) if things go wrong
 
 }
 
-object JourneyRepo {
-  val journeyIdIndexes = Seq(
-    Index (
-      key  = Seq("journeyId" -> IndexType.Ascending),
-      name = Some("journeyId")
-    )
-  )
-}
+//object JourneyRepo {
+//  val journeyIdIndexes = Seq(
+//    Index(
+//      key  = Seq("journeyId" -> IndexType.Ascending),
+//      name = Some("journeyId")
+//    )
+//  )
+//}
