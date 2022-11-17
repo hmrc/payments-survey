@@ -8,8 +8,6 @@ object AppDependencies {
   val compile = Seq(
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-28" % "5.4.0",
     "uk.gov.hmrc"             %% "play-frontend-govuk"              % "0.74.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"               % "0.69.0-play-28",
-    "uk.gov.hmrc"             %% "simple-reactivemongo"             % "8.0.0-play-28",
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-play-28"               % "0.74.0",
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-28"          % "0.74.0",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
