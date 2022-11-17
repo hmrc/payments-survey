@@ -1,7 +1,5 @@
 package paysurvey.journey
 
-import repository.RepoResultChecker.WriteResultChecker
-
 import java.time.Clock
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

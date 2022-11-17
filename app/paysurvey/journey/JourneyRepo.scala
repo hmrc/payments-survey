@@ -1,15 +1,12 @@
 package paysurvey.journey
 
 import play.api.libs.json.Json
-import play.modules.reactivemongo.ReactiveMongoComponent
-import reactivemongo.api.ReadPreference
-import reactivemongo.api.indexes.{Index, IndexType}
 import repository.Repo
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import org.mongodb.scala.model.{IndexModel, IndexOptions}
-import org.mongodb.scala.model.Indexes.ascending
+import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions}
+import org.mongodb.scala.model.Indexes.{ascending, descending}
 import uk.gov.hmrc.mongo.MongoComponent
 
 @Singleton
@@ -29,10 +26,19 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
   //      .one(ReadPreference.primaryPreferred)(domainFormatImplicit, implicitly)
   //  }
 
-  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = ???
+  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
+    collection
+      .withReadPreference(com.mongodb.ReadPreference.primary())
+      .find(Filters.equal("journeyId", journeyId.value))
+      .sort(descending("createdOn"))
+      .toFuture().map(_.headOption)
+  }
 
-  def insert(surveyJourney: SurveyJourney): Future[Unit] = ??? //Throw a new RuntimeException(writeResult.toString) if things go wrong
-
+  def insert(surveyJourney: SurveyJourney): Future[Unit] = //Throw a new RuntimeException(writeResult.toString) if things go wrong
+    collection
+      .insertOne(surveyJourney)
+      .toFuture()
+      .map(result => if (result.wasAcknowledged()) () else throw new RuntimeException(result.toString))
 }
 
 //object JourneyRepo {
