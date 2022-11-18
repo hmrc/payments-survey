@@ -1,6 +1,5 @@
 package paysurvey.journey
 
-import play.api.libs.json.Json
 import repository.Repo
 
 import javax.inject.{Inject, Singleton}

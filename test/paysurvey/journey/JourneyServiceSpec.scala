@@ -1,6 +1,5 @@
 package paysurvey.journey
 
-import cats.implicits.catsSyntaxOptionId
 import paysurvey.journey.ssj.SsjService
 import support.AppSpec
 import testdata.paysurvey.TdAll._
