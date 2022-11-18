@@ -11,8 +11,7 @@ import uk.gov.hmrc.mongo.MongoComponent
 
 @Singleton
 final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends Repo("journey", mongo, Seq(IndexModel(ascending("journeyId"), IndexOptions().unique(true)))) {
-
+  extends Repo("journey", mongo, Seq(IndexModel(ascending("journeyId"), IndexOptions()))) {
   /**
    * Find the latest journey for given sessionId.
    */
