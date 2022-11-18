@@ -10,6 +10,5 @@ import javax.inject.Singleton
 
 @Singleton
 class JourneyIdGenerator {
-  //def nextJourneyId(): SurveyJourneyId = SurveyJourneyId(BSONObjectID.generate.stringify)
   def nextJourneyId(): SurveyJourneyId = SurveyJourneyId(new BsonObjectId().getValue.toString)
 }
