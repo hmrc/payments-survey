@@ -13,18 +13,9 @@ import uk.gov.hmrc.mongo.MongoComponent
 final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
   extends Repo("journey", mongo, Seq(IndexModel(ascending("journeyId"), IndexOptions().unique(true)))) {
 
-  //override def indexes: Seq[Index] = JourneyRepo.journeyIdIndexes
-
   /**
    * Find the latest journey for given sessionId.
    */
-
-  //  def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
-  //    collection
-  //      .find(Json.obj("journeyId" -> journeyId), None)
-  //      .sort(Json.obj("createdOn" -> -1))
-  //      .one(ReadPreference.primaryPreferred)(domainFormatImplicit, implicitly)
-  //  }
 
   def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
     collection
@@ -40,12 +31,3 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
       .toFuture()
       .map(result => if (result.wasAcknowledged()) () else throw new RuntimeException(result.toString))
 }
-
-//object JourneyRepo {
-//  val journeyIdIndexes = Seq(
-//    Index(
-//      key  = Seq("journeyId" -> IndexType.Ascending),
-//      name = Some("journeyId")
-//    )
-//  )
-//}

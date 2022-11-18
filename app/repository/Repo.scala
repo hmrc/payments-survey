@@ -39,30 +39,4 @@ abstract class Repo(
   implicit val f: OWrites[JsObject] = new OWrites[JsObject] {
     override def writes(o: JsObject): JsObject = o
   }
-
-  //  def upsert(id: ID, a: A)(implicit ec: ExecutionContext): Future[Unit] = Mdc.preservingMdc {
-  //    collection.update(ordered = false).one(
-  //      idSelector(id),
-  //      a,
-  //      upsert = true
-  //    ).checkResult
-  //  }
-
-  //  def upsert(id: ID, a: A)(implicit ec: ExecutionContext): Future[Unit] = Mdc.preservingMdc {
-  //    collection.updateOne(
-  //      idSelector(id) /*equals part*/,
-  //      ??? /*combination part*/,
-  //      UpdateOptions().upsert(true)
-  //    )
-  //  }
-  //
-  //  private implicit class WriteResultChecker(future: Future[WriteResult]) {
-  //    def checkResult(implicit ec: ExecutionContext): Future[Unit] = future.map { writeResult =>
-  //      if (hasAnyConcerns(writeResult)) throw new RuntimeException(writeResult.toString)
-  //      else ()
-  //    }
-  //  }
-  //
-  //  private def hasAnyConcerns(writeResult: WriteResult): Boolean = !writeResult.ok || writeResult.writeErrors.nonEmpty || writeResult.writeConcernError.isDefined
-
 }

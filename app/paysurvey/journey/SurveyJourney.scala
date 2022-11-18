@@ -17,7 +17,7 @@ final case class SurveyJourney
     origin:     String,
     returnMsg:  String,
     returnHref: String,
-    createdOn:  LocalDateTime
+    createdOn:  LocalDateTime //TODO: discuss
 )
 
 object SurveyJourney {
