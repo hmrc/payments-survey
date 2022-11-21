@@ -1,10 +1,8 @@
 package paysurvey.journey
 
-import payapi.corcommon.internal.ValueClassBinder.{bindableA, valueClassBinder}
-import payapi.corcommon.model.Origin
 import play.api.libs.functional.syntax.toInvariantFunctorOps
 import play.api.libs.json.Format
-import play.api.mvc.{PathBindable, QueryStringBindable}
+import play.api.mvc.PathBindable
 
 final case class SurveyJourneyId(value: String)
 

@@ -5,11 +5,10 @@
 
 package paysurvey.journey
 
-import reactivemongo.bson.BSONObjectID
-
+import org.bson.BsonObjectId
 import javax.inject.Singleton
 
 @Singleton
 class JourneyIdGenerator {
-  def nextJourneyId(): SurveyJourneyId = SurveyJourneyId(BSONObjectID.generate.stringify)
+  def nextJourneyId(): SurveyJourneyId = SurveyJourneyId(new BsonObjectId().getValue.toString)
 }

@@ -5,9 +5,9 @@ GET         /assets/*file                 controllers.Assets.versioned(path = "/
 
 GET         /survey                       controllers.SurveyController.surveyDefault
 GET         /v2/survey/:surveyId          controllers.SurveyController.surveyJourney(surveyId:SurveyJourneyId)
-POST        /v2/survey/:surveyId             controllers.SurveyController.submitSurvey(surveyId:SurveyJourneyId)
+POST        /v2/survey/:surveyId          controllers.SurveyController.submitSurvey(surveyId:SurveyJourneyId)
 
-POST         /journey/start              paysurvey.journey.ssj.SsjController.startJourney()
+POST         /journey/start               paysurvey.journey.ssj.SsjController.startJourney()
 
 GET         /survey-thanks/:surveyId      controllers.SurveyController.showSurveyThanks(surveyId:SurveyJourneyId)
 
