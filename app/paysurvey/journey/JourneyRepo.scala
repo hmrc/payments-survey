@@ -13,7 +13,8 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
     mongoComponent = mongo,
     collectionName = "journey",
     indexes        = Seq(IndexModel(ascending("journeyId"))),
-    domainFormat   = SurveyJourney.format
+    domainFormat   = SurveyJourney.format,
+    replaceIndexes = true //Todo: discuss
   ) {
 
   /**
