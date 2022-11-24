@@ -16,7 +16,6 @@ object AppDependencies {
 
   val test = Seq(
     "org.scalatest"           %% "scalatest"                                  % "3.2.8"       % Test,
-    "uk.gov.hmrc"             %% "reactivemongo-test"                         % "5.0.0-play-28" % Test,
     "com.typesafe.play"       %% "play-test"                                  % current       % Test,
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-28"                    % "0.74.0"      % Test,
     "org.pegdown"             %  "pegdown"                                    % "1.6.0"       % Test,
