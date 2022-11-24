@@ -14,7 +14,7 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
     collectionName = "journey",
     indexes        = Seq(IndexModel(ascending("journeyId"))),
     domainFormat   = SurveyJourney.format,
-    replaceIndexes = true //Todo: discuss
+    replaceIndexes = true
   ) {
 
   /**
