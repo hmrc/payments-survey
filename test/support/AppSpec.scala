@@ -40,7 +40,7 @@ trait AppSpec
   with WireMockSupport
   with ScalaFutures
   with AppendedClues
-  with MongoSupport
+  with MongoTestSupport
   with OptionValues {
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
 
