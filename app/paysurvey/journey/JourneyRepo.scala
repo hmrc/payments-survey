@@ -12,7 +12,7 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
   extends PlayMongoRepository[SurveyJourney](
     mongoComponent = mongo,
     collectionName = "journey",
-    indexes        = Seq(IndexModel(ascending("journeyId"))),
+    indexes        = Seq(IndexModel(ascending("journeyId"), IndexOptions().name("journeyId"))),
     domainFormat   = SurveyJourney.format,
     replaceIndexes = true
   ) {
