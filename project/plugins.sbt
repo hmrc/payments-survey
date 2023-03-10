@@ -5,7 +5,7 @@ resolvers += Resolver.url("HMRC-open-artefacts-ivy2", url("https://open.artefact
 
 addSbtPlugin("com.typesafe.play" %% "sbt-plugin"            % "2.8.8")
 
-addSbtPlugin("org.irundaia.sbt"  %  "sbt-sassify"           % "1.5.1")
+addSbtPlugin("io.github.irundaia" %  "sbt-sassify"           % "1.5.2")
 
 addSbtPlugin("org.scalariform"   %  "sbt-scalariform"       % "1.8.3")
 
