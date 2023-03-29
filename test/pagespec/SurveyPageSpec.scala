@@ -43,7 +43,7 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
 
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    cssSelector(".govuk-header__link--service-name")
+    cssSelector(".hmrc-header__service-name--linked")
       .element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
 
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
@@ -90,9 +90,9 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
   }
 
   "should show no errors if the user hasn't clicked submit" in new TestWithJourney {
-
     goTo(pagePath(ssjResponse.journeyId.value))
-    webDriver.findElementsById("error-summary-title").isEmpty shouldBe true
+
+    webDriver.findElementsByClassName("govuk-error-summary__title").isEmpty shouldBe true
     webDriver.findElementsById("wereYouAble-error").isEmpty shouldBe true
     webDriver.findElementsById("howEasy-error").isEmpty shouldBe true
     webDriver.findElementsById("overallRate-error").isEmpty shouldBe true
@@ -102,7 +102,7 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
     goTo(pagePath(ssjResponse.journeyId.value))
     click.on("continue-button")
     currentUrl shouldBe pagePath(ssjResponse.journeyId.value)
-    id("error-summary-title").element.text shouldBe "There's a problem"
+    cssSelector(".govuk-error-summary__title").element.text shouldBe "There's a problem"
     id("wereYouAble-error").element.text shouldBe "Error: This field is required"
     id("howEasy-error").element.text shouldBe "Error: This field is required"
     id("overallRate-error").element.text shouldBe "Error: This field is required"
@@ -125,5 +125,4 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
     click.on(xpath("/html/body/div/div/nav/ul/li[1]/a/span[2]"))
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
   }
-
 }

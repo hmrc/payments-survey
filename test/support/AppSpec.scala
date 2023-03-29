@@ -21,6 +21,7 @@ import com.typesafe.config.Config
 
 import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.scalatest.{AppendedClues, OptionValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -42,7 +43,7 @@ trait AppSpec
   with AppendedClues
   with MongoTestSupport
   with OptionValues {
-  implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
+  implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(BrowserVersion.CHROME)
 
   protected def configMap: Map[String, Any] =
     Map[String, Any](

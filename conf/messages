@@ -1,3 +1,4 @@
+service.name = payments-survey
 
 header.default = Pay your tax
 
@@ -16,7 +17,7 @@ error.pageNotFound.heading = This page can’t be found
 error.pageNotFound.message = Please check that you have entered the correct web address.
 
 survey.heading = How was our payment service?
-survey.instruction.text.1 = We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. 
+survey.instruction.text.1 = We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age.
 survey.instruction.text.2.1 = See the
 survey.privacy.notice.linktext = HMRC Privacy Notice
 survey.instruction.text.2.2 = for details about how we collect, use, protect and secure your personal information.
