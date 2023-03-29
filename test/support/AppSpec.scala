@@ -21,6 +21,7 @@ import com.typesafe.config.Config
 
 import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.scalatest.{AppendedClues, OptionValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
