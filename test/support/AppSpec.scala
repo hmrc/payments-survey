@@ -43,7 +43,7 @@ trait AppSpec
   with AppendedClues
   with MongoTestSupport
   with OptionValues {
-  implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(true)
+  implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(BrowserVersion.CHROME)
 
   protected def configMap: Map[String, Any] =
     Map[String, Any](
