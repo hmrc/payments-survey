@@ -2,18 +2,18 @@ import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 import scalariform.formatter.preferences.{AlignArguments, AlignParameters, AlignSingleLineCaseStatements, AllowParamGroupsOnNewlines, CompactControlReadability, CompactStringConcatenation, DanglingCloseParenthesis, DoubleIndentConstructorArguments, DoubleIndentMethodDeclaration, FirstArgumentOnNewline, FirstParameterOnNewline, Force, FormatXml, IndentLocalDefs, IndentPackageBlocks, IndentSpaces, IndentWithTabs, MultilineScaladocCommentsStartOnFirstLine, NewlineAtEndOfFile, PlaceScaladocAsterisksBeneathSecondAsterisk, PreserveSpaceBeforeArguments, RewriteArrowSymbols, SpaceBeforeColon, SpaceBeforeContextColon, SpaceInsideBrackets, SpaceInsideParentheses, SpacesAroundMultiImports, SpacesWithinPatternBinders}
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.ShellPrompt
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 import wartremover.Wart
 
 val appName = "payments-survey"
-scalaVersion := "2.12.12"
+val scalaV = "2.13.8"
+scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtGitVersioning)
+  .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
-  .settings(commonSettings: _*)
   .settings(
     PlayKeys.playDefaultPort := 9966,
     routesImport ++= Seq(
@@ -22,7 +22,6 @@ lazy val microservice = Project(appName, file("."))
       "payapi.corcommon.model._",
       "langswitch.Language"
     ))
-  .settings(publishingSettings: _*)
   .settings(
     commands += Command.command("runTestOnly") { state =>
       state.globalLogging.full.info("running play using 'testOnlyDoNotUseInAppConf' routes...")
@@ -35,21 +34,20 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     //For some reason SBT was adding the stray string "utf8" to the compiler arguments and it was causing the 'doc' task to fail
     //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
-    scalacOptions in Compile -= "utf8")
+    Compile / scalacOptions -= "utf8"
+  )
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
 
 lazy val scalaCompilerOptions = Seq(
   "-Xfatal-warnings",
   "-Ywarn-unused:-imports,-patvars,-privates,-locals,-explicits,-implicits,_",
   "-Xlint:-missing-interpolator,_",
-  "-Yno-adapted-args",
   "-Ywarn-value-discard",
   "-Ywarn-dead-code",
   "-deprecation",
   "-feature",
   "-unchecked",
-  "-language:implicitConversions",
-  "-Ypartial-unification"
+  "-language:implicitConversions"
 )
 
 lazy val scalariformSettings: Def.SettingsDefinition = {
@@ -104,14 +102,13 @@ lazy val wartRemoverError = {
     Wart.OptionPartial,
     Wart.Recursion,
     Wart.Return,
-    Wart.TraversableOps,
     Wart.TryPartial,
     Wart.Var,
     Wart.While,
     Wart.FinalCaseClass,
     Wart.StringPlusAny
   )
-  wartremoverErrors in(Compile, compile) ++= errorWarts
+  Compile / compile / wartremoverErrors ++= errorWarts
 }
 
 lazy val scoverageSettings = {
@@ -120,37 +117,38 @@ lazy val scoverageSettings = {
     // Semicolon-separated list of regexs matching classes to exclude
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*BuildInfo.*;Reverse.*;app.Routes.*;prod.*;testOnlyDoNotUseInProd.*;manualdihealth.*;forms.*;config.*;",
     ScoverageKeys.coverageExcludedFiles := ".*microserviceGlobal.*;.*microserviceWiring.*;.*ApplicationLoader.*;.*ApplicationConfig.*;.*package.*;.*Routes.*;.*TestOnlyController.*;.*WebService.*",
-    ScoverageKeys.coverageMinimum := 80,
+    ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true
   )
 }
 
 lazy val commonSettings = Seq(
+  scalaVersion := scalaV,
   majorVersion := 0,
   //For some reason SBT was adding the stray string "-encoding" to the compiler arguments and it was causing the build to fail
   //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
-  scalacOptions in Compile -= "-encoding",
+  Compile / scalacOptions -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
-  resolvers ++= Seq(
-    "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactory/hmrc-releases/",
-    "third-party-maven-releases" at "https://artefacts.tax.service.gov.uk/artifactory/third-party-maven-releases/",
-    Resolver.bintrayRepo("hmrc", "releases"),
-    Resolver.jcenterRepo,
-    "third-party-maven-releases" at "https://artefacts.tax.service.gov.uk/artifactory/third-party-maven-releases/"
-  ),
-  evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
+  resolvers ++= Seq(Resolver.jcenterRepo),
   wartremoverExcluded ++=
     (baseDirectory.value / "it").get ++
       (baseDirectory.value / "test").get ++
       Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala") ++
-      routes.in(Compile).value,
+      (Compile / routes).value,
   scalariformSettings,
-  shellPrompt := ShellPrompt(version.value)
+  shellPrompt := ShellPrompt(version.value),
+  libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 )
   .++(wartRemoverError)
   .++(Seq(
-    wartremoverErrors in(Test, compile) --= Seq(Wart.Any, Wart.Equals, Wart.Null, Wart.NonUnitStatements, Wart.PublicInference)
+    Test / compile / wartremoverErrors --= Seq(
+      Wart.Any,
+      Wart.Equals,
+      Wart.Null,
+      Wart.NonUnitStatements,
+      Wart.PublicInference
+    )
   ))
   .++(scoverageSettings)
   .++(uk.gov.hmrc.DefaultBuildSettings.defaultSettings())

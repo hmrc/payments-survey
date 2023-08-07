@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
     Logger(this.getClass).info("Stopping wire mock server - done")
   }
 
-  override def beforeEach() {
+  override def beforeEach() = {
     Logger(this.getClass).info("Resetting wire mock server ...")
     WireMock.reset()
     Logger(this.getClass).info("Resetting wire mock server - done")
