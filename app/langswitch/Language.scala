@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +46,10 @@ object Language {
   }
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
 object Languages extends Enum[Language] {
 
-  val availableLanguages = List(English, Welsh)
+  val availableLanguages: List[Language] = List[Language](English, Welsh)
 
   override def values: immutable.IndexedSeq[Language] = findValues
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package util.enumformat
 import enumeratum.{Enum, EnumEntry}
 import play.api.libs.json._
 
+@SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
 object EnumFormat {
   def apply[T <: EnumEntry](e: Enum[T]): Format[T] = Format(
     Reads {
