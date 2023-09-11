@@ -36,6 +36,7 @@ lazy val microservice = Project(appName, file("."))
     //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
     Compile / scalacOptions -= "utf8"
   )
+  .settings(Compile / doc / scalacOptions := Seq() ) //this will allow to have warnings in `doc` task)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
 
 lazy val scalaCompilerOptions = Seq(
