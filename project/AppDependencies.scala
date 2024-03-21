@@ -2,7 +2,7 @@ import play.core.PlayVersion.current
 import sbt._
 
 object AppDependencies {
-  private val payApiVersion = "1.172.0"
+  private val payApiVersion = "1.213.0"
   private val bootstrapPlay28Version = "7.20.0"
 
   val compile = Seq(
