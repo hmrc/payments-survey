@@ -18,9 +18,8 @@ package paysurvey.journey.ssj
 
 import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
-import paysurvey.journey.{SurveyJourneyId, SurveyJourney}
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.SessionId
+import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDateTime
 
@@ -30,7 +29,7 @@ final case class SsjRequest
 )
 
 object SsjRequest {
-  implicit val format = Json.format[SsjRequest]
+  implicit val format: OFormat[SsjRequest] = Json.format[SsjRequest]
 }
 
 final case class SsjJourneyRequest
@@ -62,6 +61,6 @@ final case class SsjJourneyRequest
 }
 
 object SsjJourneyRequest {
-  implicit val format = Json.format[SsjJourneyRequest]
+  implicit val format: OFormat[SsjJourneyRequest] = Json.format[SsjJourneyRequest]
 }
 

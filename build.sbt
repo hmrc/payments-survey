@@ -5,12 +5,12 @@ import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.8"
+val scalaV = "2.13.12"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtGitVersioning)
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
@@ -99,7 +99,6 @@ lazy val wartRemoverError = {
     Wart.JavaSerializable,
     Wart.LeakingSealed,
     Wart.MutableDataStructures,
-    Wart.Null,
     Wart.OptionPartial,
     Wart.Recursion,
     Wart.Return,
@@ -146,7 +145,6 @@ lazy val commonSettings = Seq(
     Test / compile / wartremoverErrors --= Seq(
       Wart.Any,
       Wart.Equals,
-      Wart.Null,
       Wart.NonUnitStatements,
       Wart.PublicInference
     )

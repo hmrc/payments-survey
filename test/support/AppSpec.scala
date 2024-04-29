@@ -16,7 +16,7 @@
 
 package support
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.typesafe.config.Config
 
 import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
@@ -25,9 +25,9 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.scalatest.{AppendedClues, OptionValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatestplus.play.guice.{GuiceOneAppPerSuite, GuiceOneServerPerSuite}
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
-import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.http.hooks.HttpHook
@@ -61,10 +61,10 @@ trait AppSpec
     override def wsClient: WSClient = app.injector.instanceOf[WSClient]
     override val hooks: Seq[HttpHook] = Nil
     override val configuration: Config = app.configuration.underlying
-    override protected def actorSystem = app.injector.instanceOf(classOf[ActorSystem])
+    override protected def actorSystem: ActorSystem = app.injector.instanceOf(classOf[ActorSystem])
   }
 
-  override implicit val patienceConfig = PatienceConfig(
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(
     timeout  = scaled(Span(3, Seconds)),
     interval = scaled(Span(300, Millis))
   )

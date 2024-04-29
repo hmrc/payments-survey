@@ -16,7 +16,7 @@
 
 package paysurvey.audit
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Request
 import requests.RequestSupport
 
@@ -27,7 +27,7 @@ final case class AuditOptions
     orderId:   Option[String] = None,
     liability: Option[String] = None
 ) {
-  lazy val toMap = {
+  lazy val toMap: Map[String, String] = {
     Map(
       "userType" -> userType,
       "journey" -> journey.getOrElse("Unknown"),
@@ -39,9 +39,9 @@ final case class AuditOptions
 }
 
 object AuditOptions {
-  implicit val format = Json.format[AuditOptions]
+  implicit val format: OFormat[AuditOptions] = Json.format[AuditOptions]
 
-  def default(implicit r: Request[_]) = AuditOptions(
+  def default(implicit r: Request[_]): AuditOptions = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
   )
 }
