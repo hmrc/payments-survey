@@ -16,27 +16,24 @@
 
 package pagespec
 
+import org.openqa.selenium.By
 import org.scalatestplus.selenium.WebBrowser
-import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
-import payapi.corcommon.model.JourneyId
-import paysurvey.journey.ssj.{SsjJourneyRequest, SsjResponse, SsjService}
-import play.api.test.FakeRequest
-import support.{AppSpec, PageSpec}
-import testdata.{TdAll, TdJourney}
+import paysurvey.journey.ssj.{SsjJourneyRequest, SsjResponse}
+import support.AppSpec
 import testdata.paysurvey.TdAll.ssjJourneyRequest
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, SessionKeys}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 class SurveyPageSpec extends AppSpec with WebBrowser {
   def baseUrl = s"http://localhost:$port"
-  def pagePath(id: String) = baseUrl + s"/payments-survey/v2/survey/$id"
+  def pagePath(id: String): String = baseUrl + s"/payments-survey/v2/survey/$id"
   def surveyThanksPath(id: String) = s"/payments-survey/survey-thanks/$id"
   protected trait TestWithJourney {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val ssjUrl = s"http://localhost:${port}/payments-survey/journey/start"
+    val ssjUrl = s"http://localhost:$port/payments-survey/journey/start"
 
     val response: HttpResponse = testHttpClient.POST[SsjJourneyRequest, HttpResponse](ssjUrl, ssjJourneyRequest).futureValue
-    val ssjResponse = response.json.as[SsjResponse]
+    val ssjResponse: SsjResponse = response.json.as[SsjResponse]
 
   }
   "should render correctly" in new TestWithJourney {
@@ -92,10 +89,10 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
   "should show no errors if the user hasn't clicked submit" in new TestWithJourney {
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    webDriver.findElementsByClassName("govuk-error-summary__title").isEmpty shouldBe true
-    webDriver.findElementsById("wereYouAble-error").isEmpty shouldBe true
-    webDriver.findElementsById("howEasy-error").isEmpty shouldBe true
-    webDriver.findElementsById("overallRate-error").isEmpty shouldBe true
+    webDriver.findElements(By.id("govuk-error-summary__title")).isEmpty shouldBe true
+    webDriver.findElements(By.id("wereYouAble-error")).isEmpty shouldBe true
+    webDriver.findElements(By.id("howEasy-error")).isEmpty shouldBe true
+    webDriver.findElements(By.id("overallRate-error")).isEmpty shouldBe true
   }
 
   "should show an error if the user tries to submit without filling in any fields" in new TestWithJourney {

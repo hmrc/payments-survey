@@ -19,16 +19,15 @@ package testdata.paysurvey
 import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
 import paysurvey.journey.ssj.{SsjJourneyRequest, SsjRequest}
-
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import requests.SurveyRequest
-import uk.gov.hmrc.http.SessionKeys
 
 trait TdSsjRequest extends TdBase {
 
-  implicit val r = FakeRequest("GET", "/")
+  implicit val r: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/")
 
-  val auditOptions = AuditOptions(
+  val auditOptions: AuditOptions = AuditOptions(
     userType = "IsLoggedIn"
   )
 

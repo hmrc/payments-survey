@@ -16,10 +16,12 @@
 
 package paysurvey.journey
 
-import paysurvey.journey.ssj.SsjService
+import paysurvey.journey.ssj.{SsjResponse, SsjService}
 import support.AppSpec
 import testdata.paysurvey.TdAll._
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 class JourneyServiceSpec extends AppSpec {
 
@@ -27,7 +29,7 @@ class JourneyServiceSpec extends AppSpec {
 
   private val ssjService = app.injector.instanceOf[SsjService]
 
-  def startJourney() = {
+  def startJourney(): Future[SsjResponse] = {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     ssjService.startJourney(ssjJourneyRequest)
