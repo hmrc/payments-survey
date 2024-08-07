@@ -27,5 +27,6 @@ final case class SsjResponse
 )
 
 object SsjResponse {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: Format[SsjResponse] = Json.format
 }

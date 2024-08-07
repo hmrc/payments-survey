@@ -64,7 +64,7 @@ trait AppSpec
     override protected def actorSystem = app.injector.instanceOf(classOf[ActorSystem])
   }
 
-  override implicit val patienceConfig = PatienceConfig(
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(
     timeout  = scaled(Span(3, Seconds)),
     interval = scaled(Span(300, Millis))
   )

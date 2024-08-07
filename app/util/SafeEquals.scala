@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package util.enumformat
+package util
 
-import enumeratum.{Enum, EnumEntry}
-import play.api.libs.json._
+/**
+ * Simple safe equals so we don't have to import cats
+ */
+object SafeEquals {
 
-@SuppressWarnings(Array("org.wartremover.warts.JavaSerializable"))
-object EnumFormat {
-  def apply[T <: EnumEntry](e: Enum[T]): Format[T] = Format(
-    Reads {
-      case JsString(value) => e.withNameOption(value).map[JsResult[T]](JsSuccess(_)).getOrElse(JsError(s"Unknown ${e.getClass.getSimpleName} value: $value"))
-      case _               => JsError("Can only parse String")
-    },
-    Writes(v => JsString(v.entryName))
-  )
+  @SuppressWarnings(Array("org.wartremover.warts.Equals"))
+  implicit class EqualsOps[A](v: A) {
+    def ===(other: A): Boolean = v == other
+    def =!=(other: A): Boolean = v != other
+  }
 }

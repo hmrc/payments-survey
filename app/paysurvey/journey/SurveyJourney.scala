@@ -37,5 +37,6 @@ final case class SurveyJourney
 )
 
 object SurveyJourney {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[SurveyJourney] = Json.format[SurveyJourney]
 }

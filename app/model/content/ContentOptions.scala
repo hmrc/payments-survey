@@ -27,6 +27,7 @@ final case class ContentOptions(
 )
 
 object ContentOptions {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[ContentOptions] = Json.format[ContentOptions]
 
   val default: ContentOptions = ContentOptions(
@@ -54,6 +55,7 @@ final case class BannerTitle(englishValue: String, welshValue: Option[String] = 
 }
 
 object BannerTitle {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[BannerTitle] = Json.format[BannerTitle]
   val default: BannerTitle = BannerTitle(englishValue = "Pay your tax", welshValue = Option("Talu treth"))
 }

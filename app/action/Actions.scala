@@ -27,6 +27,7 @@ final class Actions @Inject() (
 ) {
   import getJourneyActionFactory._
 
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   def maybeSurveyJourneyAction(id: SurveyJourneyId): ActionBuilder[SurveyRequest, AnyContent] =
     actionBuilder andThen maybeSurveyJourneyActionRefiner(id)
 
