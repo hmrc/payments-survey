@@ -15,7 +15,6 @@ object AppDependencies {
     "org.scalatest"           %% "scalatest"                                  % "3.2.16"             % Test,
     "org.scalatestplus.play"  %% "scalatestplus-play"                         % "6.0.1"              % Test,
     "org.pegdown"             %  "pegdown"                                    % "1.6.0"              % Test,
-    //"com.github.tomakehurst"  %  "wiremock-standalone"                        % "2.27.2"             % Test,
     "com.github.tomakehurst" %   "wiremock"                                   % "3.0.0-beta-7"       % Test,
     "com.vladsch.flexmark"    %  "flexmark-all"                               % "0.64.6"             % Test,
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey-test-data" % payApiVersion        % Test,
