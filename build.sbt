@@ -5,7 +5,7 @@ import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.8"
+val scalaV = "2.13.12"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
@@ -83,34 +83,35 @@ lazy val scalariformSettings: Def.SettingsDefinition = {
     .setPreference(SpacesWithinPatternBinders, true)
 }
 
-lazy val wartRemoverError = {
-  // Error
-  val errorWarts: Seq[Wart] = Seq(
-    Wart.JavaSerializable,
-    Wart.AsInstanceOf,
-    Wart.IsInstanceOf,
-    Wart.ArrayEquals,
-    Wart.AnyVal,
-    Wart.EitherProjectionPartial,
-    Wart.Enumeration,
-    Wart.ExplicitImplicitTypes,
-    Wart.FinalVal,
-    Wart.JavaConversions,
-    Wart.JavaSerializable,
-    Wart.LeakingSealed,
-    Wart.MutableDataStructures,
-    Wart.Null,
-    Wart.OptionPartial,
-    Wart.Recursion,
-    Wart.Return,
-    Wart.TryPartial,
-    Wart.Var,
-    Wart.While,
-    Wart.FinalCaseClass,
-    Wart.StringPlusAny
+lazy val wartRemoverSettings =
+  Seq(
+    (Compile / compile / wartremoverErrors) ++= Warts.allBut(
+      Wart.DefaultArguments,
+      Wart.ImplicitConversion,
+      Wart.ImplicitParameter,
+      Wart.Nothing,
+      Wart.Null,
+      Wart.Overloading,
+      Wart.SizeIs,
+      Wart.SortedMaxMinOption,
+      Wart.Throw,
+      Wart.ToString
+    ),
+    Test / compile / wartremoverErrors --= Seq(
+      Wart.Any,
+      Wart.Equals,
+      Wart.GlobalExecutionContext,
+      Wart.Null,
+      Wart.NonUnitStatements,
+      Wart.PublicInference,
+      Wart.SeqApply
+    ),
+    wartremoverExcluded ++= (
+      (baseDirectory.value ** "*.sc").get ++
+        (Compile / routes).value
+      ),
+    Compile / doc / wartremoverErrors := Seq()
   )
-  Compile / compile / wartremoverErrors ++= errorWarts
-}
 
 lazy val scoverageSettings = {
   import scoverage.ScoverageKeys
@@ -141,7 +142,7 @@ lazy val commonSettings = Seq(
   shellPrompt := ShellPrompt(version.value),
   libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 )
-  .++(wartRemoverError)
+  .++(wartRemoverSettings)
   .++(Seq(
     Test / compile / wartremoverErrors --= Seq(
       Wart.Any,

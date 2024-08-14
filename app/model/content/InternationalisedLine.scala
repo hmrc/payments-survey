@@ -21,11 +21,13 @@ import play.api.libs.json.{Json, OFormat}
 final case class InternationalisedLine(english: Line, welsh: Option[Line] = None)
 
 object InternationalisedLine {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[InternationalisedLine] = Json.format[InternationalisedLine]
 }
 
 final case class Line(label: String, value: String)
 
 object Line {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[Line] = Json.format[Line]
 }

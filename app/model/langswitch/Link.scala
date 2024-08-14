@@ -36,6 +36,7 @@ package model.langswitch
 
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
+import util.SafeEquals._
 
 trait Target {
   protected val targetName: String
@@ -84,7 +85,7 @@ final case class Link(
   private def cssAttr = cssClasses.map(attr("class", _)).getOrElse("")
   private def dataAttr = buildAttributeString(dataAttributes)
   private def hiddenSpanFor(txt: Option[String]) = txt.map(t => s"""<span class="visuallyhidden">${Messages(t)}</span>""").getOrElse("")
-  private def relAttr = if (target == NewWindow) attr("rel", "external noopener noreferrer") else ""
+  private def relAttr = if (target === NewWindow) attr("rel", "external noopener noreferrer") else ""
 
   def buildAttributeString(attributes: Option[Map[String, String]]): String = {
     attributes match {

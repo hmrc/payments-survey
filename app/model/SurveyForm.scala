@@ -23,6 +23,7 @@ import play.api.libs.json.{Format, Json}
 final case class SurveyForm(wereYouAble: String, howEasy: String, overallRate: String, journey: String, comments: Option[String])
 
 object SurveyForm {
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: Format[SurveyForm] = Json.format[SurveyForm]
 
   val surveyForm: Form[SurveyForm] = Form(

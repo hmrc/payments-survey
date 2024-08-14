@@ -16,6 +16,7 @@
 
 package pagespec
 
+import org.openqa.selenium.By
 import org.scalatestplus.selenium.WebBrowser
 import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
 import payapi.corcommon.model.JourneyId
@@ -92,10 +93,10 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
   "should show no errors if the user hasn't clicked submit" in new TestWithJourney {
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    webDriver.findElementsByClassName("govuk-error-summary__title").isEmpty shouldBe true
-    webDriver.findElementsById("wereYouAble-error").isEmpty shouldBe true
-    webDriver.findElementsById("howEasy-error").isEmpty shouldBe true
-    webDriver.findElementsById("overallRate-error").isEmpty shouldBe true
+    webDriver.findElements(By.className("govuk-error-summary__title")).isEmpty shouldBe true
+    webDriver.findElements(By.id("wereYouAble-error")).isEmpty shouldBe true
+    webDriver.findElements(By.id("howEasy-error")).isEmpty shouldBe true
+    webDriver.findElements(By.id("overallRate-error")).isEmpty shouldBe true
   }
 
   "should show an error if the user tries to submit without filling in any fields" in new TestWithJourney {

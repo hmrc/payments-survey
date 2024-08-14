@@ -24,6 +24,7 @@ import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 @Singleton
+@SuppressWarnings(Array("org.wartremover.warts.Any"))
 final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
   extends PlayMongoRepository[SurveyJourney](
     mongoComponent = mongo,

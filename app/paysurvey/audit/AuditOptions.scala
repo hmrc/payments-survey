@@ -16,7 +16,7 @@
 
 package paysurvey.audit
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Request
 import requests.RequestSupport
 
@@ -39,9 +39,10 @@ final case class AuditOptions
 }
 
 object AuditOptions {
-  implicit val format = Json.format[AuditOptions]
+  @SuppressWarnings(Array("org.wartremover.warts.Any"))
+  implicit val format: OFormat[AuditOptions] = Json.format[AuditOptions]
 
-  def default(implicit r: Request[_]) = AuditOptions(
+  def default(implicit r: Request[_]): AuditOptions = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
   )
 }
