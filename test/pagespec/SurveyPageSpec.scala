@@ -16,17 +16,15 @@
 
 package pagespec
 
+import play.api.libs.ws.writeableOf_JsValue
 import org.openqa.selenium.By
 import org.scalatestplus.selenium.WebBrowser
-import payapi.cardpaymentjourney.model.journey.{Journey, JsdPfSa}
-import payapi.corcommon.model.JourneyId
-import paysurvey.journey.ssj.{SsjJourneyRequest, SsjResponse, SsjService}
-import play.api.test.FakeRequest
-import support.{AppSpec, PageSpec}
-import testdata.{TdAll, TdJourney}
+import paysurvey.journey.ssj.SsjResponse
+import play.api.libs.json.Json
+import support.AppSpec
 import testdata.paysurvey.TdAll.ssjJourneyRequest
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, SessionKeys}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 class SurveyPageSpec extends AppSpec with WebBrowser {
   def baseUrl = s"http://localhost:$port"
@@ -34,9 +32,14 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
   def surveyThanksPath(id: String) = s"/payments-survey/survey-thanks/$id"
   protected trait TestWithJourney {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val ssjUrl = s"http://localhost:${port}/payments-survey/journey/start"
+    val ssjUrl = url"http://localhost:${port}/payments-survey/journey/start"
 
-    val response: HttpResponse = testHttpClient.POST[SsjJourneyRequest, HttpResponse](ssjUrl, ssjJourneyRequest).futureValue
+    val response: HttpResponse =
+      testHttpClient
+        .post(ssjUrl)
+        .withBody(Json.toJson(ssjJourneyRequest))
+        .execute[HttpResponse]
+        .futureValue
     val ssjResponse = response.json.as[SsjResponse]
 
   }
@@ -44,7 +47,7 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
 
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    cssSelector(".hmrc-header__service-name--linked")
+    cssSelector(".govuk-header__service-name")
       .element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
 
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"

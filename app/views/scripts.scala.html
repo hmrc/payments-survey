@@ -20,7 +20,7 @@
         dataLayer: views.html.analytics.data_layer
 )
 
-@()(implicit request: play.api.mvc.Request[_], messages: Messages)
+@()(implicit rh: RequestHeader, messages: Messages)
 
 @hmrcScripts()
 

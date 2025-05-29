@@ -39,7 +39,7 @@
         pageTitle: Option[String] = None,
         navTitle: Option[String],
         backUrl: Option[String] = None
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+)(contentBlock: Html)(implicit rh: RequestHeader, messages: Messages)
 
 @head = {
 @hmrcTrackingConsentSnippet()

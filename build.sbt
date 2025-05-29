@@ -5,7 +5,7 @@ import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.12"
+val scalaV = "2.13.16"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
@@ -132,7 +132,6 @@ lazy val commonSettings = Seq(
   //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
   Compile / scalacOptions -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
-  resolvers ++= Seq(Resolver.jcenterRepo),
   wartremoverExcluded ++=
     (baseDirectory.value / "it").get ++
       (baseDirectory.value / "test").get ++
@@ -153,5 +152,4 @@ lazy val commonSettings = Seq(
     )
   ))
   .++(scoverageSettings)
-  .++(uk.gov.hmrc.DefaultBuildSettings.defaultSettings())
 
