@@ -18,7 +18,7 @@
 
 @this(main: views.html.main)(implicit appConfig: AppConfig)
 
-@(title: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+@(title: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages)
 
 @main(
  pageTitle = Some(title),

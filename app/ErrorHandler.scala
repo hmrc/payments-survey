@@ -20,6 +20,7 @@ import play.api.mvc._
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
 
 @Singleton
@@ -29,21 +30,27 @@ class ErrorHandler @Inject() (
     error404:                 views.html.error.error_404,
     error5xx:                 views.html.error.error_5xx,
     fallbackClientError:      views.html.error.error_fallback
-) extends FrontendErrorHandler {
+)(implicit val ec: ExecutionContext) extends FrontendErrorHandler {
 
-  override def notFoundTemplate(implicit request: Request[_]): HtmlFormat.Appendable = error404()
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] =
+    Future.successful(error404())
 
-  override def internalServerErrorTemplate(implicit request: Request[_]): Html = error5xx()
+  override def internalServerErrorTemplate(implicit rh: RequestHeader): Future[Html] =
+    Future.successful(error5xx())
 
-  override def fallbackClientErrorTemplate(implicit request: Request[_]): Html = fallbackClientError()
+  override def fallbackClientErrorTemplate(implicit rh: RequestHeader): Future[Html] =
+    Future.successful(fallbackClientError())
 
   override def standardErrorTemplate(
       pageTitle: String,
       heading:   String,
       message:   String
-  )(implicit request: Request[_]): Html = errorTemplate(
-    pageTitle,
-    heading,
-    message
-  )
+  )(implicit request: RequestHeader): Future[Html] =
+    Future.successful(
+      errorTemplate(
+        pageTitle,
+        heading,
+        message
+      )
+    )
 }

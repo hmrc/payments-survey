@@ -19,7 +19,7 @@ package requests
 import javax.inject.Inject
 import model.langswitch.Language
 import play.api.i18n._
-import play.api.mvc.Request
+import play.api.mvc.{Request, RequestHeader}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendHeaderCarrierProvider
 
@@ -43,7 +43,7 @@ object RequestSupport {
   /**
    * Naive way of checking if user is logged in. Use it in views only.
    */
-  def isLoggedIn(implicit request: Request[_]): Boolean = request.session.get(SessionKeys.authToken).isDefined
+  def isLoggedIn(implicit rh: RequestHeader): Boolean = rh.session.get(SessionKeys.authToken).isDefined
 
   /**
    * Naive way of getting session id. Use it in views only.

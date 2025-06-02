@@ -16,22 +16,16 @@
 
 package support
 
-import akka.actor.ActorSystem
-import com.typesafe.config.Config
-
 import java.time.{Clock, LocalDateTime, ZoneId, ZoneOffset}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.scalatest.{AppendedClues, OptionValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatestplus.play.guice.{GuiceOneAppPerSuite, GuiceOneServerPerSuite}
+import org.scalatestplus.play.guice.{GuiceOneServerPerSuite}
 import play.api.Application
-import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.http.hooks.HttpHook
-import uk.gov.hmrc.play.http.ws.WSHttp
+import play.api.inject.guice.{GuiceApplicationBuilder}
+import uk.gov.hmrc.http.client.{HttpClientV2}
 
 import scala.concurrent.ExecutionContext
 
@@ -57,12 +51,7 @@ trait AppSpec
 
   implicit lazy val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
-  lazy val testHttpClient: HttpClient = new HttpClient with WSHttp {
-    override def wsClient: WSClient = app.injector.instanceOf[WSClient]
-    override val hooks: Seq[HttpHook] = Nil
-    override val configuration: Config = app.configuration.underlying
-    override protected def actorSystem = app.injector.instanceOf(classOf[ActorSystem])
-  }
+  lazy val testHttpClient: HttpClientV2 = app.injector.instanceOf[HttpClientV2]
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(
     timeout  = scaled(Span(3, Seconds)),

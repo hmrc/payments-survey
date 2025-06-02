@@ -1,15 +1,15 @@
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.{AlignArguments, AlignParameters, AlignSingleLineCaseStatements, AllowParamGroupsOnNewlines, CompactControlReadability, CompactStringConcatenation, DanglingCloseParenthesis, DoubleIndentConstructorArguments, DoubleIndentMethodDeclaration, FirstArgumentOnNewline, FirstParameterOnNewline, Force, FormatXml, IndentLocalDefs, IndentPackageBlocks, IndentSpaces, IndentWithTabs, MultilineScaladocCommentsStartOnFirstLine, NewlineAtEndOfFile, PlaceScaladocAsterisksBeneathSecondAsterisk, PreserveSpaceBeforeArguments, RewriteArrowSymbols, SpaceBeforeColon, SpaceBeforeContextColon, SpaceInsideBrackets, SpaceInsideParentheses, SpacesAroundMultiImports, SpacesWithinPatternBinders}
+import scalariform.formatter.preferences.*
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.12"
+val scalaV = "2.13.16"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin, SbtGitVersioning)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .settings(commonSettings: _*)
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
@@ -25,9 +25,9 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     commands += Command.command("runTestOnly") { state =>
       state.globalLogging.full.info("running play using 'testOnlyDoNotUseInAppConf' routes...")
-      s"""set javaOptions += "-Dplay.http.router=testOnlyDoNotUseInProd.Routes"""" ::
+      s"""set javaOptions += "-Dplay.http.router=testOnlyDoNotUseInAppConf.Routes"""" ::
         "run" ::
-        s"""set javaOptions -= "-Dplay.http.router=testOnlyDoNotUseInProd.Routes"""" ::
+        s"""set javaOptions -= "-Dplay.http.router=testOnlyDoNotUseInAppConf.Routes"""" ::
         state
     }
   )
@@ -132,7 +132,6 @@ lazy val commonSettings = Seq(
   //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
   Compile / scalacOptions -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
-  resolvers ++= Seq(Resolver.jcenterRepo),
   wartremoverExcluded ++=
     (baseDirectory.value / "it").get ++
       (baseDirectory.value / "test").get ++
@@ -153,5 +152,4 @@ lazy val commonSettings = Seq(
     )
   ))
   .++(scoverageSettings)
-  .++(uk.gov.hmrc.DefaultBuildSettings.defaultSettings())
 
