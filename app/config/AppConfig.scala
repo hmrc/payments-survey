@@ -35,7 +35,9 @@ class AppConfig @Inject() (config: ServicesConfig) {
   lazy val payFrontendBaseUrl: String = s"${config.getString("payFrontendBaseUrl")}/pay"
 
   val ggBaseUrl: String = loadConfig("ggBaseUrl") + "/gg"
-  val signOutUrl: String = s"$ggBaseUrl/sign-out"
+
+  val basGatewayBaseUrl: String = config.baseUrl("bas-gateway")
+  val signOutUrl: String = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
 
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
