@@ -41,7 +41,7 @@ class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig
 
   val ggBaseUrl: String = loadConfig("ggBaseUrl") + "/gg"
 
-  val basGatewayBaseUrl: String = servicesConfig.baseUrl("bas-gateway")
+  val basGatewayBaseUrl: String = platformHost.getOrElse(config.get[String]("basGatewayBaseUrl"))
   val signOutUrl: String = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
 
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
