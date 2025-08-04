@@ -2,7 +2,7 @@ import sbt.*
 
 object AppDependencies {
   private val payApiVersion = "1.260.0"
-  private val bootstrapVersion = "9.14.0"
+  private val bootstrapVersion = "9.18.0"
 
   val compile: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-29"       % bootstrapVersion,
@@ -17,6 +17,6 @@ object AppDependencies {
     "com.github.tomakehurst" %   "wiremock"                                   % "3.0.0-beta-7"       % Test,
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey-test-data" % payApiVersion        % Test,
     "uk.gov.hmrc"             %% "bootstrap-test-play-29"                     % bootstrapVersion     % Test,
-    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-29"                    % "2.6.0"              % Test
+    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-29"                    % "2.7.0"              % Test
   )
 }
