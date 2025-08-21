@@ -33,6 +33,15 @@ final class SurveyControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SurveyController]
   private val startJourneyController = app.injector.instanceOf[SsjController]
 
+  "survey default should do it's think" in {
+    val fakeRequest = FakeRequest("GET", "/")
+
+    val result = controller.surveyDefault(fakeRequest)
+
+    status(result) shouldBe Status.OK
+
+  }
+
   "survey should render the survey page if the journey is found " in {
 
     val fakeRequest = FakeRequest("GET", "/")
