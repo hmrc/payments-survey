@@ -16,6 +16,8 @@
 
 package langswitch
 
+import akka.actor.ActorSystem
+import akka.stream.Materializer
 import langswitch.Languages.{English, Welsh}
 import play.api.i18n.Lang
 import play.api.libs.json.Json
