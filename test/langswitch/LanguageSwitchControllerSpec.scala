@@ -26,7 +26,7 @@ import support.AppSpec
 final class LanguageSwitchControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[LanguageSwitchController]
 
-  "switch to language should redirect to correct place" in {
+  "switch to language should return SEE OTHER" in {
     val fakeRequest = FakeRequest("GET", "/")
 
     val result = controller.switchToLanguage(English)(fakeRequest)
