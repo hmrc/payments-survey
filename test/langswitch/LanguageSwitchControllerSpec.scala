@@ -17,19 +17,33 @@
 package langswitch
 
 import langswitch.LanguageSwitchController
-import langswitch.Languages.English
+import langswitch.Languages.{English, Welsh}
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
+import play.mvc.Http.HeaderNames
 import support.AppSpec
 
 final class LanguageSwitchControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[LanguageSwitchController]
 
-  "switch to language should return SEE OTHER" in {
-    val fakeRequest = FakeRequest("GET", "/")
+  "switch to language should redirect to referer link" in {
+    val fakeRequest = FakeRequest("GET", "/").withHeaders(HeaderNames.REFERER -> "some/referer/link")
 
     val result = controller.switchToLanguage(English)(fakeRequest)
+
+    redirectLocation(result) shouldBe Some("some/referer/link")
+
+    status(result) shouldBe Status.SEE_OTHER
+
+  }
+
+  "switch to language should redirect to not found link without referer link" in {
+    val fakeRequest = FakeRequest("GET", "/")
+
+    val result = controller.switchToLanguage(Welsh)(fakeRequest)
+
+    redirectLocation(result) shouldBe Some("/payments-survey/survey/404")
 
     status(result) shouldBe Status.SEE_OTHER
 
@@ -39,6 +53,9 @@ final class LanguageSwitchControllerSpec extends AppSpec {
     val fakeRequest = FakeRequest("GET", "/")
 
     val result = controller.notFound(fakeRequest)
+
+    contentAsString(result).contains("Pay your tax") shouldBe true
+    contentAsString(result).contains("Is this page not working properly? ") shouldBe true
 
     status(result) shouldBe Status.OK
   }

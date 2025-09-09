@@ -33,16 +33,20 @@ final class SurveyControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SurveyController]
   private val startJourneyController = app.injector.instanceOf[SsjController]
 
-  "survey default should return OK" in {
+  "survey default should return OK for default" in {
+    val putInDb = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
+    val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
     val fakeRequest = FakeRequest("GET", "/")
 
     val result = controller.surveyDefault(fakeRequest)
-
+    println(contentAsString(result))
     status(result) shouldBe Status.OK
+    contentAsString(result).contains("How was our payment service?") shouldBe true
+    contentAsString(result).contains("<input class=\"govuk-radios__input\" id=\"wereYouAble\" name=\"wereYouAble\" type=\"radio\" value=\"1\"") shouldBe true
 
   }
 
-  "survey should render the survey page if the journey is found " in {
+  "survey should render the survey page if the journey is found" in {
 
     val fakeRequest = FakeRequest("GET", "/")
 
