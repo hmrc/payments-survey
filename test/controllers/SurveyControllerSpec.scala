@@ -30,6 +30,8 @@ import play.test.Helpers.fakeRequest
 import support.AppSpec
 import testdata.paysurvey.TdAll.{r, ssjJourneyRequest}
 
+import scala.jdk.CollectionConverters.CollectionHasAsScala
+
 final class SurveyControllerSpec extends AppSpec {
   private val controller = app.injector.instanceOf[SurveyController]
   private val startJourneyController = app.injector.instanceOf[SsjController]
@@ -43,7 +45,13 @@ final class SurveyControllerSpec extends AppSpec {
     status(result) shouldBe Status.OK
     val doc = Jsoup.parse(contentAsString(result))
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
-    doc.select("h2.govuk-heading-m").text shouldBe "1. Were you able to do what you needed to do today? 2. How easy was it for you to do what you needed to do today? 2b. Why did you give this score? 3. Overall, how did you feel about the service you received today?"
+    val h2s = doc.select("h2.govuk-heading-m").asScala.toList
+    h2s.map(_.text) shouldBe List(
+      "1. Were you able to do what you needed to do today?",
+      "2. How easy was it for you to do what you needed to do today?",
+      "2b. Why did you give this score?",
+      "3. Overall, how did you feel about the service you received today?"
+    )
     doc.select("h3.govuk-heading-m").text shouldBe "Thank you for your feedback"
   }
 
