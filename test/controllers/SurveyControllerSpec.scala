@@ -17,6 +17,7 @@
 package controllers
 
 import model._
+import org.jsoup.Jsoup
 import payapi.cardpaymentjourney.model.journey.JsdPfSa
 import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
 import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
@@ -39,11 +40,11 @@ final class SurveyControllerSpec extends AppSpec {
     val fakeRequest = FakeRequest("GET", "/")
 
     val result = controller.surveyDefault(fakeRequest)
-    println(contentAsString(result))
     status(result) shouldBe Status.OK
-    contentAsString(result).contains("How was our payment service?") shouldBe true
-    contentAsString(result).contains("<input class=\"govuk-radios__input\" id=\"wereYouAble\" name=\"wereYouAble\" type=\"radio\" value=\"1\"") shouldBe true
-
+    val doc = Jsoup.parse(contentAsString(result))
+    doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
+    doc.select("h2.govuk-heading-m").text shouldBe "1. Were you able to do what you needed to do today? 2. How easy was it for you to do what you needed to do today? 2b. Why did you give this score? 3. Overall, how did you feel about the service you received today?"
+    doc.select("h3.govuk-heading-m").text shouldBe "Thank you for your feedback"
   }
 
   "survey should render the survey page if the journey is found" in {
