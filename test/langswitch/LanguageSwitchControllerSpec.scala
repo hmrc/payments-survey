@@ -18,6 +18,7 @@ package langswitch
 
 import langswitch.LanguageSwitchController
 import langswitch.Languages.{English, Welsh}
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
@@ -54,8 +55,11 @@ final class LanguageSwitchControllerSpec extends AppSpec {
 
     val result = controller.notFound(fakeRequest)
 
-    contentAsString(result).contains("Pay your tax") shouldBe true
-    contentAsString(result).contains("Is this page not working properly? ") shouldBe true
+    val doc = Jsoup.parse(contentAsString(result))
+
+    doc.select("h1").text shouldBe "This page can’t be found"
+    doc.select("p").text shouldBe "Please check that you have entered the correct web address."
+    doc.select("title").text shouldBe "Pay your tax GOV.UK"
 
     status(result) shouldBe Status.OK
   }

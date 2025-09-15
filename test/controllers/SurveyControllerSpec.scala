@@ -44,7 +44,23 @@ final class SurveyControllerSpec extends AppSpec {
     val result = controller.surveyDefault(fakeRequest)
     status(result) shouldBe Status.OK
     val doc = Jsoup.parse(contentAsString(result))
+    doc.select("p.govuk-body").text shouldBe "We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. See the HMRC Privacy Notice for details about how we collect, use, protect and secure your personal information. The survey takes about 1 minute to complete. There are 4 questions and they are all optional. We will use your feedback to make our services better."
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
+    val radios = doc.select("label.govuk-label").asScala.toList
+    radios.map(_.text) shouldBe List(
+      "Yes",
+      "No",
+      "Very easy",
+      "Easy",
+      "Neither easy or difficult",
+      "Difficult",
+      "Very difficult",
+      "Very satisfied",
+      "Satisfied",
+      "Neither satisfied or dissatisfied",
+      "Dissatisfied",
+      "Very dissatisfied"
+    )
     val h2s = doc.select("h2.govuk-heading-m").asScala.toList
     h2s.map(_.text) shouldBe List(
       "1. Were you able to do what you needed to do today?",
