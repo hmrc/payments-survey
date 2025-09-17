@@ -19,6 +19,7 @@ package controllers
 import model._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import payapi.cardpaymentjourney.model.journey.JsdPfSa
 import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
 import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
@@ -50,23 +51,21 @@ final class SurveyControllerSpec extends AppSpec {
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
     val formGroups = doc.select("div.govuk-form-group").asScala.toList
 
+      def analyseRadios(radios: Elements) = {
+        radios.select("div.govuk-radios__item").asScala.toList.map{ r =>
+          val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
+          (input.attr("name"), input.attr("value"), label.text)
+        }
+      }
+
     val yesNoRadios = formGroups.head.select("fieldset.govuk-fieldset > div.govuk-radios")
-    yesNoRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
-      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
-      (input.attr("name"), input.attr("value"), label.text)
-    } shouldBe List(("wereYouAble", "1", "Yes"), ("wereYouAble", "0", "No"))
+    analyseRadios(yesNoRadios) shouldBe List(("wereYouAble", "1", "Yes"), ("wereYouAble", "0", "No"))
 
     val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios")
-    difficultyRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
-      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
-      (input.attr("name"), input.attr("value"), label.text)
-    } shouldBe List(("howEasy", "5", "Very easy"), ("howEasy", "4", "Easy"), ("howEasy", "3", "Neither easy or difficult"), ("howEasy", "2", "Difficult"), ("howEasy", "1", "Very difficult"))
+    analyseRadios(difficultyRadios) shouldBe List(("howEasy", "5", "Very easy"), ("howEasy", "4", "Easy"), ("howEasy", "3", "Neither easy or difficult"), ("howEasy", "2", "Difficult"), ("howEasy", "1", "Very difficult"))
 
     val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios")
-    satisfiedRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
-      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
-      (input.attr("name"), input.attr("value"), label.text)
-    } shouldBe List(("overallRate", "5", "Very satisfied"), ("overallRate", "4", "Satisfied"), ("overallRate", "3", "Neither satisfied or dissatisfied"), ("overallRate", "2", "Dissatisfied"), ("overallRate", "1", "Very dissatisfied"))
+    analyseRadios(satisfiedRadios) shouldBe List(("overallRate", "5", "Very satisfied"), ("overallRate", "4", "Satisfied"), ("overallRate", "3", "Neither satisfied or dissatisfied"), ("overallRate", "2", "Dissatisfied"), ("overallRate", "1", "Very dissatisfied"))
 
     val h2s = doc.select("h2.govuk-heading-m").asScala.toList
     h2s.map(_.text) shouldBe List(
