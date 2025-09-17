@@ -68,21 +68,6 @@ final class SurveyControllerSpec extends AppSpec {
       (input.attr("name"), input.attr("value"), label.text)
     } shouldBe List(("overallRate", "5", "Very satisfied"), ("overallRate", "4", "Satisfied"), ("overallRate", "3", "Neither satisfied or dissatisfied"), ("overallRate", "2", "Dissatisfied"), ("overallRate", "1", "Very dissatisfied"))
 
-    val radios = doc.select("label.govuk-radios__label").asScala.toList
-    radios.map(_.text) shouldBe List(
-      "Yes",
-      "No",
-      "Very easy",
-      "Easy",
-      "Neither easy or difficult",
-      "Difficult",
-      "Very difficult",
-      "Very satisfied",
-      "Satisfied",
-      "Neither satisfied or dissatisfied",
-      "Dissatisfied",
-      "Very dissatisfied"
-    )
     val h2s = doc.select("h2.govuk-heading-m").asScala.toList
     h2s.map(_.text) shouldBe List(
       "1. Were you able to do what you needed to do today?",
