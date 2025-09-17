@@ -18,6 +18,7 @@ package controllers
 
 import model._
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import payapi.cardpaymentjourney.model.journey.JsdPfSa
 import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
 import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
@@ -30,6 +31,7 @@ import play.test.Helpers.fakeRequest
 import support.AppSpec
 import testdata.paysurvey.TdAll.{r, ssjJourneyRequest}
 
+import scala.collection.mutable.ArrayBuffer
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 final class SurveyControllerSpec extends AppSpec {
@@ -46,7 +48,28 @@ final class SurveyControllerSpec extends AppSpec {
     val doc = Jsoup.parse(contentAsString(result))
     doc.select("p.govuk-body").text shouldBe "We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. See the HMRC Privacy Notice for details about how we collect, use, protect and secure your personal information. The survey takes about 1 minute to complete. There are 4 questions and they are all optional. We will use your feedback to make our services better."
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
-    val radios = doc.select("label.govuk-label").asScala.toList
+    val formGroups = doc.select("div.govuk-form-group").asScala.toList
+
+    val yesNoRadios = formGroups.head.select("fieldset.govuk-fieldset > div.govuk-radios").asScala
+    val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
+    val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
+
+      def radioAnalyser(radio: Iterable[Element], amount: Int) =
+        for (i <- 1 to amount) yield radio.map(
+          r =>
+            (
+              r.select(s"div.govuk-radios__item:nth-child($i) > input.govuk-radios__input").attr("value"),
+              r.select(s"div.govuk-radios__item:nth-child($i) > input.govuk-radios__input").attr("id"),
+              r.select(s"div.govuk-radios__item:nth-child($i)").text()
+            )
+        ).toList
+
+    radioAnalyser(yesNoRadios, 2) shouldBe List(ArrayBuffer(("1", "wereYouAble", "Yes")), ArrayBuffer(("0", "wereYouAble-2", "No")))
+    radioAnalyser(difficultyRadios, 5) shouldBe List(ArrayBuffer(("5", "howEasy", "Very easy")), ArrayBuffer(("4", "howEasy-2", "Easy")), ArrayBuffer(("3", "howEasy-3", "Neither easy or difficult")), ArrayBuffer(("2", "howEasy-4", "Difficult")), ArrayBuffer(("1", "howEasy-5", "Very difficult")))
+    radioAnalyser(satisfiedRadios, 5) shouldBe List(ArrayBuffer(("5", "overallRate", "Very satisfied")), ArrayBuffer(("4", "overallRate-2", "Satisfied")), ArrayBuffer(("3", "overallRate-3", "Neither satisfied or dissatisfied")), ArrayBuffer(("2", "overallRate-4", "Dissatisfied")), ArrayBuffer(("1", "overallRate-5", "Very dissatisfied")))
+
+
+    val radios = doc.select("label.govuk-radios__label").asScala.toList
     radios.map(_.text) shouldBe List(
       "Yes",
       "No",
