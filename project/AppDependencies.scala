@@ -1,12 +1,12 @@
 import sbt.*
 
 object AppDependencies {
-  private val payApiVersion = "1.260.0"
-  private val bootstrapVersion = "9.18.0"
+  private val payApiVersion = "1.270.0"
+  private val bootstrapVersion = "9.19.0"
 
   val compile: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-29"       % bootstrapVersion,
-    "uk.gov.hmrc"             %% "play-frontend-hmrc-play-29"       % "12.7.0",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc-play-29"       % "12.10.0",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
     "com.beachape"            %% "enumeratum"                       % "1.7.3"
   )

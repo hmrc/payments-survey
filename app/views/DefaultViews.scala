@@ -31,16 +31,6 @@ class DefaultViews @Inject() (
 
   import requestSupport._
 
-  def timedOutSessionId(implicit request: Request[_]): HtmlFormat.Appendable =
-    timedOut()
-
-  def internalServerError()(implicit request: Request[_]): HtmlFormat.Appendable =
-    error_template(
-      Messages("error.InternalServerError.heading"),
-      Messages("error.InternalServerError.heading"),
-      Messages("error.InternalServerError.message")
-    )
-
   def notFound(implicit request: Request[_]): HtmlFormat.Appendable =
     error_template(
       Messages("error.pageNotFound.title"),
@@ -48,10 +38,4 @@ class DefaultViews @Inject() (
       Messages("error.pageNotFound.message")
     )
 
-  def unauthorised()(implicit request: Request[_]): HtmlFormat.Appendable =
-    error_template(
-      Messages("error.pageNotFound.title"),
-      Messages("error.pageNotFound.heading"),
-      Messages("error.pageNotFound.message")
-    )
 }
