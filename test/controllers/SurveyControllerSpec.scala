@@ -54,8 +54,8 @@ final class SurveyControllerSpec extends AppSpec {
     val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
     val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
 
-      def radioAnalyser(radio: Iterable[Element], amount: Int) =
-        for (i <- 1 to amount) yield radio.map(
+      def radioAnalyser(radio: Iterable[Element], numberOfElementsInRadio: Int) =
+        for (i <- 1 to numberOfElementsInRadio) yield radio.map(
           r =>
             (
               r.select(s"div.govuk-radios__item:nth-child($i) > input.govuk-radios__input").attr("value"),
