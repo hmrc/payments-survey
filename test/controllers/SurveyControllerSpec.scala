@@ -50,24 +50,23 @@ final class SurveyControllerSpec extends AppSpec {
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
     val formGroups = doc.select("div.govuk-form-group").asScala.toList
 
-    val yesNoRadios = formGroups.head.select("fieldset.govuk-fieldset > div.govuk-radios").asScala
-    val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
-    val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios").asScala
+    val yesNoRadios = formGroups.head.select("fieldset.govuk-fieldset > div.govuk-radios")
+    yesNoRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
+      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
+      (input.attr("name"), input.attr("value"), label.text)
+    } shouldBe List(("wereYouAble", "1", "Yes"), ("wereYouAble", "0", "No"))
 
-      def radioAnalyser(radio: Iterable[Element], numberOfElementsInRadio: Int) =
-        for (i <- 1 to numberOfElementsInRadio) yield radio.map(
-          r =>
-            (
-              r.select(s"div.govuk-radios__item:nth-child($i) > input.govuk-radios__input").attr("value"),
-              r.select(s"div.govuk-radios__item:nth-child($i) > input.govuk-radios__input").attr("id"),
-              r.select(s"div.govuk-radios__item:nth-child($i)").text()
-            )
-        ).toList
+    val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios")
+    difficultyRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
+      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
+      (input.attr("name"), input.attr("value"), label.text)
+    } shouldBe List(("howEasy", "5", "Very easy"), ("howEasy", "4", "Easy"), ("howEasy", "3", "Neither easy or difficult"), ("howEasy", "2", "Difficult"), ("howEasy", "1", "Very difficult"))
 
-    radioAnalyser(yesNoRadios, 2) shouldBe List(ArrayBuffer(("1", "wereYouAble", "Yes")), ArrayBuffer(("0", "wereYouAble-2", "No")))
-    radioAnalyser(difficultyRadios, 5) shouldBe List(ArrayBuffer(("5", "howEasy", "Very easy")), ArrayBuffer(("4", "howEasy-2", "Easy")), ArrayBuffer(("3", "howEasy-3", "Neither easy or difficult")), ArrayBuffer(("2", "howEasy-4", "Difficult")), ArrayBuffer(("1", "howEasy-5", "Very difficult")))
-    radioAnalyser(satisfiedRadios, 5) shouldBe List(ArrayBuffer(("5", "overallRate", "Very satisfied")), ArrayBuffer(("4", "overallRate-2", "Satisfied")), ArrayBuffer(("3", "overallRate-3", "Neither satisfied or dissatisfied")), ArrayBuffer(("2", "overallRate-4", "Dissatisfied")), ArrayBuffer(("1", "overallRate-5", "Very dissatisfied")))
-
+    val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios")
+    satisfiedRadios.select("div.govuk-radios__item").asScala.toList.map{ r =>
+      val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
+      (input.attr("name"), input.attr("value"), label.text)
+    } shouldBe List(("overallRate", "5", "Very satisfied"), ("overallRate", "4", "Satisfied"), ("overallRate", "3", "Neither satisfied or dissatisfied"), ("overallRate", "2", "Dissatisfied"), ("overallRate", "1", "Very dissatisfied"))
 
     val radios = doc.select("label.govuk-radios__label").asScala.toList
     radios.map(_.text) shouldBe List(
