@@ -1,22 +1,21 @@
 import sbt.*
 
 object AppDependencies {
-  private val payApiVersion = "1.270.0"
-  private val bootstrapVersion = "9.19.0"
+  private val payApiVersion = "1.281.0"
+  private val bootstrapVersion = "10.4.0"
 
   val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-29"       % bootstrapVersion,
-    "uk.gov.hmrc"             %% "play-frontend-hmrc-play-29"       % "12.17.0",
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-30"       % bootstrapVersion,
+    "uk.gov.hmrc"             %% "play-frontend-hmrc-play-30"       % "12.21.0",
     "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey" % payApiVersion,
-    "com.beachape"            %% "enumeratum"                       % "1.7.3"
+    "com.beachape"            %% "enumeratum"                       % "1.9.1"
   )
 
   val test: Seq[ModuleID] = Seq(
-    "org.scalatest"           %% "scalatest"                                  % "3.2.19"             % Test,
-    "org.scalatestplus.play"  %% "scalatestplus-play"                         % "6.0.1"              % Test,
-    "com.github.tomakehurst" %   "wiremock"                                   % "3.0.0-beta-7"       % Test,
-    "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey-test-data" % payApiVersion        % Test,
-    "uk.gov.hmrc"             %% "bootstrap-test-play-29"                     % bootstrapVersion     % Test,
-    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-29"                    % "2.7.0"              % Test
-  )
+    "org.scalatest"           %% "scalatest"                                  % "3.2.19",
+    "org.scalatestplus.play"  %% "scalatestplus-play"                         % "7.0.2",
+    "uk.gov.hmrc"             %% "pay-api-cor-card-payment-journey-test-data" % payApiVersion,
+    "uk.gov.hmrc"             %% "bootstrap-test-play-30"                     % bootstrapVersion,
+    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-30"                    % "2.10.0"
+  ).map(_ % Test)
 }

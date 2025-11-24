@@ -5,7 +5,7 @@ import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.16"
+val scalaV = "2.13.17"
 scalaVersion := scalaV
 
 lazy val microservice = Project(appName, file("."))
@@ -138,8 +138,7 @@ lazy val commonSettings = Seq(
       Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala") ++
       (Compile / routes).value,
   scalariformSettings,
-  shellPrompt := ShellPrompt(version.value),
-  libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+  shellPrompt := ShellPrompt(version.value)
 )
   .++(wartRemoverSettings)
   .++(Seq(
