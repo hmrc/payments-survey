@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import play.api.i18n.Messages
 @import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases._
@@ -29,11 +28,8 @@
         errorSummary: uk.gov.hmrc.govukfrontend.views.html.components.GovukErrorSummary,
         button: uk.gov.hmrc.govukfrontend.views.html.components.GovukButton,
         radios: uk.gov.hmrc.govukfrontend.views.html.components.GovukRadios,
-        select: uk.gov.hmrc.govukfrontend.views.html.components.GovukSelect,
-        textArea: uk.gov.hmrc.govukfrontend.views.html.components.GovukTextarea,
-        appConfig: AppConfig
+        textArea: uk.gov.hmrc.govukfrontend.views.html.components.GovukTextarea
 )
-
 
 @(form: Form[model.SurveyForm],id: SurveyJourneyId,hrefBack:String,backLinkMessage:String)(implicit request: SurveyRequest[_], m: Messages)
 
@@ -63,7 +59,7 @@
             <h2 id="were-you-able-label" class="govuk-heading-m">@Messages("survey.wereYouAble.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("wereYouAble").map(err => ErrorMessage(content = Text("This field is required"))),
+                errorMessage = form.error("wereYouAble").map(_ => ErrorMessage(content = Text("This field is required"))),
                 name = "wereYouAble",
                 items = Seq("1", "0").map { radioItem =>
                     RadioItem(
@@ -79,7 +75,7 @@
             <h2 id="how-easy-label" class="govuk-heading-m">@Messages("survey.howEasy.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("howEasy").map(err => ErrorMessage(content = Text("This field is required"))),
+                errorMessage = form.error("howEasy").map(_ => ErrorMessage(content = Text("This field is required"))),
                 name = "howEasy",
                 items = Seq("5", "4", "3", "2", "1").map { radioItem =>
                     RadioItem(
@@ -110,7 +106,7 @@
             <h2 id="overall-label" class="govuk-heading-m">@Messages("survey.overallRate.question")</h2>
             @radios(Radios(
                 fieldset = Some(Fieldset(legend = None)),
-                errorMessage = form.error("overallRate").map(err => ErrorMessage(content = Text("This field is required"))),
+                errorMessage = form.error("overallRate").map(_ => ErrorMessage(content = Text("This field is required"))),
                 name = "overallRate",
                 items = Seq("5", "4", "3", "2", "1").map { radioItem =>
                     RadioItem(

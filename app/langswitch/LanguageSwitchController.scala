@@ -16,7 +16,6 @@
 
 package langswitch
 
-import action.Actions
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
@@ -24,13 +23,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.DefaultViews
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class LanguageSwitchController @Inject() (
-    actions:      Actions,
-    cc:           MessagesControllerComponents,
-    defaultViews: DefaultViews
-)(implicit ec: ExecutionContext) extends FrontendController(cc) with I18nSupport {
+  cc:           MessagesControllerComponents,
+  defaultViews: DefaultViews
+) extends FrontendController(cc)
+    with I18nSupport {
 
   def switchToLanguage(language: Language): Action[AnyContent] = cc.actionBuilder { implicit request =>
     val result: Result = request.headers.get(HeaderNames.REFERER) match {
@@ -44,4 +42,3 @@ class LanguageSwitchController @Inject() (
     Ok(defaultViews.notFound)
   }
 }
-

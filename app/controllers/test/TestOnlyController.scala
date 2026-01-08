@@ -16,20 +16,16 @@
 
 package controllers.test
 
-import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.ExecutionContext
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TestOnlyController @Inject() (
-    cc:               MessagesControllerComponents,
-    show_error_pages: views.html.error.show_error_pages,
-    error_5xx:        views.html.error.error_5xx
-)(
-    implicit
-    ec: ExecutionContext
+  cc:               MessagesControllerComponents,
+  show_error_pages: views.html.error.show_error_pages,
+  error_5xx:        views.html.error.error_5xx
 ) extends FrontendController(cc) {
 
   def addToSession(key: String, value: String): Action[AnyContent] = Action { implicit request =>

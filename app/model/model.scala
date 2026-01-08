@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-package object model {
-
-}
-
+package object model {}

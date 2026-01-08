@@ -17,12 +17,10 @@
 package paysurvey.journey
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
-class JourneyService @Inject() (
-    journeyRepo: JourneyRepo
-)(implicit ec: ExecutionContext) {
+class JourneyService @Inject() (journeyRepo: JourneyRepo) {
 
   def insert(j: SurveyJourney): Future[Unit] = journeyRepo.insert(j)
 

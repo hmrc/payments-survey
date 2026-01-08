@@ -22,7 +22,6 @@ import paysurvey.journey.ssj.{SsjJourneyRequest, SsjRequest}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import requests.SurveyRequest
-import uk.gov.hmrc.http.SessionKeys
 
 trait TdSsjRequest extends TdBase {
 
@@ -32,7 +31,7 @@ trait TdSsjRequest extends TdBase {
     userType = "IsLoggedIn"
   )
 
-  val ssjRequest: SsjRequest = SsjRequest(
+  val ssjRequest: SsjRequest               = SsjRequest(
     auditOptions
   )
   val ssjJourneyRequest: SsjJourneyRequest = SsjJourneyRequest(

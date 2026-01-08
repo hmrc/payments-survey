@@ -26,7 +26,9 @@ trait WireMockSupport extends BeforeAndAfterAll with BeforeAndAfterEach {
   self: Suite =>
   import WireMockSupport._
 
-  implicit val wireMockServer: WireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(WireMockSupport.port))
+  implicit val wireMockServer: WireMockServer = new WireMockServer(
+    WireMockConfiguration.wireMockConfig().port(WireMockSupport.port)
+  )
 
   WireMock.configureFor(port)
 

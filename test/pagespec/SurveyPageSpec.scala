@@ -28,11 +28,11 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 class SurveyPageSpec extends AppSpec with WebBrowser {
   def baseUrl = s"http://localhost:$port"
-  def pagePath(id: String) = baseUrl + s"/payments-survey/v2/survey/$id"
+  def pagePath(id:         String) = baseUrl + s"/payments-survey/v2/survey/$id"
   def surveyThanksPath(id: String) = s"/payments-survey/survey-thanks/$id"
   protected trait TestWithJourney {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val ssjUrl = url"http://localhost:${port}/payments-survey/journey/start"
+    val ssjUrl                     = url"http://localhost:${port}/payments-survey/journey/start"
 
     val response: HttpResponse =
       testHttpClient
@@ -40,52 +40,45 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
         .withBody(Json.toJson(ssjJourneyRequest))
         .execute[HttpResponse]
         .futureValue
-    val ssjResponse = response.json.as[SsjResponse]
+    val ssjResponse            = response.json.as[SsjResponse]
 
   }
   "should render correctly" in new TestWithJourney {
 
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    cssSelector(".govuk-header__service-name")
-      .element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
+    cssSelector(
+      ".govuk-header__service-name"
+    ).element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
 
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
 
     id("were-you-able-label").element.text shouldBe "1. Were you able to do what you needed to do today?"
-    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(1) > label")
-      .element.text shouldBe "Yes"
-    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(2) > label")
-      .element.text shouldBe "No"
+    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(1) > label").element.text shouldBe "Yes"
+    cssSelector("#were-you-able-q > div > fieldset > div > div:nth-child(2) > label").element.text shouldBe "No"
 
-    id("how-easy-label")
-      .element.text shouldBe "2. How easy was it for you to do what you needed to do today?"
-    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(1) > label")
-      .element.text shouldBe "Very easy"
-    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(2) > label")
-      .element.text shouldBe "Easy"
-    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(3) > label")
-      .element.text shouldBe "Neither easy or difficult"
-    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(4) > label")
-      .element.text shouldBe "Difficult"
-    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(5) > label")
-      .element.text shouldBe "Very difficult"
+    id("how-easy-label").element.text shouldBe "2. How easy was it for you to do what you needed to do today?"
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(1) > label").element.text shouldBe "Very easy"
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(2) > label").element.text shouldBe "Easy"
+    cssSelector(
+      "#how-easy-q > div > fieldset > div > div:nth-child(3) > label"
+    ).element.text shouldBe "Neither easy or difficult"
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(4) > label").element.text shouldBe "Difficult"
+    cssSelector("#how-easy-q > div > fieldset > div > div:nth-child(5) > label").element.text shouldBe "Very difficult"
 
     id("why-score-label").element.text shouldBe "2b. Why did you give this score?"
     id("comments").element.attribute("value") shouldBe Some("")
 
-    id("overall-label")
-      .element.text shouldBe "3. Overall, how did you feel about the service you received today?"
-    cssSelector("#overall-q > div > fieldset > div > div:nth-child(1) > label")
-      .element.text shouldBe "Very satisfied"
-    cssSelector("#overall-q > div > fieldset > div > div:nth-child(2) > label")
-      .element.text shouldBe "Satisfied"
-    cssSelector("#overall-q > div > fieldset > div > div:nth-child(3) > label")
-      .element.text shouldBe "Neither satisfied or dissatisfied"
-    cssSelector("#overall-q > div > fieldset > div > div:nth-child(4) > label")
-      .element.text shouldBe "Dissatisfied"
-    cssSelector("#overall-q > div > fieldset > div > div:nth-child(5) > label")
-      .element.text shouldBe "Very dissatisfied"
+    id("overall-label").element.text shouldBe "3. Overall, how did you feel about the service you received today?"
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(1) > label").element.text shouldBe "Very satisfied"
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(2) > label").element.text shouldBe "Satisfied"
+    cssSelector(
+      "#overall-q > div > fieldset > div > div:nth-child(3) > label"
+    ).element.text shouldBe "Neither satisfied or dissatisfied"
+    cssSelector("#overall-q > div > fieldset > div > div:nth-child(4) > label").element.text shouldBe "Dissatisfied"
+    cssSelector(
+      "#overall-q > div > fieldset > div > div:nth-child(5) > label"
+    ).element.text shouldBe "Very dissatisfied"
 
     id("thank-you-header").element.text shouldBe "Thank you for your feedback"
     id("thank-you-message").element.text shouldBe "We will use your feedback to make our services better."

@@ -16,11 +16,8 @@
 
 package langswitch
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.Materializer
 import langswitch.Languages.{English, Welsh}
 import play.api.i18n.Lang
-import play.api.libs.json.Json
 import support.AppSpec
 
 class LanguageSpec extends AppSpec {

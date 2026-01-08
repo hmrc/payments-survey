@@ -21,13 +21,15 @@ import play.api.mvc.PathBindable
 
 object ValueClassBinder {
 
-  def valueClassBinder[A: Reads](fromAtoString: A => String)(implicit stringBinder: PathBindable[String]): PathBindable[A] = {
+  def valueClassBinder[A: Reads](
+    fromAtoString: A => String
+  )(implicit stringBinder: PathBindable[String]): PathBindable[A] = {
 
-      def parseString(str: String): Either[String, A] =
-        JsString(str).validate[A] match {
-          case JsSuccess(a, _) => Right(a)
-          case JsError(error)  => Left(s"No valid value in path: $str. Error: ${error.toString}")
-        }
+    def parseString(str: String): Either[String, A] =
+      JsString(str).validate[A] match {
+        case JsSuccess(a, _) => Right(a)
+        case JsError(error)  => Left(s"No valid value in path: $str. Error: ${error.toString}")
+      }
 
     new PathBindable[A] {
       override def bind(key: String, value: String): Either[String, A] =

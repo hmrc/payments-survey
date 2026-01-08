@@ -20,32 +20,27 @@ import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
 import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.http.SessionId
 
 import java.time.LocalDateTime
 
-final case class SsjRequest
-  (
-    audit: AuditOptions
-)
+final case class SsjRequest(audit: AuditOptions)
 
 object SsjRequest {
   implicit val format: OFormat[SsjRequest] = Json.format[SsjRequest]
 }
 
-final case class SsjJourneyRequest
-  (
-    origin:         String,
-    returnMsg:      String,
-    returnHref:     String,
-    auditName:      String,
-    audit:          AuditOptions,
-    contentOptions: ContentOptions
+final case class SsjJourneyRequest(
+  origin:         String,
+  returnMsg:      String,
+  returnHref:     String,
+  auditName:      String,
+  audit:          AuditOptions,
+  contentOptions: ContentOptions
 ) {
   def toSurveyJourney(
-      journeyId:      SurveyJourneyId,
-      createdOn:      LocalDateTime,
-      contentOptions: ContentOptions
+    journeyId:      SurveyJourneyId,
+    createdOn:      LocalDateTime,
+    contentOptions: ContentOptions
   ): SurveyJourney = {
 
     SurveyJourney(
@@ -65,4 +60,3 @@ object SsjJourneyRequest {
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[SsjJourneyRequest] = Json.format[SsjJourneyRequest]
 }
-

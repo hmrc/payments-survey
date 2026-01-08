@@ -16,16 +16,26 @@
 
 package views
 
-import model.content.{BannerTitle, ContentOptions}
+import model.content.BannerTitle
 import play.api.data.Form
 import play.api.i18n.Messages
 
 object TitleMaker {
-  def titleMaker(h1Key: String, bannerTitle: BannerTitle, maybeForm: Option[Form[_]] = None)(implicit messages: Messages): String =
+  def titleMaker(
+    h1Key:       String,
+    bannerTitle: BannerTitle,
+    maybeForm:   Option[Form[_]] = None
+  )(implicit messages: Messages): String =
     makeTitle(h1Key, bannerTitle.forCurrentLanguage, maybeForm.exists(_.hasErrors))
 
-  private def makeTitle(h1Key: String, serviceName: Option[String], error: Boolean)(implicit messages: Messages): String = {
-    val title = s"""${Messages(h1Key)} - ${serviceName.getOrElse(Messages("global.service-name"))} - ${Messages("global.title-suffix")}"""
+  private def makeTitle(
+    h1Key:       String,
+    serviceName: Option[String],
+    error:       Boolean
+  )(implicit messages: Messages): String = {
+    val title = s"""${Messages(h1Key)} - ${serviceName.getOrElse(Messages("global.service-name"))} - ${Messages(
+        "global.title-suffix"
+      )}"""
     if (error) s"""${Messages("global.error-prefix")} - $title""" else title
   }
 }

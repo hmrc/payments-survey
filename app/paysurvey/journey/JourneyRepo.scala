@@ -26,26 +26,28 @@ import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 @Singleton
 @SuppressWarnings(Array("org.wartremover.warts.Any"))
 final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
-  extends PlayMongoRepository[SurveyJourney](
-    mongoComponent = mongo,
-    collectionName = "journey",
-    indexes        = Seq(IndexModel(ascending("journeyId"), IndexOptions().name("journeyId"))),
-    domainFormat   = SurveyJourney.format,
-    replaceIndexes = true
-  ) {
+    extends PlayMongoRepository[SurveyJourney](
+      mongoComponent = mongo,
+      collectionName = "journey",
+      indexes = Seq(IndexModel(ascending("journeyId"), IndexOptions().name("journeyId"))),
+      domainFormat = SurveyJourney.format,
+      replaceIndexes = true
+    ) {
 
-  /**
-   * Find the latest journey for given sessionId.
-   */
+  /** Find the latest journey for given sessionId.
+    */
   def findLatestJourneyByJourneyId(journeyId: SurveyJourneyId): Future[Option[SurveyJourney]] = {
     collection
       .withReadPreference(com.mongodb.ReadPreference.primary())
       .find(Filters.equal("journeyId", journeyId.value))
       .sort(descending("createdOn"))
-      .toFuture().map(_.headOption)
+      .toFuture()
+      .map(_.headOption)
   }
 
-  def insert(surveyJourney: SurveyJourney): Future[Unit] = //Throw a new RuntimeException(writeResult.toString) if things go wrong
+  def insert(
+    surveyJourney: SurveyJourney
+  ): Future[Unit] = // Throw a new RuntimeException(writeResult.toString) if things go wrong
     collection
       .insertOne(surveyJourney)
       .toFuture()

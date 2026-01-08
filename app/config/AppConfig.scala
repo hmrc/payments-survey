@@ -27,12 +27,12 @@ import scala.util.Try
 class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
   private def loadConfig(key: String) = servicesConfig.getString(key)
 
-  private val contactHost = servicesConfig.getConfString(s"contact-frontend.host", "")
+  private val contactHost          = servicesConfig.getConfString(s"contact-frontend.host", "")
   val platformHost: Option[String] = config.getOptional[String]("platform.frontend.host")
 
   val paymentSurvey: String = platformHost.getOrElse(config.get[String]("frontendBaseUrl"))
 
-  private val contactFormServiceIdentifier = "MyService"
+  private val contactFormServiceIdentifier     = "MyService"
   lazy val optimizelyProjectId: Option[String] = Try(servicesConfig.getString(s"optimizely.projectId")).toOption
 
   lazy val frontendBaseUrl: String = s"$paymentSurvey/payments-survey"
@@ -42,16 +42,17 @@ class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig
   val ggBaseUrl: String = loadConfig("ggBaseUrl") + "/gg"
 
   val basGatewayBaseUrl: String = platformHost.getOrElse(config.get[String]("basGatewayBaseUrl"))
-  val signOutUrl: String = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
+  val signOutUrl: String        = s"$basGatewayBaseUrl/bas-gateway/sign-out-without-state"
 
-  lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
-  lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
-  lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val accessibilityStatementUrl: String = s"${servicesConfig.getString("payFrontendBaseUrl")}/accessibility-statement/pay?referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Fpay-frontend"
-  val privacyNoticeUrl: String = loadConfig("govUkUrls.privacyNoticeUrl")
-  val paymentSupportUrl: String = loadConfig("govUkUrls.paymentSupportUrl")
-  val cookiesUrl: String = loadConfig("govUkUrls.cookiesUrl")
-  val termsAndConditionsUrl: String = loadConfig("govUkUrls.termsAndConditionsUrl")
-  val helpUsingGovUkUrl: String = loadConfig("govUkUrls.helpUsingGovUkUrl")
+  lazy val analyticsToken: String            = loadConfig(s"google-analytics.token")
+  lazy val analyticsHost: String             = loadConfig(s"google-analytics.host")
+  lazy val reportAProblemPartialUrl          = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl            = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val accessibilityStatementUrl: String =
+    s"${servicesConfig.getString("payFrontendBaseUrl")}/accessibility-statement/pay?referrerUrl=https%3A%2F%2Fwww.tax.service.gov.uk%2Fpay-frontend"
+  val privacyNoticeUrl: String               = loadConfig("govUkUrls.privacyNoticeUrl")
+  val paymentSupportUrl: String              = loadConfig("govUkUrls.paymentSupportUrl")
+  val cookiesUrl: String                     = loadConfig("govUkUrls.cookiesUrl")
+  val termsAndConditionsUrl: String          = loadConfig("govUkUrls.termsAndConditionsUrl")
+  val helpUsingGovUkUrl: String              = loadConfig("govUkUrls.helpUsingGovUkUrl")
 }

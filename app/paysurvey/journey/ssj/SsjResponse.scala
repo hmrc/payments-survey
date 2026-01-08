@@ -20,10 +20,9 @@ import payapi.cardpaymentjourney.model.journey.Url
 import paysurvey.journey.SurveyJourneyId
 import play.api.libs.json.{Format, Json}
 
-final case class SsjResponse
-  (
-    journeyId: SurveyJourneyId,
-    nextUrl:   Url
+final case class SsjResponse(
+  journeyId: SurveyJourneyId,
+  nextUrl:   Url
 )
 
 object SsjResponse {

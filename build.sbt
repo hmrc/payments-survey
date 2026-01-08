@@ -1,18 +1,15 @@
-import com.typesafe.sbt.SbtScalariform.ScalariformKeys
-import scalariform.formatter.preferences.*
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.ShellPrompt
 import wartremover.Wart
 
 val appName = "payments-survey"
-val scalaV = "2.13.17"
-scalaVersion := scalaV
+scalaVersion := "3.3.7"
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
-  .settings(commonSettings: _*)
+  .settings(commonSettings *)
   .settings(
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
   )
   .settings(
     PlayKeys.playDefaultPort := 9966,
@@ -40,48 +37,21 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
 
 lazy val scalaCompilerOptions = Seq(
-  "-Xfatal-warnings",
-  "-Ywarn-unused:-imports,-patvars,-privates,-locals,-explicits,-implicits,_",
-  "-Xlint:-missing-interpolator,_",
-  "-Ywarn-value-discard",
-  "-Ywarn-dead-code",
+  "-Werror",
+  "-Wunused:implicits",
+  "-Wunused:imports",
+  "-Wunused:locals",
+  "-Wunused:params",
+  "-Wunused:privates",
+  "-Wvalue-discard",
   "-deprecation",
   "-feature",
   "-unchecked",
-  "-language:implicitConversions"
+  "-language:implicitConversions",
+  "-language:strictEquality",
+  "-Wconf:msg=unused import&src=html/.*:s",
+  "-Wconf:src=routes/.*:s"
 )
-
-lazy val scalariformSettings: Def.SettingsDefinition = {
-  // description of options found here -> https://github.com/scala-ide/scalariform
-  ScalariformKeys.preferences := ScalariformKeys.preferences.value
-    .setPreference(AlignArguments, true)
-    .setPreference(AlignParameters, true)
-    .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(AllowParamGroupsOnNewlines, true)
-    .setPreference(CompactControlReadability, false)
-    .setPreference(CompactStringConcatenation, false)
-    .setPreference(DanglingCloseParenthesis, Force)
-    .setPreference(DoubleIndentConstructorArguments, true)
-    .setPreference(DoubleIndentMethodDeclaration, true)
-    .setPreference(FirstArgumentOnNewline, Force)
-    .setPreference(FirstParameterOnNewline, Force)
-    .setPreference(FormatXml, true)
-    .setPreference(IndentLocalDefs, true)
-    .setPreference(IndentPackageBlocks, true)
-    .setPreference(IndentSpaces, 2)
-    .setPreference(IndentWithTabs, false)
-    .setPreference(MultilineScaladocCommentsStartOnFirstLine, false)
-    .setPreference(NewlineAtEndOfFile, true)
-    .setPreference(PlaceScaladocAsterisksBeneathSecondAsterisk, false)
-    .setPreference(PreserveSpaceBeforeArguments, true)
-    .setPreference(RewriteArrowSymbols, false)
-    .setPreference(SpaceBeforeColon, false)
-    .setPreference(SpaceBeforeContextColon, false)
-    .setPreference(SpaceInsideBrackets, false)
-    .setPreference(SpaceInsideParentheses, false)
-    .setPreference(SpacesAroundMultiImports, false)
-    .setPreference(SpacesWithinPatternBinders, true)
-}
 
 lazy val wartRemoverSettings =
   Seq(
@@ -110,7 +80,6 @@ lazy val wartRemoverSettings =
       (baseDirectory.value ** "*.sc").get ++
         (Compile / routes).value
       ),
-    Compile / doc / wartremoverErrors := Seq()
   )
 
 lazy val scoverageSettings = {
@@ -126,10 +95,9 @@ lazy val scoverageSettings = {
 }
 
 lazy val commonSettings = Seq(
-  scalaVersion := scalaV,
   majorVersion := 0,
   //For some reason SBT was adding the stray string "-encoding" to the compiler arguments and it was causing the build to fail
-  //This removes it again but it's not an ideal solution as I can't work out why this is being added in the first place.
+  //This removes it again, but it's not an ideal solution as I can't work out why this is being added in the first place.
   Compile / scalacOptions -= "-encoding",
   scalacOptions ++= scalaCompilerOptions,
   wartremoverExcluded ++=
@@ -137,18 +105,9 @@ lazy val commonSettings = Seq(
       (baseDirectory.value / "test").get ++
       Seq(sourceManaged.value / "main" / "sbt-buildinfo" / "BuildInfo.scala") ++
       (Compile / routes).value,
-  scalariformSettings,
-  shellPrompt := ShellPrompt(version.value)
+  shellPrompt := ShellPrompt(version.value),
+  scalafmtOnCompile                := true,
 )
   .++(wartRemoverSettings)
-  .++(Seq(
-    Test / compile / wartremoverErrors --= Seq(
-      Wart.Any,
-      Wart.Equals,
-      Wart.Null,
-      Wart.NonUnitStatements,
-      Wart.PublicInference
-    )
-  ))
   .++(scoverageSettings)
 

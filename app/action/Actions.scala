@@ -19,11 +19,11 @@ package action
 import com.google.inject.Inject
 import paysurvey.journey.SurveyJourneyId
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
-import requests.{SurveyRequest}
+import requests.SurveyRequest
 
 final class Actions @Inject() (
-    getJourneyActionFactory: GetJourneyActionFactory,
-    actionBuilder:           DefaultActionBuilder
+  getJourneyActionFactory: GetJourneyActionFactory,
+  actionBuilder:           DefaultActionBuilder
 ) {
   import getJourneyActionFactory._
 

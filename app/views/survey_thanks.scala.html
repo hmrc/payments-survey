@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,14 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import requests.SurveyRequest
 @import views.TitleMaker.titleMaker
 @import uk.gov.hmrc.govukfrontend.views.Aliases.{Button, Text}
 @import model.content.BannerTitle
-@import paysurvey.journey.SurveyJourneyId
 
 @this(main: views.html.main, button: uk.gov.hmrc.govukfrontend.views.html.components.GovukButton)
 
-@(id: SurveyJourneyId)(implicit request: SurveyRequest[_], m: Messages, appConfig: AppConfig)
-
-@header = {
-    <h1 class="heading-xlarge">@Messages("thanks.heading")</h1>
-}
+@()(implicit request: SurveyRequest[_], m: Messages)
 
 @main(
     pageTitle = Some(titleMaker("thanks.heading", request.content.title)),

@@ -1,5 +1,5 @@
 @*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.LanguageSelect
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
-@import paysurvey.journey.SurveyJourneyId
 
 @this(
         govukLayout: uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout,
@@ -53,7 +52,7 @@
 
     <div class="language-toggle-position">
     @languageSelect(LanguageSelect(
-        if(messages.lang.code == "cy") Cy else En,
+        if(messages.lang.code.contains("cy")) Cy else En,
         En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
         Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
     ))
