@@ -34,7 +34,25 @@ class LanguageSpec extends AppSpec {
     "welsh" in {
       Language.apply(Lang("cy")) shouldBe Welsh
     }
-
   }
 
+  "Should have correct play language for" - {
+    "english" in {
+      English.toPlayLang.code shouldBe "en"
+    }
+
+    "welsh" in {
+      Welsh.toPlayLang.code shouldBe "cy"
+    }
+  }
+
+  "Should have correct labels for" - {
+    "english" in {
+      English.label shouldBe "English"
+    }
+
+    "welsh" in {
+      Welsh.label shouldBe "Cymraeg"
+    }
+  }
 }

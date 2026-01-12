@@ -18,14 +18,14 @@ package model.content
 
 import play.api.libs.json.{Json, OFormat}
 
-final case class InternationalisedLine(english: Line, welsh: Option[Line] = None)
+final case class InternationalisedLine(english: Line, welsh: Option[Line] = None) derives CanEqual
 
 object InternationalisedLine {
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[InternationalisedLine] = Json.format[InternationalisedLine]
 }
 
-final case class Line(label: String, value: String)
+final case class Line(label: String, value: String) derives CanEqual
 
 object Line {
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
