@@ -16,6 +16,7 @@
 
 package paysurvey.journey.ssj
 
+import play.api.libs.ws.writeableOf_JsValue
 import play.api.libs.json.Json
 import support.AppSpec
 import testdata.paysurvey.TdAll.ssjJourneyRequest
@@ -35,7 +36,7 @@ class StartJourneySpec extends AppSpec {
         .withBody(Json.toJson(ssjJourneyRequest))
         .execute[HttpResponse]
         .futureValue
-    val ssjResponse = response.json.as[SsjResponse]
+    val ssjResponse            = response.json.as[SsjResponse]
 
     ssjResponse.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/v2/survey/${ssjResponse.journeyId.value}"
   }

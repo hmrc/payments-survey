@@ -17,18 +17,15 @@
 package action
 
 import com.google.inject.Inject
-import config.AppConfig
-import paysurvey.journey.{SurveyJourneyId, JourneyService}
-import play.api.mvc._
-import requests.{RequestSupport, SurveyRequest}
+import paysurvey.journey.{JourneyService, SurveyJourneyId}
+import play.api.mvc.*
+import requests.SurveyRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 final class GetJourneyActionFactory @Inject() (
-    journeyService: JourneyService
-)(implicit ec: ExecutionContext, config: AppConfig) {
-
-  import RequestSupport._
+  journeyService: JourneyService
+)(implicit ec: ExecutionContext) {
 
   def maybeSurveyJourneyActionRefiner(id: SurveyJourneyId): ActionRefiner[Request, SurveyRequest] =
     new ActionRefiner[Request, SurveyRequest] {
@@ -36,15 +33,17 @@ final class GetJourneyActionFactory @Inject() (
       override protected def refine[A](request: Request[A]): Future[Either[Result, SurveyRequest[A]]] = {
         implicit val r: Request[A] = request
         for {
-          maybeJourney <- journeyService.findLatestByJourneyId(id)
+          maybeJourney       <- journeyService.findLatestByJourneyId(id)
           maybeSurveyRequest <- maybeJourney match {
-            case Some(j) => Future.successful {
-              Option(SurveyRequest(j.content, j.audit, j.origin, j.returnMsg, j.returnHref, r))
-            }
-            case _ => Future.successful {
-              None
-            }
-          }
+                                  case Some(j) =>
+                                    Future.successful {
+                                      Option(SurveyRequest(j.content, j.audit, j.origin, j.returnMsg, j.returnHref, r))
+                                    }
+                                  case _       =>
+                                    Future.successful {
+                                      None
+                                    }
+                                }
         } yield maybeSurveyRequest match {
           case Some(request) => Right(request)
           case None          => Right(SurveyRequest.default)

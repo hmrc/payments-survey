@@ -16,7 +16,6 @@
 
 package model.langswitch
 
-import cats.data.NonEmptyList
 import enumeratum.{Enum, EnumEntry}
 import util.enumformat.EnumFormat
 import model.langswitch.Languages.{English, Welsh}
@@ -27,7 +26,7 @@ import util.ValueClassBinder.valueClassBinder
 
 import scala.collection.immutable
 
-sealed trait Language extends EnumEntry {
+sealed trait Language extends EnumEntry derives CanEqual {
   def code: String
   def label: String
   val toPlayLang: Lang = Lang(code)
@@ -35,7 +34,7 @@ sealed trait Language extends EnumEntry {
 
 object Language {
 
-  implicit val format: Format[Language] = EnumFormat(Languages)
+  implicit val format: Format[Language]                   = EnumFormat(Languages)
   implicit val languagePathBinder: PathBindable[Language] = valueClassBinder(_.toString)
 
   def apply()(implicit m: Messages): Language = apply(m.lang)
@@ -43,7 +42,7 @@ object Language {
   private def apply(lang: Lang): Language = lang.code match {
     case "en" => English
     case "cy" => Welsh
-    case _    => English //default language is English
+    case _    => English // default language is English
   }
 }
 
@@ -51,11 +50,11 @@ object Language {
 object Languages extends Enum[Language] {
 
   case object English extends Language {
-    override def code: String = "en"
+    override def code: String  = "en"
     override def label: String = "English"
   }
-  case object Welsh extends Language {
-    override def code: String = "cy"
+  case object Welsh   extends Language {
+    override def code: String  = "cy"
     override def label: String = "Cymraeg"
   }
 

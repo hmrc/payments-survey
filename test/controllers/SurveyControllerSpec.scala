@@ -16,56 +16,63 @@
 
 package controllers
 
-import model._
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import payapi.cardpaymentjourney.model.journey.JsdPfSa
-import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
+import paysurvey.journey.SurveyJourneyId
 import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
 import play.api.http.Status
 import play.api.libs.json.Json
-import play.api.mvc.Result
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsString, _}
-import play.test.Helpers.fakeRequest
+import play.api.test.Helpers.{contentAsString, *}
 import support.AppSpec
 import testdata.paysurvey.TdAll.{r, ssjJourneyRequest}
 
-import scala.collection.mutable.ArrayBuffer
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 final class SurveyControllerSpec extends AppSpec {
-  private val controller = app.injector.instanceOf[SurveyController]
+  private val controller             = app.injector.instanceOf[SurveyController]
   private val startJourneyController = app.injector.instanceOf[SsjController]
 
   "survey default should return OK for default" in {
-    val putInDb = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
-    val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
+    startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.surveyDefault(fakeRequest)
+    val result     = controller.surveyDefault(fakeRequest)
     status(result) shouldBe Status.OK
-    val doc = Jsoup.parse(contentAsString(result))
-    doc.select("p.govuk-body").text shouldBe "We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. See the HMRC Privacy Notice for details about how we collect, use, protect and secure your personal information. The survey takes about 1 minute to complete. There are 4 questions and they are all optional. We will use your feedback to make our services better."
+    val doc        = Jsoup.parse(contentAsString(result))
+    doc
+      .select("p.govuk-body")
+      .text shouldBe "We use your feedback to improve our services. To better understand it, we may link your feedback to other information we hold about you, like gender and age. See the HMRC Privacy Notice for details about how we collect, use, protect and secure your personal information. The survey takes about 1 minute to complete. There are 4 questions and they are all optional. We will use your feedback to make our services better."
     doc.select("h1.govuk-heading-xl").text shouldBe "How was our payment service?"
     val formGroups = doc.select("div.govuk-form-group").asScala.toList
 
-      def analyseRadios(radios: Elements) = {
-        radios.select("div.govuk-radios__item").asScala.toList.map{ r =>
-          val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
-          (input.attr("name"), input.attr("value"), label.text)
-        }
+    def analyseRadios(radios: Elements) = {
+      radios.select("div.govuk-radios__item").asScala.toList.map { r =>
+        val (input, label) = (r.select("input.govuk-radios__input"), r.select("label.govuk-radios__label"))
+        (input.attr("name"), input.attr("value"), label.text)
       }
+    }
 
     val yesNoRadios = formGroups.head.select("fieldset.govuk-fieldset > div.govuk-radios")
     analyseRadios(yesNoRadios) shouldBe List(("wereYouAble", "1", "Yes"), ("wereYouAble", "0", "No"))
 
     val difficultyRadios = formGroups(1).select("fieldset.govuk-fieldset > div.govuk-radios")
-    analyseRadios(difficultyRadios) shouldBe List(("howEasy", "5", "Very easy"), ("howEasy", "4", "Easy"), ("howEasy", "3", "Neither easy or difficult"), ("howEasy", "2", "Difficult"), ("howEasy", "1", "Very difficult"))
+    analyseRadios(difficultyRadios) shouldBe List(
+      ("howEasy", "5", "Very easy"),
+      ("howEasy", "4", "Easy"),
+      ("howEasy", "3", "Neither easy or difficult"),
+      ("howEasy", "2", "Difficult"),
+      ("howEasy", "1", "Very difficult")
+    )
 
     val satisfiedRadios = formGroups(3).select("fieldset.govuk-fieldset > div.govuk-radios")
-    analyseRadios(satisfiedRadios) shouldBe List(("overallRate", "5", "Very satisfied"), ("overallRate", "4", "Satisfied"), ("overallRate", "3", "Neither satisfied or dissatisfied"), ("overallRate", "2", "Dissatisfied"), ("overallRate", "1", "Very dissatisfied"))
+    analyseRadios(satisfiedRadios) shouldBe List(
+      ("overallRate", "5", "Very satisfied"),
+      ("overallRate", "4", "Satisfied"),
+      ("overallRate", "3", "Neither satisfied or dissatisfied"),
+      ("overallRate", "2", "Dissatisfied"),
+      ("overallRate", "1", "Very dissatisfied")
+    )
 
     val h2s = doc.select("h2.govuk-heading-m").asScala.toList
     h2s.map(_.text) shouldBe List(
@@ -89,10 +96,10 @@ final class SurveyControllerSpec extends AppSpec {
   }
   "survey should render the survey page if the survey journey is in the db" in {
 
-    val putInDb = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
+    val putInDb     = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
     val fakeRequest = FakeRequest("GET", "/")
-    val result = controller.surveyJourney(ssjResponse.journeyId)(fakeRequest)
+    val result      = controller.surveyJourney(ssjResponse.journeyId)(fakeRequest)
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
     contentAsString(result).contains("returnHref") shouldBe true

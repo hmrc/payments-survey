@@ -26,23 +26,22 @@ import play.api.mvc.PathBindable
 
 import scala.collection.immutable
 
-sealed trait Language extends EnumEntry {
+sealed trait Language extends EnumEntry derives CanEqual {
   val toPlayLang: Lang = Lang(code)
 
   def code: String
-
   def label: String
 }
 
 object Language {
 
-  implicit val format: Format[Language] = EnumFormat(Languages)
+  implicit val format: Format[Language]                   = EnumFormat(Languages)
   implicit val languagePathBinder: PathBindable[Language] = valueClassBinder(_.toString)
 
   def apply(lang: Lang): Language = lang.code match {
     case "en" => English
     case "cy" => Welsh
-    case _    => English //default language is English
+    case _    => English // default language is English
   }
 }
 

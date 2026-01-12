@@ -16,20 +16,19 @@
 
 package views
 
-import config.AppConfig
-import javax.inject.Inject
 import play.api.i18n.Messages
 import play.api.mvc.Request
 import play.twirl.api.HtmlFormat
 import requests.RequestSupport
 
-class DefaultViews @Inject() (
-    error_template: views.html.error.error_template,
-    timedOut:       views.html.error.timed_out,
-    requestSupport: RequestSupport
-)(implicit appConfig: AppConfig) {
+import javax.inject.Inject
 
-  import requestSupport._
+class DefaultViews @Inject() (
+  error_template: views.html.error.error_template,
+  requestSupport: RequestSupport
+) {
+
+  import requestSupport.*
 
   def notFound(implicit request: Request[_]): HtmlFormat.Appendable =
     error_template(

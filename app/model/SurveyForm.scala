@@ -20,7 +20,13 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, optional, text}
 import play.api.libs.json.{Format, Json}
 
-final case class SurveyForm(wereYouAble: String, howEasy: String, overallRate: String, journey: String, comments: Option[String])
+final case class SurveyForm(
+  wereYouAble: String,
+  howEasy:     String,
+  overallRate: String,
+  journey:     String,
+  comments:    Option[String]
+)
 
 object SurveyForm {
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
@@ -29,10 +35,10 @@ object SurveyForm {
   val surveyForm: Form[SurveyForm] = Form(
     mapping(
       "wereYouAble" -> text,
-      "howEasy" -> text,
+      "howEasy"     -> text,
       "overallRate" -> text,
-      "journey" -> text(maxLength = 30),
-      "comments" -> optional(text)
-    )(SurveyForm.apply)(SurveyForm.unapply)
+      "journey"     -> text(maxLength = 30),
+      "comments"    -> optional(text)
+    )(SurveyForm.apply)((sf: SurveyForm) => Some((sf.wereYouAble, sf.howEasy, sf.overallRate, sf.journey, sf.comments)))
   )
 }

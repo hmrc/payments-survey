@@ -16,12 +16,8 @@
 
 package paysurvey.journey.ssj
 
-import action.Actions
-import config.AppConfig
-import play.api.Logger
 import play.api.libs.json.Json
 import play.api.mvc.{Action, MessagesControllerComponents}
-import requests.RequestSupport
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -29,22 +25,17 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 final class SsjController @Inject() (
-    actions:    Actions,
-    ssjService: SsjService,
-    cc:         MessagesControllerComponents
+  ssjService: SsjService,
+  cc:         MessagesControllerComponents
 )(implicit
-    ec: ExecutionContext,
-  appConfig: AppConfig
+  ec:         ExecutionContext
 ) extends FrontendController(cc) {
 
-  private lazy val logger: Logger = Logger(getClass)
-
-  def startJourney(): Action[SsjJourneyRequest] = Action.async(parse.json[SsjJourneyRequest]) {
-    implicit request =>
-      val ssjJourneyRequest: SsjJourneyRequest = request.body
-      for {
-        ssjResponse <- ssjService.startJourney(ssjJourneyRequest)
-      } yield Created(Json.toJson(ssjResponse))
+  def startJourney(): Action[SsjJourneyRequest] = Action.async(parse.json[SsjJourneyRequest]) { implicit request =>
+    val ssjJourneyRequest: SsjJourneyRequest = request.body
+    for {
+      ssjResponse <- ssjService.startJourney(ssjJourneyRequest)
+    } yield Created(Json.toJson(ssjResponse))
   }
 
 }

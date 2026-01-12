@@ -16,22 +16,18 @@
 
 package paysurvey.journey
 
-import paysurvey.journey.ssj.SsjService
+import paysurvey.journey.ssj.{SsjResponse, SsjService}
 import support.AppSpec
-import testdata.paysurvey.TdAll._
-import uk.gov.hmrc.http.HeaderCarrier
+import testdata.paysurvey.TdAll.*
+
+import scala.concurrent.Future
 
 class JourneyServiceSpec extends AppSpec {
 
-  private val service = app.injector.instanceOf[JourneyService]
-
+  private val service    = app.injector.instanceOf[JourneyService]
   private val ssjService = app.injector.instanceOf[SsjService]
 
-  def startJourney() = {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
-    ssjService.startJourney(ssjJourneyRequest)
-  }
+  def startJourney(): Future[SsjResponse] = ssjService.startJourney(ssjJourneyRequest)
 
   "return None when no journey for JourneyId" in {
     service.findLatestByJourneyId(journeyId).futureValue shouldBe None
@@ -50,7 +46,7 @@ class JourneyServiceSpec extends AppSpec {
   }
 
   "return latest journey for sessionId if there is multiple journeys" in {
-    val ssjResponse = startJourney().futureValue
+    startJourney().futureValue
     val ssjResponse2 = startJourney().futureValue
 
     val j = {

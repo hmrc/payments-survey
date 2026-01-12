@@ -20,19 +20,18 @@ import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Request
 import requests.RequestSupport
 
-final case class AuditOptions
-  (
-    userType:  String,
-    journey:   Option[String] = None,
-    orderId:   Option[String] = None,
-    liability: Option[String] = None
+final case class AuditOptions(
+  userType:  String,
+  journey:   Option[String] = None,
+  orderId:   Option[String] = None,
+  liability: Option[String] = None
 ) {
   lazy val toMap = {
     Map(
-      "userType" -> userType,
-      "journey" -> journey.getOrElse("Unknown"),
-      "orderId" -> orderId.getOrElse("Unknown"),
-      "liability" -> liability.getOrElse("Unknown"),
+      "userType"  -> userType,
+      "journey"   -> journey.getOrElse("Unknown"),
+      "orderId"   -> orderId.getOrElse("Unknown"),
+      "liability" -> liability.getOrElse("Unknown")
     )
   }
 
@@ -46,4 +45,3 @@ object AuditOptions {
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
   )
 }
-
