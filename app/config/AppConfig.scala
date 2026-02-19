@@ -35,7 +35,7 @@ class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig
   private val contactFormServiceIdentifier     = "MyService"
   lazy val optimizelyProjectId: Option[String] = Try(servicesConfig.getString(s"optimizely.projectId")).toOption
 
-  val featureNewServiceNavigationEnabled: Boolean = config.get[Boolean]("play-frontend-hmrc.forceServiceNavigation")
+  val featureNewServiceNavigationEnabled: Boolean = config.get[Boolean]("features.new-service-navigation-enabled")
 
   lazy val frontendBaseUrl: String = s"$paymentSurvey/payments-survey"
 
