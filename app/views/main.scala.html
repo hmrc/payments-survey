@@ -26,6 +26,7 @@
 @this(
         govukLayout: uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout,
         govukBackLink: uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink,
+        hmrcHeader: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcHeader,
         hmrcStandardHeader: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardHeader,
         languageSelect: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcLanguageSelect,
         reportTechnicalIssues: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue,
@@ -67,12 +68,21 @@
 }
 
 @headerBlock = {
-    @hmrcStandardHeader(
-        serviceName          = navTitle,
-        serviceUrl           = Some(controllers.routes.SurveyController.surveyDefault.url),
-        signOutUrl           = if (isLoggedIn) Some(appConfig.signOutUrl) else None,
-        isWelshTranslationAvailable = true
-    )
+    @if(appConfig.featureNewServiceNavigationEnabled) {
+        @hmrcStandardHeader(
+            serviceName = navTitle,
+            serviceUrl = Some(controllers.routes.SurveyController.surveyDefault.url),
+            signOutUrl = if(isLoggedIn) Some(appConfig.signOutUrl) else None,
+            isWelshTranslationAvailable = true
+        )
+    } else {
+        @hmrcHeader(Header(
+        homepageUrl = "https://www.gov.uk",
+        serviceName = navTitle,
+        serviceUrl = controllers.routes.SurveyController.surveyDefault.url,
+        signOutHref = if(isLoggedIn) Some(appConfig.signOutUrl) else None
+        )))
+    }
 }
 
 @govukLayout(
