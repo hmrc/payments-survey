@@ -16,20 +16,23 @@
 
 package paysurvey.journey
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
-import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions}
+import config.AppConfig
 import org.mongodb.scala.model.Indexes.{ascending, descending}
+import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.util.concurrent.TimeUnit
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
 @SuppressWarnings(Array("org.wartremover.warts.Any"))
-final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: ExecutionContext)
+final class JourneyRepo @Inject() (appConfig: AppConfig, mongo: MongoComponent)(implicit ec: ExecutionContext)
     extends PlayMongoRepository[SurveyJourney](
       mongoComponent = mongo,
       collectionName = "journey",
-      indexes = Seq(IndexModel(ascending("journeyId"), IndexOptions().name("journeyId"))),
+      indexes = JourneyRepo.getIndexes(appConfig),
       domainFormat = SurveyJourney.format,
       replaceIndexes = true
     ) {
@@ -45,11 +48,23 @@ final class JourneyRepo @Inject() (mongo: MongoComponent)(implicit ec: Execution
       .map(_.headOption)
   }
 
-  def insert(
-    surveyJourney: SurveyJourney
-  ): Future[Unit] = // Throw a new RuntimeException(writeResult.toString) if things go wrong
+  def insert(surveyJourney: SurveyJourney): Future[Unit] =
     collection
       .insertOne(surveyJourney)
       .toFuture()
       .map(result => if (result.wasAcknowledged()) () else throw new RuntimeException(result.toString))
+}
+
+object JourneyRepo {
+
+  private def getIndexes(appConfig: AppConfig): Seq[IndexModel] = Seq[IndexModel](
+    IndexModel(
+      keys = ascending("journeyId"),
+      indexOptions = IndexOptions().name("journeyId")
+    ),
+    IndexModel(
+      keys = Indexes.ascending("createdOn"),
+      indexOptions = IndexOptions().expireAfter(appConfig.mongoExpiry.toSeconds, TimeUnit.SECONDS).name("createdOnIdx")
+    )
+  )
 }
