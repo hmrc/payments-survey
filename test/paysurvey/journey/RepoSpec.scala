@@ -25,8 +25,8 @@ class RepoSpec extends AppSpec {
 
   "JourneyRepo should have an index which sets a time to live of 14 days" in {
     val indexes: Seq[IndexModel] = app.injector.instanceOf[JourneyRepo].indexes
-    val createdOnIndexOption = indexes.filter(_.getKeys.toBsonDocument.containsKey("createdOn"))
-    val ttl = createdOnIndexOption.map(_.getOptions.getExpireAfter(TimeUnit.DAYS))
+    val createdOnIndexOption     = indexes.filter(_.getKeys.toBsonDocument.containsKey("createdOn"))
+    val ttl                      = createdOnIndexOption.map(_.getOptions.getExpireAfter(TimeUnit.DAYS))
     ttl shouldBe List(14)
   }
 
