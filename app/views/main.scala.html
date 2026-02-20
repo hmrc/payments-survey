@@ -50,14 +50,15 @@
 @backUrl.map { url =>
     @govukBackLink(BackLink(href = url, classes = "govuk-!-display-none-print", content = Text("generic_back.show")))
 }
-
-    <div class="language-toggle-position">
-    @languageSelect(LanguageSelect(
-        if(messages.lang.code.contains("cy")) Cy else En,
-        En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
-        Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
-    ))
-    </div>
+    @if(!appConfig.featureNewServiceNavigationEnabled) {
+        <div class="language-toggle-position">
+            @languageSelect(LanguageSelect(
+                if(messages.lang.code.contains("cy")) Cy else En,
+                En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
+                Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
+            ))
+        </div>
+    }
 }
 
 @mainContent = {
@@ -73,7 +74,8 @@
             serviceName = navTitle,
             serviceUrl = Some(controllers.routes.SurveyController.surveyDefault.url),
             signOutUrl = if(isLoggedIn) Some(appConfig.signOutUrl) else None,
-            isWelshTranslationAvailable = true
+            isWelshTranslationAvailable = true,
+            displayHmrcBanner = false
         )
     } else {
         @hmrcHeader(Header(
