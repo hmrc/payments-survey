@@ -18,9 +18,9 @@ package paysurvey.journey
 
 import model.content.ContentOptions
 import paysurvey.audit.AuditOptions
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.*
 
-import java.time.LocalDateTime
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
 final case class SurveyJourney(
   journeyId:  SurveyJourneyId,
@@ -33,6 +33,19 @@ final case class SurveyJourney(
 )
 
 object SurveyJourney {
+
+  final val localDateTimeReads: Reads[LocalDateTime] =
+    Reads
+      .at[String](__ \ "$date" \ "$numberLong")
+      .map(dateTime => Instant.ofEpochMilli(dateTime.toLong).atZone(ZoneOffset.UTC).toLocalDateTime)
+
+  final val localDateTimeWrites: Writes[LocalDateTime] =
+    Writes
+      .at[String](__ \ "$date" \ "$numberLong")
+      .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
+
+  implicit val localDateTimeFormat: Format[LocalDateTime] = Format(localDateTimeReads, localDateTimeWrites)
+
   @SuppressWarnings(Array("org.wartremover.warts.Any"))
   implicit val format: OFormat[SurveyJourney] = Json.format[SurveyJourney]
 }
