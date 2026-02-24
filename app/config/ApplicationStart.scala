@@ -32,7 +32,6 @@ class ApplicationStart @Inject() (lifecycle: ApplicationLifecycle, journeyRepo: 
   // Start up code
   journeyRepo.updateCreatedOnTime()
 
-
   // Shut-down hook
   lifecycle.addStopHook { () =>
     logger.info("Inside the ApplicationStart addStopHook")
