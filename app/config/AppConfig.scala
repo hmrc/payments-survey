@@ -21,6 +21,7 @@ import play.api.Configuration
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import scala.concurrent.duration.Duration
 import scala.util.Try
 
 @Singleton
@@ -55,4 +56,6 @@ class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig
   val cookiesUrl: String                     = loadConfig("govUkUrls.cookiesUrl")
   val termsAndConditionsUrl: String          = loadConfig("govUkUrls.termsAndConditionsUrl")
   val helpUsingGovUkUrl: String              = loadConfig("govUkUrls.helpUsingGovUkUrl")
+
+  val mongoExpiry: Duration = servicesConfig.getDuration("mongodb.journeyTtl")
 }
