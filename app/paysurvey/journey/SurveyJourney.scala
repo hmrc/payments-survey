@@ -44,6 +44,7 @@ object SurveyJourney {
       .at[String](__ \ "$date" \ "$numberLong")
       .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
 
+  // uncomment to make it use the correct local date format in mongo. If not provided, puts time field as string in mongo. If provided, it's a date.
   implicit val localDateTimeFormat: Format[LocalDateTime] = Format(localDateTimeReads, localDateTimeWrites)
 
   @SuppressWarnings(Array("org.wartremover.warts.Any"))

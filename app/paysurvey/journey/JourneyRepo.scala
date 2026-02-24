@@ -17,11 +17,18 @@
 package paysurvey.journey
 
 import config.AppConfig
+import model.content.{BannerTitle, ContentOptions, IsWelshSupported}
+import org.bson.BsonType
 import org.mongodb.scala.model.Indexes.{ascending, descending}
-import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes}
+import org.mongodb.scala.model.{Filters, IndexModel, IndexOptions, Indexes, Updates}
+import org.mongodb.scala.result.UpdateResult
+import paysurvey.audit.AuditOptions
+import play.api.Logging
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
+import java.time.LocalDateTime
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,7 +42,8 @@ final class JourneyRepo @Inject() (appConfig: AppConfig, mongo: MongoComponent)(
       indexes = JourneyRepo.getIndexes(appConfig),
       domainFormat = SurveyJourney.format,
       replaceIndexes = true
-    ) {
+    )
+    with Logging {
 
   /** Find the latest journey for given sessionId.
     */
@@ -48,11 +56,46 @@ final class JourneyRepo @Inject() (appConfig: AppConfig, mongo: MongoComponent)(
       .map(_.headOption)
   }
 
-  def insert(surveyJourney: SurveyJourney): Future[Unit] =
+  def insert(surveyJourney: SurveyJourney): Future[Unit] = {
     collection
       .insertOne(surveyJourney)
       .toFuture()
       .map(result => if (result.wasAcknowledged()) () else throw new RuntimeException(result.toString))
+  }
+
+  def updateCreatedOnTime(): Future[Unit] = {
+    logger.info(s"Inside updateCreatedOnTime: ${LocalDateTime.now().toString}")
+    collection
+      .updateMany(
+        Filters.`type`("createdOn", BsonType.STRING),
+        Updates.set("createdOn", LocalDateTime.now().minusDays(15))
+      )
+      .toFuture()
+      .map { (result: UpdateResult) =>
+        if (result.wasAcknowledged()) {
+          logger.info(s"Inside wasAcknowledged, finished updating: ${LocalDateTime.now().toString}")()
+        } else {
+          throw new RuntimeException(result.toString)
+        }
+      }
+  }
+
+  // to be used for building test records (2.5M?)
+  def insertMany(): Future[Unit] = {
+    val testRecords: Seq[SurveyJourney] = (1 to 500000).map { _ =>
+      SurveyJourney(
+        journeyId = SurveyJourneyId(UUID.randomUUID().toString),
+        content = ContentOptions(IsWelshSupported.yes, BannerTitle("blah", None)),
+        audit = AuditOptions("wuh", None, None, None),
+        origin = "Origin",
+        returnMsg = "returnMsg",
+        returnHref = "returnHref",
+        createdOn = LocalDateTime.now()
+      )
+    }
+
+    collection.insertMany(testRecords).toFuture().map(_ => ())
+  }
 }
 
 object JourneyRepo {
