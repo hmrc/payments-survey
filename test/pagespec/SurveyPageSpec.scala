@@ -118,9 +118,9 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
 
   "ensure can switch to Welsh and back" in new TestWithJourney {
     goTo(pagePath(ssjResponse.journeyId.value))
-    click.on(xpath("/html/body/div/div/nav/ul/li[2]/a/span[2]"))
+    webDriver.findElement(By.cssSelector("a[lang='cy']")).click()
     pageTitle shouldBe "Sut oedd eich gwasanaeth talu? - Talu treth - GOV.UK"
-    click.on(xpath("/html/body/div/div/nav/ul/li[1]/a/span[2]"))
+    webDriver.findElement(By.cssSelector("a[lang='en']")).click()
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
   }
 }
