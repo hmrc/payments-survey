@@ -15,12 +15,14 @@
  */
 
 import java.time.{Clock, ZoneOffset}
-
 import com.google.inject.{AbstractModule, Provides, Singleton}
+import config.ApplicationStart
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
-class Module() extends AbstractModule {
-  override def configure(): Unit = ()
+class Module extends AbstractModule {
+  override def configure(): Unit = {
+    bind(classOf[ApplicationStart]).asEagerSingleton()
+  }
 
   @Provides
   @Singleton

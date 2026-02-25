@@ -15,4 +15,5 @@
 GET        /payments-survey/test-only/add-to-session/:key/:value  @controllers.test.TestOnlyController.addToSession(key: String, value: String)
 GET        /payments-survey/test-only/error-pages                 @controllers.test.TestOnlyController.showErrorPages()
 GET        /payments-survey/test-only/error-5xx                   @controllers.test.TestOnlyController.showError5xx()
+GET        /payments-survey/test-only/create-dummy-data           @controllers.test.TestOnlyController.createABunchOfRecords()
 

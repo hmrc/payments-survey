@@ -16,17 +16,21 @@
 
 package controllers.test
 
+import paysurvey.journey.JourneyRepo
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class TestOnlyController @Inject() (
   cc:               MessagesControllerComponents,
   show_error_pages: views.html.error.show_error_pages,
-  error_5xx:        views.html.error.error_5xx
-) extends FrontendController(cc) {
+  error_5xx:        views.html.error.error_5xx,
+  journeyRepo:      JourneyRepo
+)(implicit executionContext: ExecutionContext)
+    extends FrontendController(cc) {
 
   def addToSession(key: String, value: String): Action[AnyContent] = Action { implicit request =>
     Ok("").addingToSession(key -> value)
@@ -38,5 +42,10 @@ class TestOnlyController @Inject() (
 
   def showError5xx(): Action[AnyContent] = Action { implicit request =>
     Ok(error_5xx())
+  }
+
+  // create 500K records in mongo for test purposes.
+  def createABunchOfRecords(): Action[AnyContent] = Action.async { _ =>
+    journeyRepo.insertMany().map(_ => Created)
   }
 }
