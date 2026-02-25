@@ -22,12 +22,11 @@
 @import uk.gov.hmrc.hmrcfrontend.views.Aliases.{Header, ReportTechnicalIssue}
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.LanguageSelect
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En}
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.*
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.{Banners, HmrcStandardPageParams, ServiceURLs, TemplateOverrides}
 
 @this(
-        govukLayout: uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout,
-        govukBackLink: uk.gov.hmrc.govukfrontend.views.html.components.GovukBackLink,
-        hmrcHeader: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcHeader,
-        languageSelect: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcLanguageSelect,
+        hmrcStandardPage: HmrcStandardPage,
         reportTechnicalIssues: uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcReportTechnicalIssue,
         hmrcTrackingConsentSnippet: uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet,
         scripts: views.html.scripts,
@@ -40,23 +39,13 @@
         backUrl: Option[String] = None
 )(contentBlock: Html)(implicit rh: RequestHeader, messages: Messages)
 
-@head = {
+@headerBlock = {
 @hmrcTrackingConsentSnippet()
     <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
 }
 
-@beforeContentBlock = {
-@backUrl.map { url =>
-    @govukBackLink(BackLink(href = url, classes = "govuk-!-display-none-print", content = Text("generic_back.show")))
-}
-
-    <div class="language-toggle-position">
-    @languageSelect(LanguageSelect(
-        if(messages.lang.code.contains("cy")) Cy else En,
-        En -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.English).url,
-        Cy -> langswitch.routes.LanguageSwitchController.switchToLanguage(langswitch.Languages.Welsh).url
-    ))
-    </div>
+@script = {
+  @scripts()
 }
 
 @mainContent = {
@@ -66,37 +55,22 @@
     </div>
 }
 
-@govukLayout(
-    pageTitle = pageTitle,
-    headBlock = Some(head),
-    headerBlock = Some(hmrcHeader(Header(
-        homepageUrl = "https://www.gov.uk",
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        templateOverrides = TemplateOverrides(
+            additionalScriptsBlock = Some(script),
+            additionalHeadBlock = Some(headerBlock)
+        ),
+        serviceURLs = ServiceURLs(
+            signOutUrl = if(isLoggedIn) Some(appConfig.signOutUrl) else None,
+            serviceUrl = Some(controllers.routes.SurveyController.surveyDefault.url),
+        ),
+        banners = Banners(
+            displayHmrcBanner = false
+        ),
+        pageTitle = pageTitle,
         serviceName = navTitle,
-        serviceUrl = controllers.routes.SurveyController.surveyDefault.url,
-        signOutHref = if(isLoggedIn) Some(appConfig.signOutUrl) else None
-    ))),
-    scriptsBlock = Some(scripts()),
-    beforeContentBlock = Some(beforeContentBlock),
-    footerItems = Seq(
-        FooterItem(
-            text = Some(Messages("footer_cookies")),
-            href = Some(appConfig.cookiesUrl)
-        ),
-        FooterItem(
-            text = Some(Messages("footer_privacyNotice")),
-            href = Some(appConfig.privacyNoticeUrl)
-        ),
-        FooterItem(
-            text = Some(Messages("footer_termsAndConditions")),
-            href = Some(appConfig.termsAndConditionsUrl)
-        ),
-        FooterItem(
-            text = Some(Messages("footer_helpUsingGovUk")),
-            href = Some(appConfig.helpUsingGovUkUrl)
-        ),
-        FooterItem(
-            text = Some(Messages("footer_accessibilityStatement")),
-            href = Some(appConfig.accessibilityStatementUrl)
-        )
-    ),
-    bodyEndBlock = None)(mainContent)
+        isWelshTranslationAvailable = true,
+        backLink = if (backUrl.isDefined) backUrl.map(url => BackLink(url)) else Some(BackLink.mimicsBrowserBackButtonViaJavaScript)
+    )
+)(mainContent)
