@@ -38,7 +38,7 @@ class StartJourneySpec extends AppSpec {
         .futureValue
     val ssjResponse            = response.json.as[SsjResponse]
 
-    ssjResponse.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/v2/survey/${ssjResponse.journeyId.value}"
+    ssjResponse.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/survey/${ssjResponse.journeyId.value}"
   }
 
 }

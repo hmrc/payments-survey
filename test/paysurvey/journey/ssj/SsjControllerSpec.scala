@@ -31,7 +31,7 @@ class SsjControllerSpec extends AppSpec {
     val result = controller.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
 
     val responseBody = Json.parse(contentAsString(result)).as[SsjResponse]
-    responseBody.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/v2/survey/${responseBody.journeyId.value}"
+    responseBody.nextUrl.value shouldBe s"http://localhost:9966/payments-survey/survey/${responseBody.journeyId.value}"
 
     val j: SurveyJourney = {
       val maybeJ = journeyService.findLatestByJourneyId(responseBody.journeyId).futureValue

@@ -65,7 +65,7 @@ class SsjService @Inject() (
       val id = journey.journeyId
       SsjResponse(
         id,
-        Url(s"$frontendBaseUrl/v2/survey/${id.value}")
+        Url(s"$frontendBaseUrl/survey/${id.value}")
       )
     }
   }
