@@ -28,7 +28,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 class SurveyPageSpec extends AppSpec with WebBrowser {
   def baseUrl = s"http://localhost:$port"
-  def pagePath(id:         String) = baseUrl + s"/payments-survey/v2/survey/$id"
+  def pagePath(id:         String) = baseUrl + s"/payments-survey/survey/$id"
   def surveyThanksPath(id: String) = s"/payments-survey/survey-thanks/$id"
   protected trait TestWithJourney {
     implicit val hc: HeaderCarrier = HeaderCarrier()
