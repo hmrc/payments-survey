@@ -25,17 +25,7 @@ final case class AuditOptions(
   journey:   Option[String] = None,
   orderId:   Option[String] = None,
   liability: Option[String] = None
-) {
-  lazy val toMap = {
-    Map(
-      "userType"  -> userType,
-      "journey"   -> journey.getOrElse("Unknown"),
-      "orderId"   -> orderId.getOrElse("Unknown"),
-      "liability" -> liability.getOrElse("Unknown")
-    )
-  }
-
-}
+)
 
 object AuditOptions {
   @SuppressWarnings(Array("org.wartremover.warts.Any"))

@@ -19,10 +19,10 @@ package controllers
 import action.Actions
 import model.SurveyForm.surveyForm
 import paysurvey.journey.SurveyJourneyId
+import paysurvey.audit.AuditDetail
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.audit.model._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -79,22 +79,17 @@ final class SurveyController @Inject() (
           )
         },
         data => {
-          val surveyMap: Map[String, String] = Map(
-            "wereYouAble" -> data.wereYouAble,
-            "overallRate" -> data.overallRate,
-            "howEasy"     -> data.howEasy,
-            "comments"    -> data.comments.getOrElse("None given")
+          val auditDetail = AuditDetail(
+            auditOptions = request.audit,
+            wereYouAble = data.wereYouAble,
+            overallRate = data.overallRate,
+            howEasy = data.howEasy,
+            comments = data.comments
           )
 
-          val details = surveyMap ++ request.audit.toMap
-
-          auditConnector.sendEvent(
-            DataEvent(
-              auditSource = "payments-survey",
-              auditType = "Questionnaire",
-              tags = Map("submitSurvey" -> request.uri),
-              detail = details
-            )
+          auditConnector.sendExplicitAudit(
+            "Questionnaire",
+            auditDetail
           )
 
           Redirect(controllers.routes.SurveyController.showSurveyThanks(id))
