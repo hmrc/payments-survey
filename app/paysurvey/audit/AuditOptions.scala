@@ -21,15 +21,17 @@ import play.api.mvc.Request
 import requests.RequestSupport
 
 final case class AuditOptions(
-  userType:  String,
-  journey:   Option[String] = None,
-  orderId:   Option[String] = None,
-  liability: Option[String] = None
+  userType:     String,
+  journey:      Option[String] = None,
+  orderId:      Option[String] = None,
+  liability:    Option[String] = None,
+  surveySource: Option[String] = None,
+  paymentId:    Option[String] = None,
+  origin:       Option[String] = None
 )
 
 object AuditOptions {
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  implicit val format: OFormat[AuditOptions] = Json.format[AuditOptions]
+  given OFormat[AuditOptions] = Json.format[AuditOptions]
 
   def default(implicit r: Request[_]): AuditOptions = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"

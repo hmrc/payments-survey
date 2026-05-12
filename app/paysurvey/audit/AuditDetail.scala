@@ -19,33 +19,39 @@ package paysurvey.audit
 import play.api.libs.json.{Json, Writes}
 
 final case class AuditDetail(
-  wereYouAble: String, 
-  overallRate: String, 
-  howEasy: String,
-  userType:  String,
-  comments:  Option[String],
-  journey:   Option[String],
-  orderId:   Option[String],
-  liability: Option[String],
+  wereYouAble:  String,
+  overallRate:  String,
+  howEasy:      String,
+  userType:     String,
+  comments:     Option[String],
+  journey:      Option[String],
+  orderId:      Option[String],
+  liability:    Option[String],
+  surveySource: Option[String],
+  paymentId:    Option[String],
+  origin:       Option[String]
 )
 
-object AuditDetail: 
+object AuditDetail:
   def apply(
-    auditOptions: AuditOptions, 
-    wereYouAble: String, 
-    overallRate: String, 
-    howEasy: String,
-    comments:  Option[String]
+    auditOptions: AuditOptions,
+    wereYouAble:  String,
+    overallRate:  String,
+    howEasy:      String,
+    comments:     Option[String]
   ): AuditDetail =
     AuditDetail(
-      wereYouAble  = wereYouAble,
-      overallRate  = overallRate,
-      howEasy      = howEasy,
-      userType     = auditOptions.userType,
-      comments     = comments,
-      journey      = auditOptions.journey,
-      orderId      = auditOptions.orderId,
-      liability    = auditOptions.liability,
+      wereYouAble = wereYouAble,
+      overallRate = overallRate,
+      howEasy = howEasy,
+      userType = auditOptions.userType,
+      comments = comments,
+      journey = auditOptions.journey,
+      orderId = auditOptions.orderId,
+      liability = auditOptions.liability,
+      surveySource = auditOptions.surveySource,
+      paymentId = auditOptions.paymentId,
+      origin = auditOptions.origin
     )
-    
+
   given Writes[AuditDetail] = Json.writes[AuditDetail]
