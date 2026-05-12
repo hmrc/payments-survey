@@ -17,7 +17,7 @@ Start a journey with this request:
 
 ```
 curl -X POST localhost:9966/payments-survey/journey/start -H "Content-Type: application/json" -d '{
-  "origin": "lala",
+  "origin": "ptaSa",
   "returnMsg": "Return to gov uk",
   "returnHref": "https://www.gov.uk",
   "auditName": "auditname",
@@ -27,8 +27,7 @@ curl -X POST localhost:9966/payments-survey/journey/start -H "Content-Type: appl
     "orderId": "123",
     "liability": "Self Assessment",
     "surveySource": "pay-frontend",
-    "paymentId": "ecospend payment id",
-    "origin": "ptaSa"
+    "paymentId": "ecospend payment id"
   },
   "contentOptions": {
     "isWelshSupported": true,

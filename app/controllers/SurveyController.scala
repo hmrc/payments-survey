@@ -18,8 +18,8 @@ package controllers
 
 import action.Actions
 import model.SurveyForm.surveyForm
+import model.audit.AuditDetail
 import paysurvey.journey.SurveyJourneyId
-import paysurvey.audit.AuditDetail
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import requests.RequestSupport
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -81,6 +81,7 @@ final class SurveyController @Inject() (
         data => {
           val auditDetail = AuditDetail(
             auditOptions = request.audit,
+            origin = request.origin,
             wereYouAble = data.wereYouAble,
             overallRate = data.overallRate,
             howEasy = data.howEasy,

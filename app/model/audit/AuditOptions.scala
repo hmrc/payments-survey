@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package paysurvey.audit
+package model.audit
 
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Request

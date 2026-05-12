@@ -17,13 +17,17 @@
 package testdata.paysurvey
 
 import model.content.ContentOptions
-import paysurvey.audit.AuditOptions
+import model.audit.AuditOptions
 import paysurvey.journey.ssj.{SsjJourneyRequest, SsjRequest}
+import paysurvey.journey.SurveyJourneyId
+
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import requests.SurveyRequest
 
-trait TdSsjRequest extends TdBase {
+trait TdSsjRequest {
+
+  val journeyId: SurveyJourneyId = SurveyJourneyId("paysurvey-journey-2d0df4fd")
 
   implicit val r: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/")
 

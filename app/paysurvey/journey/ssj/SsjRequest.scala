@@ -17,7 +17,7 @@
 package paysurvey.journey.ssj
 
 import model.content.ContentOptions
-import paysurvey.audit.AuditOptions
+import model.audit.AuditOptions
 import paysurvey.journey.{SurveyJourney, SurveyJourneyId}
 import play.api.libs.json.{Json, OFormat}
 

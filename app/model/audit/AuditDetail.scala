@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package paysurvey.audit
+package model.audit
 
 import play.api.libs.json.{Json, Writes}
 
@@ -29,12 +29,13 @@ final case class AuditDetail(
   liability:    Option[String],
   surveySource: Option[String],
   paymentId:    Option[String],
-  origin:       Option[String]
+  origin:       String
 )
 
 object AuditDetail:
   def apply(
     auditOptions: AuditOptions,
+    origin:       String,
     wereYouAble:  String,
     overallRate:  String,
     howEasy:      String,
@@ -51,7 +52,7 @@ object AuditDetail:
       liability = auditOptions.liability,
       surveySource = auditOptions.surveySource,
       paymentId = auditOptions.paymentId,
-      origin = auditOptions.origin
+      origin = origin
     )
 
   given Writes[AuditDetail] = Json.writes[AuditDetail]
