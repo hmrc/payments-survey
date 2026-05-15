@@ -33,7 +33,6 @@ final case class SsjJourneyRequest(
   origin:         String,
   returnMsg:      String,
   returnHref:     String,
-  auditName:      String,
   audit:          AuditOptions,
   contentOptions: ContentOptions
 ) {

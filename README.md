@@ -20,7 +20,6 @@ curl -X POST localhost:9966/payments-survey/journey/start -H "Content-Type: appl
   "origin": "ptaSa",
   "returnMsg": "Return to gov uk",
   "returnHref": "https://www.gov.uk",
-  "auditName": "auditname",
   "audit": {
     "userType": "IsLoggedIn",
     "journey": "PaymentComplete",

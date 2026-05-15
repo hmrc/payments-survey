@@ -42,7 +42,6 @@ trait TdSsjRequest {
     "lala",
     "returnMsg",
     "returnHref",
-    "auditname",
     auditOptions,
     ContentOptions.default
   )
