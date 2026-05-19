@@ -17,7 +17,7 @@
 package requests
 
 import model.content.ContentOptions
-import paysurvey.audit.AuditOptions
+import model.audit.AuditOptions
 import play.api.mvc.{Request, WrappedRequest}
 
 final case class SurveyRequest[A](

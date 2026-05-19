@@ -37,8 +37,9 @@ final class SurveyControllerSpec extends AppSpec {
     startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result     = controller.surveyDefault(fakeRequest)
+    val result = controller.surveyDefault(fakeRequest)
     status(result) shouldBe Status.OK
+
     val doc        = Jsoup.parse(contentAsString(result))
     doc
       .select("p.govuk-body")
