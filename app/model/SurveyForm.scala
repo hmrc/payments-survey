@@ -29,8 +29,8 @@ final case class SurveyForm(
 )
 
 object SurveyForm {
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  implicit val format: Format[SurveyForm] = Json.format[SurveyForm]
+
+  given format: Format[SurveyForm] = Json.format[SurveyForm]
 
   val surveyForm: Form[SurveyForm] = Form(
     mapping(

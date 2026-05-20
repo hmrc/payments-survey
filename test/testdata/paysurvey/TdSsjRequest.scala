@@ -56,4 +56,20 @@ trait TdSsjRequest {
       .withBody(ssjRequest)
   )
 
+  val auditTestSsjJourneyRequest: SsjJourneyRequest = SsjJourneyRequest(
+    origin = "lala",
+    returnMsg = "returnMsg",
+    returnHref = "returnHref",
+    audit = AuditOptions(
+      userType = "IsLoggedIn",
+      journey = Some("journey"),
+      orderId = Some("orderId"),
+      liability = Some("liability"),
+      surveySource = Some("surveySource"),
+      paymentId = Some("paymentId"),
+      origin = Some("origin")
+    ),
+    contentOptions = ContentOptions.default
+  )
+
 }
