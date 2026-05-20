@@ -169,5 +169,17 @@ final class SurveyControllerSpec extends AppSpec {
           .as[JsObject]
       )
     }
+    
+    "should not fire audit event when form submission results in bad request" in {
+      val putInDb = ssjController.startJourney()(r.withBody[SsjJourneyRequest](auditTestSsjJourneyRequest))
+      val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
+      val result = surveyController.submitSurvey(ssjResponse.journeyId)(
+        FakeRequest("POST", s"/survey/${ssjResponse.journeyId.value}").withFormUrlEncodedBody(
+          "missing" -> "values"
+        )
+      )
+      status(result) shouldBe 400
+      AuditConnectorStub.verifyNoAuditEvent()
+    }
   }
 }
