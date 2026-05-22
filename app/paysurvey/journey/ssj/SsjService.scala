@@ -19,6 +19,7 @@ package paysurvey.journey.ssj
 import config.AppConfig
 import payapi.cardpaymentjourney.model.journey.Url
 import paysurvey.journey.{JourneyIdGenerator, JourneyService}
+import paysurvey.journey.SurveyJourney
 import play.api.Logger
 import play.api.mvc.Request
 import requests.RequestSupport.hc
@@ -41,7 +42,7 @@ class SsjService @Inject() (
 
   def startJourney(ssjRequest: SsjJourneyRequest)(implicit r: Request[_]): Future[SsjResponse] = {
 
-    val journey = ssjRequest.toSurveyJourney(
+    val journey: SurveyJourney = ssjRequest.toSurveyJourney(
       journeyId = journeyIdGenerator.nextJourneyId(),
       createdOn = LocalDateTime.now(clock),
       ssjRequest.contentOptions

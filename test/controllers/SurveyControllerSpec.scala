@@ -21,24 +21,31 @@ import org.jsoup.select.Elements
 import paysurvey.journey.SurveyJourneyId
 import paysurvey.journey.ssj.{SsjController, SsjJourneyRequest, SsjResponse}
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, *}
+import stubs.AuditConnectorStub
 import support.AppSpec
-import testdata.paysurvey.TdAll.{r, ssjJourneyRequest}
+import testdata.paysurvey.TdAll.{auditTestSsjJourneyRequest, r, ssjJourneyRequest}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 final class SurveyControllerSpec extends AppSpec {
-  private val controller             = app.injector.instanceOf[SurveyController]
-  private val startJourneyController = app.injector.instanceOf[SsjController]
+
+  override protected lazy val configOverrides: Map[String, Any] = Map[String, Any](
+    "auditing.enabled" -> true
+  )
+
+  private val surveyController = app.injector.instanceOf[SurveyController]
+  private val ssjController    = app.injector.instanceOf[SsjController]
 
   "survey default should return OK for default" in {
-    startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
+    ssjController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result     = controller.surveyDefault(fakeRequest)
+    val result = surveyController.surveyDefault(fakeRequest)
     status(result) shouldBe Status.OK
+
     val doc        = Jsoup.parse(contentAsString(result))
     doc
       .select("p.govuk-body")
@@ -88,18 +95,19 @@ final class SurveyControllerSpec extends AppSpec {
 
     val fakeRequest = FakeRequest("GET", "/")
 
-    val result = controller.surveyJourney(SurveyJourneyId(""))(fakeRequest)
+    val result = surveyController.surveyJourney(SurveyJourneyId(""))(fakeRequest)
 
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
 
   }
+
   "survey should render the survey page if the survey journey is in the db" in {
 
-    val putInDb     = startJourneyController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
+    val putInDb     = ssjController.startJourney()(r.withBody[SsjJourneyRequest](ssjJourneyRequest))
     val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
     val fakeRequest = FakeRequest("GET", "/")
-    val result      = controller.surveyJourney(ssjResponse.journeyId)(fakeRequest)
+    val result      = surveyController.surveyJourney(ssjResponse.journeyId)(fakeRequest)
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
     contentAsString(result).contains("returnHref") shouldBe true
@@ -107,7 +115,7 @@ final class SurveyControllerSpec extends AppSpec {
   }
 
   "survey should render the survey page if there is no Journey ID in the request" in {
-    val result = controller.surveyJourney(SurveyJourneyId(""))(FakeRequest("GET", "/"))
+    val result = surveyController.surveyJourney(SurveyJourneyId(""))(FakeRequest("GET", "/"))
 
     status(result) shouldBe Status.OK
     contentAsString(result).contains("How was our payment service?") shouldBe true
@@ -115,10 +123,63 @@ final class SurveyControllerSpec extends AppSpec {
   }
 
   "surveyThanks should render the survey thanks page if there is no session ID in the session" in {
-    val result = controller.showSurveyThanks(SurveyJourneyId(""))(FakeRequest("GET", "/"))
+    val result = surveyController.showSurveyThanks(SurveyJourneyId(""))(FakeRequest("GET", "/"))
 
     status(result) shouldBe Status.OK
     contentAsString(result).contains("Thank you") shouldBe true
 
+  }
+
+  "submitSurvey" - {
+    "should redirect to the thanks page and trigger explicit audit event" in {
+      val putInDb     = ssjController.startJourney()(r.withBody[SsjJourneyRequest](auditTestSsjJourneyRequest))
+      val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
+      val result      = surveyController.submitSurvey(ssjResponse.journeyId)(
+        FakeRequest("POST", s"/survey/${ssjResponse.journeyId.value}").withFormUrlEncodedBody(
+          "journey"     -> "Created",
+          "wereYouAble" -> "1",
+          "howEasy"     -> "5",
+          "comments"    -> "asdfg",
+          "overallRate" -> "5"
+        )
+      )
+      redirectLocation(result) shouldBe Some(s"/payments-survey/survey-thanks/${ssjResponse.journeyId.value}")
+      result.futureValue.header.status shouldBe 303
+      AuditConnectorStub.verifyEventAudited(
+        auditType = "Questionnaire",
+        auditEvent = Json
+          .parse(
+            // language=JSON
+            """
+              |{
+              |   "wereYouAble" : "1",
+              |   "overallRate" : "5",
+              |   "howEasy" : "5",
+              |   "userType" : "IsLoggedIn",
+              |   "comments" : "asdfg",
+              |   "journey" : "journey",
+              |   "orderId" : "orderId",
+              |   "liability" : "liability",
+              |   "surveySource" : "surveySource",
+              |   "paymentId" : "paymentId",
+              |   "origin" : "lala"
+              |}
+              |""".stripMargin
+          )
+          .as[JsObject]
+      )
+    }
+
+    "should not fire audit event when form submission results in bad request" in {
+      val putInDb     = ssjController.startJourney()(r.withBody[SsjJourneyRequest](auditTestSsjJourneyRequest))
+      val ssjResponse = Json.parse(contentAsString(putInDb)).as[SsjResponse]
+      val result      = surveyController.submitSurvey(ssjResponse.journeyId)(
+        FakeRequest("POST", s"/survey/${ssjResponse.journeyId.value}").withFormUrlEncodedBody(
+          "missing" -> "values"
+        )
+      )
+      status(result) shouldBe 400
+      AuditConnectorStub.verifyNoAuditEvent()
+    }
   }
 }

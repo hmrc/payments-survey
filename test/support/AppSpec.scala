@@ -39,11 +39,14 @@ trait AppSpec
     with OptionValues {
   implicit val webDriver: HtmlUnitDriver = new HtmlUnitDriver(BrowserVersion.CHROME)
 
-  protected def configMap: Map[String, Any] =
+  protected lazy val configOverrides: Map[String, Any] = Map()
+
+  protected lazy val configMap: Map[String, Any] =
     Map[String, Any](
       "microservice.services.pay-api.port" -> WireMockSupport.port,
-      "mongodb.uri"                        -> mongoUri
-    )
+      "mongodb.uri"                        -> mongoUri,
+      "auditing.consumer.baseUri.port"     -> WireMockSupport.port
+    ) ++ configOverrides
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(configMap)

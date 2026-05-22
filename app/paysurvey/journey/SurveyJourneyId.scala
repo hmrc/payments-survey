@@ -23,8 +23,9 @@ import play.api.mvc.PathBindable
 final case class SurveyJourneyId(value: String) derives CanEqual
 
 object SurveyJourneyId {
-  implicit val format: Format[SurveyJourneyId]                                                                       =
+  implicit val format: Format[SurveyJourneyId] =
     implicitly[Format[String]].inmap(SurveyJourneyId(_), _.value)
+
   implicit def surveyJourneyIdPathBinder(implicit stringBinder: PathBindable[String]): PathBindable[SurveyJourneyId] =
     new PathBindable[SurveyJourneyId] {
       override def bind(key: String, value: String): Either[String, SurveyJourneyId] = {

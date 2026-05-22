@@ -17,7 +17,7 @@
 package paysurvey.journey
 
 import model.content.ContentOptions
-import paysurvey.audit.AuditOptions
+import model.audit.AuditOptions
 import play.api.libs.json.*
 
 import java.time.{Instant, LocalDateTime, ZoneOffset}

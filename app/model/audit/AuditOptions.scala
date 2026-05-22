@@ -14,32 +14,24 @@
  * limitations under the License.
  */
 
-package paysurvey.audit
+package model.audit
 
 import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Request
 import requests.RequestSupport
 
 final case class AuditOptions(
-  userType:  String,
-  journey:   Option[String] = None,
-  orderId:   Option[String] = None,
-  liability: Option[String] = None
-) {
-  lazy val toMap = {
-    Map(
-      "userType"  -> userType,
-      "journey"   -> journey.getOrElse("Unknown"),
-      "orderId"   -> orderId.getOrElse("Unknown"),
-      "liability" -> liability.getOrElse("Unknown")
-    )
-  }
-
-}
+  userType:     String,
+  journey:      Option[String] = None,
+  orderId:      Option[String] = None,
+  liability:    Option[String] = None,
+  surveySource: Option[String] = None,
+  paymentId:    Option[String] = None,
+  origin:       Option[String] = None
+)
 
 object AuditOptions {
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  implicit val format: OFormat[AuditOptions] = Json.format[AuditOptions]
+  given OFormat[AuditOptions] = Json.format[AuditOptions]
 
   def default(implicit r: Request[_]): AuditOptions = AuditOptions(
     userType = if (RequestSupport.isLoggedIn) "LoggedIn" else "LoggedOut"
