@@ -47,9 +47,8 @@ class SurveyPageSpec extends AppSpec with WebBrowser {
 
     goTo(pagePath(ssjResponse.journeyId.value))
 
-    // Update to ".govuk-service-navigation__service-name" when new service navigation is enabled
     cssSelector(
-      ".govuk-header__service-name"
+      ".govuk-service-navigation__service-name"
     ).element.text shouldEqual ssjJourneyRequest.contentOptions.title.englishValue
 
     pageTitle shouldBe "How was our payment service? - Pay your tax - GOV.UK"
