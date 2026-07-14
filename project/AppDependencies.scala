@@ -1,7 +1,7 @@
 import sbt.*
 
 object AppDependencies {
-  private val payApiVersion = "1.299.0"
+  private val payApiVersion = "1.308.0-SNAPSHOT"
   private val bootstrapVersion = "10.7.0"
 
   val compile: Seq[ModuleID] = Seq(
