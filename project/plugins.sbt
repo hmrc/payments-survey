@@ -3,7 +3,7 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 resolvers += MavenRepository("HMRC-open-artefacts-maven2", "https://open.artefacts.tax.service.gov.uk/maven2")
 resolvers += Resolver.url("HMRC-open-artefacts-ivy2", url("https://open.artefacts.tax.service.gov.uk/ivy2"))(Resolver.ivyStylePatterns)
 
-addSbtPlugin("org.playframework"  %  "sbt-plugin"            % "3.0.10")
+addSbtPlugin("org.playframework"  %  "sbt-plugin"            % "3.0.12")
 addSbtPlugin("uk.gov.hmrc"        %  "sbt-sass-compiler"     % "0.13.0")
 addSbtPlugin("org.scalameta"      %  "sbt-scalafmt"          % "2.5.6")
 addSbtPlugin("org.scoverage"      %  "sbt-scoverage"         % "2.4.2" exclude("org.scala-lang.modules", "scala-xml_2.12"))
